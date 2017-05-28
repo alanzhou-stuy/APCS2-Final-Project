@@ -5,6 +5,7 @@ import processing.core.PApplet;
 /**
  * Main class which sets up the frame and background, as well as creates the
  * grid through blocks
+ * 
  * @author luoje
  */
 public class Main extends PApplet {
@@ -15,13 +16,15 @@ public class Main extends PApplet {
 	}
 
 	public void setup() {
-		background(100, 100, 100);
+		background(50,50,50);
 		s = new Setup(this);
+		s.setColCount(10);
+		s.setRowCount(20);
 		s.createGrid();
 	}
 
 	public void settings() {
-		size(700, 1000);
+		size(700, 1200);
 	}
 
 	public void draw() {
