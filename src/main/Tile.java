@@ -9,6 +9,7 @@ public class Tile {
 	}
 	
 	public Tile(String type) {
+		tiles = new int[4][4];
 		if (type.equals("I")) {
 				setIBlock();
 		}
@@ -30,6 +31,7 @@ public class Tile {
 		else if (type.equals("Z")) {
 				setZBlockV();
 		}
+		setBlockColor();
 	}
 	
 	//bottom aligned 
@@ -66,19 +68,36 @@ public class Tile {
 	
 	//bottom right
 	public void setSBlock() {
-	
+		tiles[2][2] = 1;
+		tiles[2][3] = 1;
+		tiles[3][1] = 1;
+		tiles[3][2] = 1;
 	}
 
+	//bottom right
 	public void setTBlock() {
-		
+		tiles[2][2] = 1;
+		tiles[3][1] = 1;
+		tiles[3][2] = 1;
+		tiles[3][3] = 1;
 	}
 	
-	public void setIBlock() {
-		
-	}
-	
+	//bottom right
 	public void setZBlock() {
-		
+		tiles[2][1] = 1;
+		tiles[2][2] = 1;
+		tiles[4][2] = 1;
+		tiles[4][3] = 1;
+	}
+	
+	//set all the color of the tile the same from Square file
+	/*public void setBlockColor() {
+		for (int i = 0;i < size; i++) {
+			for(int j = 0;j < size; j++) {
+				if (tiles[i][j] == 1) {
+						
+				}
+			}
 	}
 	
 	public void rotateLeft() {
@@ -86,9 +105,8 @@ public class Tile {
 	}
 	
 	public void rotateRight() {
+	}*/
 	
-	}
-	}
 	
 	
 }
