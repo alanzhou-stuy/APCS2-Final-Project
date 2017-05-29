@@ -95,7 +95,6 @@ public class Colorizer extends PApplet {
 		color(1, g.numCols / 2  +1, new int[] {254, 0, 0});
 	}
 	
-
 	public void refreshGrid() {
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
