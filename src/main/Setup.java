@@ -2,10 +2,14 @@ package main;
 
 import processing.core.PApplet;
 
+/**
+ * Sets up the most important elements in the frame, including the grid, score
+ * count, and menu options (TBF)
+ */
 public class Setup extends PApplet {
 	private PApplet pApplet;
 	private int numRows, numCols;
-	private final int tileSep = 1;
+	private final int tileSep = 2;
 
 	public Setup(PApplet pApplet) {
 		this.pApplet = pApplet;
@@ -24,24 +28,18 @@ public class Setup extends PApplet {
 	 * board
 	 */
 	public void createGrid() {
-		int tileSize = pApplet.width / (numCols + 3);
-		int margin = (pApplet.width - numCols * tileSize - (numCols - 1) * tileSep) / 2;
+		Grid g = new Grid(numRows, numCols);
+		g.setDimensions(pApplet.width, pApplet.height, tileSep);
+		g.loadGrid();
 
-		int rowIncrement = 0;
-		for (int r = 0; r < numRows; r++) {
-
-			int colIncrement = 0;
-			for (int c = 0; c < numCols; c++) {
-				pApplet.fill(120,120,120);
-				pApplet.rect(margin + colIncrement, margin + rowIncrement, tileSize, tileSize);
-				colIncrement += tileSize + tileSep;
+		for (Square[] rowOfSquares : g.grid) {
+			for (Square s : rowOfSquares) {
+				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
+				pApplet.rect(s.getXCor(), s.getYCor(), s.getSize(), s.getSize());
 			}
-
-			rowIncrement += tileSize + tileSep;
 		}
 	}
-	
-	public void createScore(){
-		
+
+	public void createScore() {
 	}
 }
