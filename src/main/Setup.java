@@ -8,8 +8,9 @@ import processing.core.PApplet;
  */
 public class Setup extends PApplet {
 	private PApplet pApplet;
-	private int numRows, numCols;
-	private final int tileSep = 2;
+	public int numRows, numCols;
+	public Grid g;
+	public final int tileSep = 2;
 
 	public Setup(PApplet pApplet) {
 		this.pApplet = pApplet;
@@ -28,7 +29,7 @@ public class Setup extends PApplet {
 	 * board
 	 */
 	public void createGrid() {
-		Grid g = new Grid(numRows, numCols);
+		g = new Grid(numRows, numCols);
 		g.setDimensions(pApplet.width, pApplet.height, tileSep);
 		g.loadGrid();
 
