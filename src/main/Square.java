@@ -38,10 +38,6 @@ public class Square {
 	public int getYCor() {
 		return yCor;
 	}
-	
-	public void setYCor(int x) {
-		yCor = yCor + x;
-	}
 
 	public int getSize() {
 		return size;

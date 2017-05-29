@@ -31,7 +31,7 @@ public class Main extends PApplet {
 
 	public void draw() {
 		// Test cases to color individual squares
-		colorizer.spawnZBlock(); // uhhh
+		colorizer.spawnIBlock(); // uhhh
 		colorizer.refreshGrid();
 	}
 }

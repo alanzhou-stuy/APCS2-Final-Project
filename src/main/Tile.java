@@ -3,7 +3,7 @@ package main;
 public class Tile implements Tilable {
 	int[][] tiles;
 	int color;
-
+	
 	public Tile() {
 		tiles = new int[4][4];
 	}

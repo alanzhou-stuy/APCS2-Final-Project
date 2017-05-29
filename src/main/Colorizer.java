@@ -10,7 +10,7 @@ import java.util.Random;
 public class Colorizer extends PApplet {
 	private PApplet pApplet;
 	private Grid g;
-
+	
 	public Colorizer(Grid g, PApplet pApplet) {
 		this.g = g;
 		this.pApplet = pApplet;
@@ -51,6 +51,7 @@ public class Colorizer extends PApplet {
 		color(1, g.numCols / 2 - 1, new int[] { 47, 0, 252 });
 		color(1, g.numCols / 2 , new int[] { 47, 0, 252});
 		color(1, g.numCols / 2 + 1, new int[] {47, 0, 252});
+
 	}
 	
 	public void spawnIBlock() {
