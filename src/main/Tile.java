@@ -1,11 +1,24 @@
 package main;
 
-public class Tile implements Tilable {
-	int[][] tiles;
-	int color;
+import java.util.ArrayList;
 
+public class Tile implements Tilable {
+	private int[][] tiles;
+	private ArrayList<Square> squares;
+	private int color;
+	private Grid g;
+	private int pivotX, pivotY;
+	
 	public Tile() {
 		tiles = new int[4][4];
+		squares = new ArrayList<Square>();
+	}
+	
+	public Tile(Grid g, int pivotX, int pivotY){
+		this();
+		this.g = g;
+		this.pivotX = pivotX;
+		this.pivotY = pivotY;
 	}
 
 	public Tile(String type) {
@@ -30,10 +43,17 @@ public class Tile implements Tilable {
 
 	// bottom aligned
 	public void setIBlock() {
+		/*
 		tiles[3][0] = 1;
 		tiles[3][1] = 1;
 		tiles[3][2] = 1;
 		tiles[3][3] = 1;
+		*/
+		
+		squares.add(g.getSquare(pivotX,pivotY));
+		squares.add(g.getSquare(pivotX,pivotY+1));
+		squares.add(g.getSquare(pivotX,pivotY+2));
+		squares.add(g.getSquare(pivotX,pivotY+3));
 	}
 
 	// left
