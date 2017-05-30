@@ -73,6 +73,30 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
 	}
 	
+	public void setPivotY(int x) {
+		pivotY += x;
+	}
+	
+	public void setPivotX(int x ){
+		pivotX += x;
+	}
+	
+	public int getPivotX() {
+		return pivotX;
+	}
+	
+	public int getPivotY() {
+		return pivotY;
+	}
+	
+	public String blockType(Tile t) {
+		return "";
+	}
+	
+	public void setBlock(String s) {
+		
+	}
+	
 	public void move(){
 	};
 	/*public void move() {

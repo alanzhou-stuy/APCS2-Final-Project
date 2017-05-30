@@ -13,6 +13,7 @@ public class Main extends PApplet {
 	private Leaderboard lb;
 	private final int height = 800;
 	private final int width = 1000;
+	private Tile current;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
@@ -41,7 +42,7 @@ public class Main extends PApplet {
 
 	public void draw() {
 		// Test cases to color individual squares
-		colorizer.spawnTBlock();
+		current = colorizer.spawnIBlock();
 		colorizer.refresh();
 		
 		score.refresh();
