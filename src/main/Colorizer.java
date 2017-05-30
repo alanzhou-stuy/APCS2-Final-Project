@@ -144,6 +144,7 @@ public class Colorizer extends PApplet implements Displayable {
 	
 	public Tile drop(Tile t) {
 		t.setPivotY(-1);
+		t.remove();
 		Tile t1 = new Tile(g,t.getPivotX(),t.getPivotY());
 		//t1.setBlock(t.blockType());
 		t1.setColor(color);

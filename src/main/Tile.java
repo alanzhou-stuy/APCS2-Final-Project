@@ -6,6 +6,7 @@ public class Tile implements Tilable {
 	public ArrayList<Square> squares;
 	private Grid g;
 	public int pivotX, pivotY;
+	private String blockType;
 	
 	public Tile() {
 		squares = new ArrayList<Square>();
@@ -29,6 +30,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotX + 1,pivotY));
 		squares.add(g.getSquare(pivotX + 2,pivotY));
 		squares.add(g.getSquare(pivotX + 3,pivotY));
+		blockType = "I";
 	}
 
 	public void setJBlock() {
@@ -36,6 +38,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotX + 1,pivotY));
 		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
 		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		blockType = "J";
 	}
 
 	public void setLBlock() {
@@ -43,6 +46,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotX + 1,pivotY));
 		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
 		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		blockType = "L";
 	}
 
 	public void setOBlock() {
@@ -50,6 +54,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotX ,pivotY));
 		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
 		squares.add(g.getSquare(pivotX + 1,pivotY));
+		blockType = "O";
 	}
 
 	public void setSBlock() {
@@ -57,6 +62,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotX ,pivotY + 2));
 		squares.add(g.getSquare(pivotX + 1,pivotY ));
 		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
+		blockType = "S";
 	}
 
 	public void setTBlock() {
@@ -64,6 +70,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotX + 1,pivotY));
 		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
 		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		blockType = "T";
 	}
 
 	public void setZBlock() {
@@ -71,6 +78,14 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotX ,pivotY + 1));
 		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
 		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		blockType = "Z";
+	}
+	
+	public void remove() {
+		squares.remove(0);
+		squares.remove(1);
+		squares.remove(2);
+		squares.remove(3);
 	}
 	
 	public void setPivotY(int x) {
@@ -90,12 +105,33 @@ public class Tile implements Tilable {
 	}
 	
 	public String blockType(Tile t) {
-		return "";
+		return blockType;
 	}
 	
-	public void setBlock(String s) {
-		
+	public Tile setBlock(String s) {
+		if (s.equals("I")){
+			setIBlock();
+		}
+		else if (s.equals("J")) {
+			setJBlock();
+		}
+		else if (s.equals("L")) {
+			setLBlock();
+		}
+		else if (s.equals("O")) {
+			setOBlock();
+		}
+		else if (s.equals("S'")) {
+			setSBlock();
+		}
+		else if (s.equals("T")) {
+			setTBlock();
+		}
+		else if (s.equals("Z")) {
+			setZBlock();
+		}
 	}
+		
 	
 	public void move(){
 	};
