@@ -144,11 +144,21 @@ public class Colorizer extends PApplet implements Displayable {
 	
 	public Tile drop(Tile t) {
 		t.setPivotY(-1);
-		t.remove();
 		Tile t1 = new Tile(g,t.getPivotX(),t.getPivotY());
-		//t1.setBlock(t.blockType());
+		t.remove();
+		t1.setBlock(t.blockType());
 		t1.setColor(color);
 		return t1;
+	}
+	
+	public boolean hitBottom(Tile t) {
+		int lowestYCor = t.getPivotY();
+		for (Square s: t.squares){
+			if (s.getPivotY() < lowestYCor) {
+				lowestYCor = s.getPivotY();
+			}
+		}
+		return (lowestYCor == 0);	
 	}
 	
 	

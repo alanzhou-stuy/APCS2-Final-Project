@@ -43,8 +43,7 @@ public class Main extends PApplet {
 	public void draw() {
 		// Test cases to color individual squares
 		current = colorizer.spawnIBlock();
-		colorizer.refresh();
-		
+		current.drop();
 		score.refresh();
 		lb.refresh();
 	}
