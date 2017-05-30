@@ -7,8 +7,12 @@ import processing.core.PApplet;
  * grid through blocks
  */
 public class Main extends PApplet {
-	Setup s;
-	Colorizer colorizer;
+	private Colorizer colorizer;
+	private Grid grid;
+	private Score score;
+	private Leaderboard lb;
+	private final int height = 800;
+	private final int width = 1000;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
@@ -16,17 +20,23 @@ public class Main extends PApplet {
 
 	public void setup() {
 		background(50, 50, 50);
+		grid = new Grid(20,10);
+		
+		colorizer = new Colorizer(grid, this);
+		colorizer.setTileSep(1);
+		colorizer.create(); // create grid
 
-		s = new Setup(this);
-		s.setColCount(10);
-		s.setRowCount(20);
-		s.createGrid();
-
-		colorizer = new Colorizer(s.g, this);
+		score = new Score(this, grid);
+		score.setBackgroundColor(new int[]{200,200,200});
+		score.create();
+		
+		lb = new Leaderboard(this, grid);
+		lb.setBackgroundColor(new int[]{200,200,200});
+		lb.create();
 	}
 
 	public void settings() {
-		size(1200, 1200);
+		size(width, height);
 	}
 
 	public void draw() {
@@ -35,6 +45,9 @@ public class Main extends PApplet {
 		colorizer.color(1, 0, new int[] { 51, 204, 51 });
 		colorizer.color(1, 1, new int[] { 51, 204, 51 });
 		colorizer.color(1, 2, new int[] { 51, 204, 51 });
-		colorizer.refreshGrid();
+		colorizer.refresh();
+		
+		score.refresh();
+		lb.refresh();
 	}
 }
