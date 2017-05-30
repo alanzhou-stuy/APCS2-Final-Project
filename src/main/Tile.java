@@ -7,6 +7,7 @@ public class Tile implements Tilable {
 	private Grid g;
 	public int pivotX, pivotY;
 	private String blockType;
+	public int[] color;
 	
 	public Tile() {
 		squares = new ArrayList<Square>();
@@ -19,10 +20,19 @@ public class Tile implements Tilable {
 		this.pivotY = pivotY;
 	}
 	
+	public int[] getColor(){
+		return color;
+	}
+	
 	public void setColor(int[] color) {
+		this.color = color;
 		for (Square s: squares) {
 			s.setColor(color);
 		}
+	}
+
+	public ArrayList<Square> getSquares() {
+		return squares;
 	}
 
 	public void setIBlock() {
@@ -86,6 +96,10 @@ public class Tile implements Tilable {
 		squares.remove(1);
 		squares.remove(2);
 		squares.remove(3);
+		//squares.remove(g.getSquare(pivotX,pivotY));
+		//squares.remove(1);
+		//squares.remove(2);
+		//squares.remove(3);
 	}
 	
 	public void setPivotY(int x) {
@@ -104,11 +118,11 @@ public class Tile implements Tilable {
 		return pivotY;
 	}
 	
-	public String blockType(Tile t) {
+	public String blockType() {
 		return blockType;
 	}
 	
-	public Tile setBlock(String s) {
+	public void setBlock(String s) {
 		if (s.equals("I")){
 			setIBlock();
 		}

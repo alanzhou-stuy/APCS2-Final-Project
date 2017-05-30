@@ -12,7 +12,6 @@ public class Colorizer extends PApplet implements Displayable {
 	private Grid g;
 	public int numRows, numCols;
 	public int tileSep = 2;
-	private int[] color;
 
 	/**
 	 * @param grid
@@ -89,7 +88,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnIBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setIBlock();
-		color = (new int[] { 189, 219, 249});
+		int [] color = (new int[] { 189, 219, 249});
 		t.setColor(color);
 		return t;
 	}
@@ -97,7 +96,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnJBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setJBlock();
-		color = new int[] {47, 0, 252};
+		int [] color = new int[] {47, 0, 252};
 		t.setColor(color);	
 		return t;
 	}
@@ -105,7 +104,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnSBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setSBlock();
-		color = new int[] {0, 255, 55};
+		int[] color = new int[] {0, 255, 55};
 		t.setColor(color);	
 		return t;
 	}
@@ -113,7 +112,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnOBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setOBlock();
-		color = new int[] {212, 243, 48};
+		int[] color = new int[] {212, 243, 48};
 		t.setColor(color);
 		return t;
 	}
@@ -121,7 +120,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnTBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setTBlock();
-		color = new int[] {40, 10, 62};
+		int[] color = new int[] {40, 10, 62};
 		t.setColor(color);
 		return t;
 	}
@@ -129,7 +128,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnZBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setZBlock();
-		color = new int[] {254, 0, 0};
+		int[] color = new int[] {254, 0, 0};
 		t.setColor(color);
 		return t;
 	}
@@ -137,25 +136,28 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnLBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setJBlock();
-		color = new int[] {255,165,0};
+		int[] color = new int[] {255,165,0};
 		t.setColor(color);
 		return t;
 	}
 	
 	public Tile drop(Tile t) {
-		t.setPivotY(-1);
-		Tile t1 = new Tile(g,t.getPivotX(),t.getPivotY());
-		t.remove();
-		t1.setBlock(t.blockType());
-		t1.setColor(color);
-		return t1;
+		//t.setPivotY(-1);
+		while (!hitBottom(t)) {
+			Tile t1 = new Tile(g,t.getPivotX(),t.getPivotY() - 1);
+			t1.setBlock(t.blockType());
+			t1.setColor(t.getColor());
+			t.remove();
+			t = t1;
+		}
+		return t;
 	}
 	
 	public boolean hitBottom(Tile t) {
-		int lowestYCor = t.getPivotY();
-		for (Square s: t.squares){
-			if (s.getPivotY() < lowestYCor) {
-				lowestYCor = s.getPivotY();
+		int lowestYCor = t.getSquares().get(0).getYCor();
+		for (Square s: t.getSquares()){
+			if (s.getYCor() < lowestYCor) {
+				lowestYCor = s.getYCor();
 			}
 		}
 		return (lowestYCor == 0);	
