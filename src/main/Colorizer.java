@@ -85,52 +85,46 @@ public class Colorizer extends PApplet implements Displayable {
 		}
 	}
 	
-	public void spawnJBlock() {
-		color(0, g.numCols / 2 - 1, new int[] {47, 0, 252});
-		color(1, g.numCols / 2 - 1, new int[] { 47, 0, 252 });
-		color(1, g.numCols / 2 , new int[] { 47, 0, 252});
-		color(1, g.numCols / 2 + 1, new int[] {47, 0, 252});
-	}
-	
 	public void spawnIBlock() {
-		color(0, g.numCols / 2 - 2, new int[] { 189, 219, 249});
-		color(0, g.numCols / 2 - 1, new int[] { 189, 219, 249 });
-		color(0, g.numCols / 2 , new int[] { 189, 219, 249 });
-		color(0, g.numCols / 2 + 1, new int[] { 189, 219, 249 });
+		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
+		t.setIBlock();
+		t.setColor(new int[] { 189, 219, 249});
 	}
 	
-	public void spawnLBlock() {
-		color(0, g.numCols / 2 + 1, new int[] { 252, 166, 55});
-		color(1, g.numCols / 2 - 1, new int[] { 252, 166, 55 });
-		color(1, g.numCols / 2 , new int[] { 252, 166, 55 });
-		color(1, g.numCols / 2 + 1, new int[] {252, 166, 55});
+	public void spawnJBlock() {
+		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
+		t.setJBlock();
+		t.setColor(new int[] {47, 0, 252});	
 	}
 	
 	public void spawnSBlock() {
-		color(0, g.numCols / 2 , new int[] {0, 255, 55});
-		color(0, g.numCols / 2 + 1, new int[] {0, 255, 55});
-		color(1, g.numCols / 2 , new int[] {0, 255, 55 });
-		color(1, g.numCols / 2 - 1, new int[] {0, 255, 55});
+		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
+		t.setSBlock();
+		t.setColor(new int[] {0, 255, 55});	
 	}
 	
 	public void spawnOBlock() {
-		color(0, g.numCols / 2 - 1, new int[] {212, 243, 48});
-		color(0, g.numCols / 2 , new int[] {212, 243, 48});
-		color(1, g.numCols / 2 - 1, new int[] {212, 243, 48 });
-		color(1, g.numCols / 2 , new int[] {212, 243, 48});
+		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
+		t.setOBlock();
+		t.setColor(new int[] {212, 243, 48});	
 	}
 	
 	public void spawnTBlock() {
-		color(0, g.numCols / 2, new int[] {40, 10, 62});
-		color(1, g.numCols / 2 + 1, new int[] {40, 10, 62});
-		color(1, g.numCols / 2 , new int[] {40, 10, 62});
-		color(1, g.numCols / 2 - 1, new int[] {40, 10, 62});
+		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
+		t.setTBlock();
+		t.setColor(new int[] {40, 10, 62});	
 	}
 	
 	public void spawnZBlock() {
-		color(0, g.numCols / 2 , new int[] {254, 0, 0});
-		color(0, g.numCols / 2 - 1, new int[] {254, 0, 0});
-		color(1, g.numCols / 2 , new int[] {254, 0, 0});
-		color(1, g.numCols / 2  +1, new int[] {254, 0, 0});
+		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
+		t.setZBlock();
+		t.setColor(new int[] {254, 0, 0});	
 	}
+	
+	public void spawnLBlock() {
+		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
+		t.setJBlock();
+		t.setColor(new int[] {255,165,0});	
+	}
+	
 }
