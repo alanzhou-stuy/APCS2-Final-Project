@@ -1,5 +1,7 @@
 package main;
 
+import processing.core.PApplet;
+
 /**
  * Class for the grid in the Main frame. Contains a 2-D array of Squares. Grid
  * has no ability to change visuals in the Main frame directly. Instead, all
@@ -8,7 +10,7 @@ package main;
 public class Grid {
 	public Square[][] grid;
 	public int numRows, numCols;
-	public int width, height, squareSep, squareSize;
+	public int pAppletWidth, pAppletHeight, squareSep, squareSize;
 	public int sideMargin, vertMargin;
 
 	public Grid(int numRows, int numCols) {
@@ -20,34 +22,60 @@ public class Grid {
 	/**
 	 * Sets the dimensions of the grid
 	 * 
-	 * @param width
+	 * @param pAppletWidth
 	 *            width of grid in pixels
-	 * @param height
+	 * @param pAppletHeight
 	 *            height of grid in pixels
 	 * @param squareSep
 	 *            separation of squares in pixels
 	 */
-	public void setDimensions(int width, int height, int squareSep) {
-		this.width = width;
-		this.height = height;
+	public void setDimensions(int pAppletWidth, int pAppletHeight, int squareSep) {
+		this.pAppletWidth = pAppletWidth;
+		this.pAppletHeight = pAppletHeight;
 		this.squareSep = squareSep;
-		
-		if ((width / (numCols + 3)) <= (height / (numRows + 3))) {
-			squareSize = width / (numCols + 3);
+
+		if (((pAppletWidth / (numCols)*.75) <= ((pAppletHeight / (numRows)*.75)))){
+			//squareSize = pAppletWidth / (numCols + 3);
+			squareSize = (int)((pAppletWidth / numCols) * .85);
 		} else {
-			squareSize = height / (numRows + 3);
+			//squareSize = pAppletHeight / (numRows + 3);
+			squareSize = (int)((pAppletHeight / numRows) * .85);
 		}
 
-		sideMargin = (width - numCols * squareSize - (numCols - 1) * squareSep) / 2;
-		vertMargin = (height - numRows * squareSize - (numRows - 1) * squareSep) / 2;
-		
-		
+		sideMargin = ((pAppletWidth - numCols * squareSize - (numCols - 1) * squareSep) / 2);
+		vertMargin = ((pAppletHeight - numRows * squareSize - (numRows - 1) * squareSep) / 2);
+		//sideMargin = (int)(pAppletWidth * .3);
+		//vertMargin = (int)(pAppletHeight * .1);
+	}
+
+	/**
+	 * Updates grid if the number of rows and columns are changed
+	 * 
+	 * @param newRows
+	 * @param newCols
+	 */
+	public void updateGrid(int newRows, int newCols) {
+		Square[][] gridNew = new Square[newRows][newCols];
+
+		for (int r = 0; r < newRows; r++) {
+			for (int c = 0; c < newCols; c++) {
+				if (r < numRows && c < numCols) {
+					gridNew[r][c] = grid[r][c];
+				} else {
+					gridNew[r][c] = null;
+				}
+			}
+		}
+
+		numRows = newRows;
+		numCols = newCols;
+		this.grid = gridNew;
 	}
 
 	public Square getSquare(int row, int col) {
 		return grid[row][col];
 	}
-	
+
 	public int getNumRows() {
 		return numRows;
 	}

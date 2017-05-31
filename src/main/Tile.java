@@ -19,9 +19,10 @@ public class Tile implements Tilable {
 	}
 	
 	public void setColor(int[] color) {
-		for (Square s: squares) {
+		for (Square s : squares) {
 			s.setColor(color);
 		}
+		// setBlockColor();
 	}
 
 	public void setIBlock() {
@@ -32,17 +33,17 @@ public class Tile implements Tilable {
 	}
 
 	public void setJBlock() {
-		squares.add(g.getSquare(pivotX , pivotY));
-		squares.add(g.getSquare(pivotX + 1,pivotY));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		squares.add(g.getSquare(pivotX, pivotY));
+		squares.add(g.getSquare(pivotX + 1, pivotY));
+		squares.add(g.getSquare(pivotX + 1, pivotY + 1));
+		squares.add(g.getSquare(pivotX + 1, pivotY + 2));
 	}
 
 	public void setLBlock() {
-		squares.add(g.getSquare(pivotX ,pivotY + 2));
-		squares.add(g.getSquare(pivotX + 1,pivotY));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		squares.add(g.getSquare(pivotX, pivotY + 2));
+		squares.add(g.getSquare(pivotX + 1, pivotY));
+		squares.add(g.getSquare(pivotX + 1, pivotY + 1));
+		squares.add(g.getSquare(pivotX + 1, pivotY + 2));
 	}
 
 	public void setOBlock() {
@@ -53,17 +54,17 @@ public class Tile implements Tilable {
 	}
 
 	public void setSBlock() {
-		squares.add(g.getSquare(pivotX ,pivotY + 1));
-		squares.add(g.getSquare(pivotX ,pivotY + 2));
-		squares.add(g.getSquare(pivotX + 1,pivotY ));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
+		squares.add(g.getSquare(pivotX, pivotY + 1));
+		squares.add(g.getSquare(pivotX, pivotY + 2));
+		squares.add(g.getSquare(pivotX + 1, pivotY));
+		squares.add(g.getSquare(pivotX + 1, pivotY + 1));
 	}
 
 	public void setTBlock() {
-		squares.add(g.getSquare(pivotX ,pivotY + 2));
-		squares.add(g.getSquare(pivotX + 1,pivotY));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		squares.add(g.getSquare(pivotX, pivotY + 2));
+		squares.add(g.getSquare(pivotX + 1, pivotY));
+		squares.add(g.getSquare(pivotX + 1, pivotY + 1));
+		squares.add(g.getSquare(pivotX + 1, pivotY + 2));
 	}
 
 	public void setZBlock() {
@@ -73,14 +74,16 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
 	}
 	
-	public void move(){
+	public void move() {
+		// squares.add(g.getSquare)
 	};
-	/*public void move() {
-		squares.add(g.getSquare(squares.get(0).,squares.get(0).));
-		squares.add(g.getSquare(squares.get(0).,squares.get(1).);
-		squares.add(g.getSquare(squares.get(0).,squares.get(2).);
-		squares.add(g.getSquare(squares.get(0),squares.get(3).);
-	};*/
+	/*
+	 * public void move() {
+	 * squares.add(g.getSquare(squares.get(0).,squares.get(0).));
+	 * squares.add(g.getSquare(squares.get(0).,squares.get(1).);
+	 * squares.add(g.getSquare(squares.get(0).,squares.get(2).);
+	 * squares.add(g.getSquare(squares.get(0),squares.get(3).); };
+	 */
 
 	public void rotate() {
 	};

@@ -1,6 +1,7 @@
 package main;
 
 import processing.core.PApplet;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -10,8 +11,9 @@ import java.util.Random;
 public class Colorizer extends PApplet implements Displayable {
 	private PApplet pApplet;
 	private Grid g;
+	private LinkedList<Tile> existingTiles;
 	public int numRows, numCols;
-	public int tileSep = 2;
+	public int tileSep = 1; // default is 1
 
 	/**
 	 * @param grid
@@ -27,43 +29,41 @@ public class Colorizer extends PApplet implements Displayable {
 		numRows = g.getNumRows();
 		numCols = g.getNumCols();
 	}
-	
-	public void setTileSep(int tileSep){
+
+	public void setTileSep(int tileSep) {
 		this.tileSep = tileSep;
 	}
 
 	public void color(int row, int col, int[] color) {
 		g.getSquare(row, col).setColor(color);
 	}
-	
+
 	public void spawnBlock() {
 		Random rand = new Random();
-		int x = rand.nextInt(7); 
-		if (x == 0) {
-			spawnJBlock();	
-		}	 
-		else if(x == 1) {
+		int x = rand.nextInt(7);
+
+		switch (x) {
+		case 0:
+			spawnJBlock();
+		case 1:
 			spawnIBlock();
-		}
-		else if(x == 2){
+		case 2:
 			spawnLBlock();
-		}
-		else if(x == 3) {
+		case 3:
 			spawnSBlock();
-		}
-		else if(x == 4){
+		case 4:
 			spawnTBlock();
-		}
-		else if(x == 5) {
+		case 5:
 			spawnZBlock();
-		}
-		else if (x == 6) {
+		case 6:
 			spawnOBlock();
 		}
 	}
 
 	@Override
 	public void refresh() {
+		g.setDimensions(pApplet.width, pApplet.height, tileSep);
+		g.loadGrid();
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
 				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
@@ -76,7 +76,6 @@ public class Colorizer extends PApplet implements Displayable {
 	public void create() {
 		g.setDimensions(pApplet.width, pApplet.height, tileSep);
 		g.loadGrid();
-
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
 				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
@@ -126,5 +125,8 @@ public class Colorizer extends PApplet implements Displayable {
 		t.setJBlock();
 		t.setColor(new int[] {255,165,0});	
 	}
-	
+
+	public void spawnBlock(int[] color) {
+		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
+	}
 }
