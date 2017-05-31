@@ -43,9 +43,9 @@ public class Tile implements Tilable {
 
 	public void setIBlock() {
 		squares.add(g.getSquare(pivotY, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX));
-		squares.add(g.getSquare(pivotY + 2, pivotX));
-		squares.add(g.getSquare(pivotY + 3, pivotX));
+		squares.add(g.getSquare(pivotY + 1, pivotX)); 
+		squares.add(g.getSquare(pivotY + 2, pivotX)); 
+		squares.add(g.getSquare(pivotY + 3, pivotX)); 
 		blockType = "I";
 		height = 4;
 	}
