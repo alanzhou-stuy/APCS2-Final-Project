@@ -1,5 +1,7 @@
 package main;
 
+import processing.core.PApplet;
+
 /**
  * Class for the grid in the Main frame. Contains a 2-D array of Squares. Grid
  * has no ability to change visuals in the Main frame directly. Instead, all
@@ -8,7 +10,7 @@ package main;
 public class Grid {
 	public Square[][] grid;
 	public int numRows, numCols;
-	public int width, height, squareSep, squareSize;
+	public int pAppletWidth, pAppletHeight, squareSep, squareSize;
 	public int sideMargin, vertMargin;
 
 	public Grid(int numRows, int numCols) {
@@ -20,26 +22,30 @@ public class Grid {
 	/**
 	 * Sets the dimensions of the grid
 	 * 
-	 * @param width
+	 * @param pAppletWidth
 	 *            width of grid in pixels
-	 * @param height
+	 * @param pAppletHeight
 	 *            height of grid in pixels
 	 * @param squareSep
 	 *            separation of squares in pixels
 	 */
-	public void setDimensions(int width, int height, int squareSep) {
-		this.width = width;
-		this.height = height;
+	public void setDimensions(int pAppletWidth, int pAppletHeight, int squareSep) {
+		this.pAppletWidth = pAppletWidth;
+		this.pAppletHeight = pAppletHeight;
 		this.squareSep = squareSep;
 
-		if ((width / (numCols + 3)) <= (height / (numRows + 3))) {
-			squareSize = width / (numCols + 3);
+		if (((pAppletWidth / (numCols)*.75) <= ((pAppletHeight / (numRows)*.75)))){
+			//squareSize = pAppletWidth / (numCols + 3);
+			squareSize = (int)((pAppletWidth / numCols) * .85);
 		} else {
-			squareSize = height / (numRows + 3);
+			//squareSize = pAppletHeight / (numRows + 3);
+			squareSize = (int)((pAppletHeight / numRows) * .85);
 		}
 
-		sideMargin = (width - numCols * squareSize - (numCols - 1) * squareSep) / 2;
-		vertMargin = (height - numRows * squareSize - (numRows - 1) * squareSep) / 2;
+		sideMargin = ((pAppletWidth - numCols * squareSize - (numCols - 1) * squareSep) / 2);
+		vertMargin = ((pAppletHeight - numRows * squareSize - (numRows - 1) * squareSep) / 2);
+		//sideMargin = (int)(pAppletWidth * .3);
+		//vertMargin = (int)(pAppletHeight * .1);
 	}
 
 	/**
