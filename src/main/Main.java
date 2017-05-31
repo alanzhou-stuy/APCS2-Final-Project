@@ -64,13 +64,7 @@ public class Main extends PApplet {
 	}
 
 	public void draw() {
-		// Test cases to color individual squares
-		colorizer.color(0, 0, new int[] { 51, 204, 51 });
-		colorizer.color(1, 0, new int[] { 51, 204, 51 });
-		colorizer.color(1, 1, new int[] { 51, 204, 51 });
-		colorizer.color(1, 2, new int[] { 51, 204, 51 });
-		colorizer.refresh();
-		
+		// Test cases to color individual square
 		grid.setNumRows(numRows);
 		grid.setNumCols(numCols);
 		colorizer.create();

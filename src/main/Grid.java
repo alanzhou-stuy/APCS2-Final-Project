@@ -10,7 +10,7 @@ public class Grid {
 	public int numRows, numCols;
 	public int width, height, squareSep, squareSize;
 	public int sideMargin, vertMargin;
-
+	
 	public Grid(int numRows, int numCols) {
 		grid = new Square[numRows][numCols];
 		this.numRows = numRows;

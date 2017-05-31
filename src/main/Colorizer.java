@@ -3,6 +3,7 @@ package main;
 import processing.core.PApplet;
 import java.util.LinkedList;
 import java.util.Random;
+
 /**
  * Allows for the interaction with the Grid and provides for coloring of squares
  * and tiles, as well as conducting their movement and placement throughout.
@@ -25,7 +26,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Colorizer(Grid g, PApplet pApplet) {
 		this.g = g;
 		this.pApplet = pApplet;
-		
+
 		numRows = g.getNumRows();
 		numCols = g.getNumCols();
 	}
@@ -83,8 +84,8 @@ public class Colorizer extends PApplet implements Displayable {
 			}
 		}
 	}
-	
-	public void spawnBlock(int[] color){
+
+	public void spawnBlock(int[] color) {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 	}
 

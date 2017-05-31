@@ -94,10 +94,14 @@ public class Tile implements Tilable {
 
 	// bottom right
 	public void setZBlock() {
+		squares.add(g.getSquare(pivotX, pivotY));
+		squares.add(g.getSquare(pivotX, pivotY + 1));
+		squares.add(g.getSquare(pivotX + 1, pivotY + 1));
+		squares.add(g.getSquare(pivotX + 1, pivotY + 2));
 	}
 
 	public void move() {
-		//squares.add(g.getSquare)
+		// squares.add(g.getSquare)
 	};
 	/*
 	 * public void move() {
