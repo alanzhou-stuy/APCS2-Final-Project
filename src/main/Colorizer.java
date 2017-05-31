@@ -39,24 +39,25 @@ public class Colorizer extends PApplet implements Displayable {
 		g.getSquare(row, col).setColor(color);
 	}
 
-	public void spawnBlock() {
+	public Tile spawnBlock() {
 		Random rand = new Random();
 		int x = rand.nextInt(7);
 		if (x == 0) {
-			spawnJBlock();
+			return spawnJBlock();
 		} else if (x == 1) {
-			spawnIBlock();
+			return spawnIBlock();
 		} else if (x == 2) {
-			spawnLBlock();
+			return spawnLBlock();
 		} else if (x == 3) {
-			spawnSBlock();
+			return spawnSBlock();
 		} else if (x == 4) {
-			spawnTBlock();
+			return spawnTBlock();
 		} else if (x == 5) {
-			spawnZBlock();
+			return spawnZBlock();
 		} else if (x == 6) {
-			spawnOBlock();
+			return spawnOBlock();
 		}
+		return spawnIBlock();
 	}
 
 	@Override
@@ -137,15 +138,34 @@ public class Colorizer extends PApplet implements Displayable {
 		t.setColor(color);
 		return t;
 	}
-
+	
+	public Tile rotateRight(Tile t, int numOfTimes){
+		/*int[] white = new int[] { 255, 255, 255 };
+		int y = 0;
+		int size1 = t.getSquares().size();
+		while (y < size1) {
+			t.remove().setColor(white);
+			y++;
+		}
+		Tile t1 = new Tile();
+		t1.setBlock(t.blockType());
+		t1.setColor(t.getColor());*/
+		return t;
+	}
+	
+	public Tile rotateLeft(Tile t, int numOfTimes){
+		return t;
+	}
+	
 	public Tile drop(Tile t, int numberOfDrop) {
 		int[] white = new int[] { 255, 255, 255 };
 		// t.setPivotY(-1);
 		int x = 0;
 		int y = 0;
+		int size1 = t.getSquares().size();
 		while (x < numberOfDrop) {
 			y = 0;
-			int size1 = t.getSquares().size();
+			size1 = t.getSquares().size();
 			while (y < size1) {
 				t.remove().setColor(white);
 				y++;
@@ -156,29 +176,28 @@ public class Colorizer extends PApplet implements Displayable {
 			t1.setBlock(t.blockType());
 			t1.setColor(t.getColor());
 			// System.out.println("Calls remove");
-			// t = t1;
+			t = t1;
 			x++;
 		}
 		return t;
 	}
-
+	
 	/*
 	 * public void fall(Tile t) { while (current.getPivotY() < 16) { current =
 	 * drop(t); current.setPivotY(t.getPivotY() + 1); } }
 	 */
 
-	public boolean hitBottom(Tile t) {
+	/*public boolean hitBottom(Tile t) {
 		int lowestYCor = t.getSquares().get(0).getYCor();
-		// System.out.println(lowestYCor);
 		for (Square s : t.getSquares()) {
 			if (s.getYCor() < lowestYCor) {
 				lowestYCor = s.getYCor();
 			}
-			if (lowestYCor == 50) {
+			if (lowestYCor == 0) {
 				return true;
 			}
 		}
 		return false;
-	}
+	}*/
 
 }

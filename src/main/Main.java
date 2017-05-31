@@ -44,8 +44,10 @@ public class Main extends PApplet {
 		// Test cases to color individual squares
 		//
 		
-		current = colorizer.spawnLBlock();
-		current = colorizer.drop(current,16);
+		current = colorizer.spawnBlock();
+		current = colorizer.drop(current,grid.getNumRows() - current.getHeight());
+		
+		//System.out.println(current.hitBottom());
 		//current = colorizer.drop(current);
 		//current = colorizer.drop(current);
 		//current = colorizer.drop(current);

@@ -8,9 +8,11 @@ public class Tile implements Tilable {
 	public int pivotX, pivotY;
 	private String blockType;
 	public int[] color;
+	private int height;
 
 	public Tile() {
 		squares = new ArrayList<Square>();
+		height = 2;
 	}
 
 	public Tile(Grid g, int pivotY, int pivotX) {
@@ -18,6 +20,10 @@ public class Tile implements Tilable {
 		this.g = g;
 		this.pivotX = pivotX;
 		this.pivotY = pivotY;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 
 	public int[] getColor() {
@@ -41,6 +47,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 2, pivotX));
 		squares.add(g.getSquare(pivotY + 3, pivotX));
 		blockType = "I";
+		height = 4;
 	}
 
 	public void setJBlock() {
@@ -48,7 +55,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 2, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
-		
+		height = 3;
 		blockType = "J";
 	}
 
@@ -57,6 +64,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 1, pivotX));
 		squares.add(g.getSquare(pivotY + 2, pivotX ));
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
+		height = 3;
 		blockType = "L";
 	}
 
@@ -73,6 +81,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 1, pivotX));
 		squares.add(g.getSquare(pivotY + 2, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+		height = 3;
 		blockType = "S";
 	}
 
@@ -81,6 +90,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 2, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
+		height = 3;
 		blockType = "T";
 	}
 
@@ -89,6 +99,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 1, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
+		height = 3;
 		blockType = "Z";
 	}
 
@@ -138,6 +149,21 @@ public class Tile implements Tilable {
 		}
 	}
 
+	//not sure if it works
+	public boolean hitBottom() {
+		int lowestYCor = squares.get(0).getYCor();
+		int x = 0;
+		while (x < squares.size()) {
+			if (squares.get(x).getYCor() < lowestYCor) {
+				lowestYCor = squares.get(x).getYCor();
+			}
+			if (lowestYCor == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void move() {
 	};
 
