@@ -51,7 +51,7 @@ public class Main extends PApplet {
 			current = colorizer.drop(current,
 			// grid.getNumRows() - current.getHeight()
 					1);
-		}
+		}	
 		// System.out.println(current.hitBottom());
 		// current = colorizer.drop(current);
 		// current = colorizer.drop(current);
