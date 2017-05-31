@@ -23,14 +23,14 @@ public class Colorizer extends PApplet implements Displayable {
 	 * @param pApplet
 	 *            PApplet in which Colorizer has the ability to change visual
 	 *            aspects
-	 * @param current 
+	 * @param current
 	 */
 	public Colorizer(Grid g, PApplet pApplet) {
 		this.g = g;
 		this.pApplet = pApplet;
 		numRows = g.getNumRows();
 		numCols = g.getNumCols();
-	    current = new Tile();
+		current = new Tile();
 	}
 
 	public void setTileSep(int tileSep) {
@@ -136,7 +136,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnLBlock() {
-		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
+		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setLBlock();
 		int[] color = new int[] { 255, 165, 0 };
 		t.setColor(color);
@@ -144,19 +144,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile rotateRight(Tile t, int numOfTimes) {
-		/*
-		 * int[] white = new int[] { 255, 255, 255 }; int y = 0; int size1 =
-		 * t.getSquares().size(); while (y < size1) {
-		 * t.remove().setColor(white); y++; } Tile t1 = new Tile();
-		 * t1.setBlock(t.blockType()); t1.setColor(t.getColor());
-		 */
 		return t;
 	}
-
-	public void spawnBlock(int[] color) {
-		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
-	}
-
+	
 	public Tile rotateLeft(Tile t, int numOfTimes) {
 		return t;
 	}

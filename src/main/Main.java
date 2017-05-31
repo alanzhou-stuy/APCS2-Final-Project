@@ -16,8 +16,9 @@ public class Main extends PApplet {
 	private final int height = 900;
 	private final int width = 1600;
 	private int numRows, numCols;
-	private int[] bgColor = {20,20,20};
+	private int[] bgColor = { 20, 20, 20 };
 	private Tile current;
+	int timer = 0;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
@@ -45,7 +46,7 @@ public class Main extends PApplet {
 		gui.addSlider("numCols").setSize(225, 50).setRange(4, 40).setPosition(40, 500).setValue(10)
 				.setNumberOfTickMarks(37);
 
-		background(bgColor[0],bgColor[1],bgColor[2]);
+		background(bgColor[0], bgColor[1], bgColor[2]);
 		grid = new Grid(numRows, numCols);
 
 		colorizer = new Colorizer(grid, this);
@@ -60,6 +61,8 @@ public class Main extends PApplet {
 		lb = new Leaderboard(this, grid);
 		lb.setBackgroundColor(new int[] { 200, 200, 200 });
 		lb.create();
+
+		current = colorizer.spawnLBlock();
 	}
 
 	public void settings() {
@@ -67,20 +70,20 @@ public class Main extends PApplet {
 	}
 
 	public void draw() {
-		// Test cases to color individual squares
-		// Test cases to color individual square
-		background(bgColor[0],bgColor[1],bgColor[2]);
-		//score.refresh();
-		grid.updateGrid(numRows, numCols);; // should only be if changes
-		//current = colorizer.drop(current,1);
-		
-		//System.out.println(current.hitBottom());
-		//current = colorizer.drop(current);
-		//current = colorizer.drop(current);
-		//current = colorizer.drop(current);
-		//current = colorizer.drop(current);
+		background(bgColor[0], bgColor[1], bgColor[2]);
+		grid.updateGrid(numRows, numCols);
+		; // should only be if changes
+
+		if (timer % 40 == 0) {
+			current = colorizer.drop(current,
+					// grid.getNumRows() - current.getHeight()
+					1);
+		}
+
 		colorizer.refresh();
-		//score.refresh();
-		//lb.refresh();
+		score.refresh();
+		lb.refresh();
+
+		timer++;
 	}
 }

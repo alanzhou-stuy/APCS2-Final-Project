@@ -4,14 +4,18 @@ import java.util.ArrayList;
 
 public class Tile implements Tilable {
 	public ArrayList<Square> squares;
+	public ArrayList<Integer[]> respectiveCoords;
 	private Grid g;
 	public int pivotX, pivotY;
 	private String blockType;
 	public int[] color;
 	private int height;
+	private int phase;
+	private int numOfPhases;
 
 	public Tile() {
 		squares = new ArrayList<Square>();
+		respectiveCoords = new ArrayList<Integer[]>();
 		height = 2;
 	}
 
@@ -21,7 +25,7 @@ public class Tile implements Tilable {
 		this.pivotX = pivotX;
 		this.pivotY = pivotY;
 	}
-	
+
 	public int getHeight() {
 		return height;
 	}
@@ -44,28 +48,40 @@ public class Tile implements Tilable {
 
 	public void setIBlock() {
 		squares.add(g.getSquare(pivotY, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX)); 
-		squares.add(g.getSquare(pivotY + 2, pivotX)); 
-		squares.add(g.getSquare(pivotY + 3, pivotX)); 
-		blockType = "I";
+		squares.add(g.getSquare(pivotY + 1, pivotX));
+		squares.add(g.getSquare(pivotY + 2, pivotX));
+		squares.add(g.getSquare(pivotY + 3, pivotX));
 		height = 4;
+		phase = 0;
+		blockType = "I";
+		numOfPhases = 2;
 	}
 
 	public void setJBlock() {
-		squares.add(g.getSquare(pivotY , pivotX + 1));
+		squares.add(g.getSquare(pivotY, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 2, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
 		height = 3;
+		phase = 0;
 		blockType = "J";
+		numOfPhases = 4;
 	}
 
 	public void setLBlock() {
-		squares.add(g.getSquare(pivotY, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX));
-		squares.add(g.getSquare(pivotY + 2, pivotX ));
-		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
+		squares.add(g.getSquare(pivotY, pivotX)); // 0 0
+		squares.add(g.getSquare(pivotY + 1, pivotX)); // 1 0
+		squares.add(g.getSquare(pivotY + 2, pivotX)); // 2 0
+		squares.add(g.getSquare(pivotY + 2, pivotX + 1)); // 2 1
+		
+		respectiveCoords.add(new Integer[]{0,0});
+		respectiveCoords.add(new Integer[]{1,0});
+		respectiveCoords.add(new Integer[]{2,0});
+		respectiveCoords.add(new Integer[]{2,1});
+		
 		height = 3;
+		phase = 0;
+		numOfPhases = 4;
 		blockType = "L";
 	}
 
@@ -74,6 +90,8 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 1, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		squares.add(g.getSquare(pivotY, pivotX + 1));
+		height = 2;
+		numOfPhases = 1;
 		blockType = "O";
 	}
 
@@ -83,6 +101,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 2, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		height = 3;
+		numOfPhases = 2;
 		blockType = "S";
 	}
 
@@ -92,6 +111,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
 		height = 3;
+		numOfPhases = 4;
 		blockType = "T";
 	}
 
@@ -101,6 +121,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
 		height = 3;
+		numOfPhases = 2;
 		blockType = "Z";
 	}
 
@@ -110,6 +131,18 @@ public class Tile implements Tilable {
 		// squares.remove(1);
 		// squares.remove(2);
 		// squares.remove(3);
+	}
+
+	public int getNumOfPhases() {
+		return numOfPhases;
+	}
+
+	public int getPhase() {
+		return phase;
+	}
+
+	public void setPhase(int phase) {
+		this.phase = phase;
 	}
 
 	public void setPivotX(int x) {
@@ -150,7 +183,7 @@ public class Tile implements Tilable {
 		}
 	}
 
-	//not sure if it works
+	// not sure if it works
 	public boolean hitBottom() {
 		int lowestYCor = squares.get(0).getYCor();
 		int x = 0;
@@ -164,7 +197,7 @@ public class Tile implements Tilable {
 		}
 		return false;
 	}
-	
+
 	public void move() {
 		
 	}
