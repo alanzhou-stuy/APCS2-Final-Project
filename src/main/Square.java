@@ -33,7 +33,7 @@ public class Square {
 		this.xCor = xCor;
 		this.yCor = yCor;
 	}
-
+	
 	public void setSize(int size) {
 		this.size = size;
 	}
@@ -57,4 +57,5 @@ public class Square {
 	public int[] getColor() {
 		return color;
 	}
+	
 }

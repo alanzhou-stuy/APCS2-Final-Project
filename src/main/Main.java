@@ -17,12 +17,14 @@ public class Main extends PApplet {
 	private final int width = 1600;
 	private int numRows, numCols;
 	private int[] bgColor = {20,20,20};
+	private Tile current;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
 	}
 
 	public void setup() {
+
 		numRows = 20;
 		numCols = 10;
 
@@ -49,6 +51,7 @@ public class Main extends PApplet {
 		colorizer = new Colorizer(grid, this);
 		colorizer.setTileSep(1);
 		colorizer.create(); // create grid
+		current = colorizer.spawnIBlock();
 
 		score = new Score(this, grid);
 		score.setBackgroundColor(new int[] { 200, 200, 200 });
@@ -65,11 +68,19 @@ public class Main extends PApplet {
 
 	public void draw() {
 		// Test cases to color individual squares
-		colorizer.spawnTBlock();
 		// Test cases to color individual square
 		background(bgColor[0],bgColor[1],bgColor[2]);
 		//score.refresh();
 		grid.updateGrid(numRows, numCols);; // should only be if changes
+		//current = colorizer.drop(current,1);
+		
+		//System.out.println(current.hitBottom());
+		//current = colorizer.drop(current);
+		//current = colorizer.drop(current);
+		//current = colorizer.drop(current);
+		//current = colorizer.drop(current);
 		colorizer.refresh();
+		//score.refresh();
+		//lb.refresh();
 	}
 }
