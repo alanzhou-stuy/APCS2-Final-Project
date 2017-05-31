@@ -40,8 +40,6 @@ public class Grid {
 
 		sideMargin = (width - numCols * squareSize - (numCols - 1) * squareSep) / 2;
 		vertMargin = (height - numRows * squareSize - (numRows - 1) * squareSep) / 2;
-		
-		
 	}
 
 	public Square getSquare(int row, int col) {
