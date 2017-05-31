@@ -44,40 +44,41 @@ public class Tile implements Tilable {
 	}
 
 	public void setJBlock() {
-		squares.add(g.getSquare(pivotY, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX));
-		squares.add(g.getSquare(pivotY + 2, pivotX ));
+		squares.add(g.getSquare(pivotY , pivotX + 1));
+		squares.add(g.getSquare(pivotY + 2, pivotX));
+		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
+		
 		blockType = "J";
 	}
 
 	public void setLBlock() {
-		squares.add(g.getSquare(pivotY + 2, pivotX));
-		squares.add(g.getSquare(pivotY , pivotX + 1));
-		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+		squares.add(g.getSquare(pivotY, pivotX));
+		squares.add(g.getSquare(pivotY + 1, pivotX));
+		squares.add(g.getSquare(pivotY + 2, pivotX ));
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
 		blockType = "L";
 	}
 
 	public void setOBlock() {
-		squares.add(g.getSquare(pivotY + 1, pivotX));
 		squares.add(g.getSquare(pivotY, pivotX));
+		squares.add(g.getSquare(pivotY + 1, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		squares.add(g.getSquare(pivotY, pivotX + 1));
 		blockType = "O";
 	}
 
 	public void setSBlock() {
+		squares.add(g.getSquare(pivotY, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 1, pivotX));
 		squares.add(g.getSquare(pivotY + 2, pivotX));
-		squares.add(g.getSquare(pivotY, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		blockType = "S";
 	}
 
 	public void setTBlock() {
-		squares.add(g.getSquare(pivotY + 2, pivotX));
 		squares.add(g.getSquare(pivotY, pivotX + 1));
+		squares.add(g.getSquare(pivotY + 2, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
 		blockType = "T";
@@ -87,7 +88,7 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX));
 		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
-		squares.add(g.getSquare(pivotY + 2, pivotX + 2));
+		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
 		blockType = "Z";
 	}
 
@@ -100,11 +101,11 @@ public class Tile implements Tilable {
 	}
 
 	public void setPivotX(int x) {
-		pivotX += x;
+		pivotX = x;
 	}
 
 	public void setPivotY(int y) {
-		pivotY += y;
+		pivotY = y;
 	}
 
 	public int getPivotX() {
@@ -128,7 +129,7 @@ public class Tile implements Tilable {
 			setLBlock();
 		} else if (s.equals("O")) {
 			setOBlock();
-		} else if (s.equals("S'")) {
+		} else if (s.equals("S")) {
 			setSBlock();
 		} else if (s.equals("T")) {
 			setTBlock();

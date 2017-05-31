@@ -21,18 +21,18 @@ public class Main extends PApplet {
 
 	public void setup() {
 		background(50, 50, 50);
-		grid = new Grid(20,10);
-		
+		grid = new Grid(20, 10);
+
 		colorizer = new Colorizer(grid, this);
 		colorizer.setTileSep(1);
 		colorizer.create(); // create grid
 
 		score = new Score(this, grid);
-		score.setBackgroundColor(new int[]{200,200,200});
+		score.setBackgroundColor(new int[] { 200, 200, 200 });
 		score.create();
-		
+
 		lb = new Leaderboard(this, grid);
-		lb.setBackgroundColor(new int[]{200,200,200});
+		lb.setBackgroundColor(new int[] { 200, 200, 200 });
 		lb.create();
 	}
 
@@ -42,8 +42,14 @@ public class Main extends PApplet {
 
 	public void draw() {
 		// Test cases to color individual squares
-		current = colorizer.spawnIBlock();
-		colorizer.drop(current);
+		//
+		
+		current = colorizer.spawnLBlock();
+		current = colorizer.drop(current,16);
+		//current = colorizer.drop(current);
+		//current = colorizer.drop(current);
+		//current = colorizer.drop(current);
+		//current = colorizer.drop(current);
 		colorizer.refresh();
 		score.refresh();
 		lb.refresh();

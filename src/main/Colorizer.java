@@ -13,6 +13,7 @@ public class Colorizer extends PApplet implements Displayable {
 	private Grid g;
 	public int numRows, numCols;
 	public int tileSep = 2;
+	private Tile current;
 
 	/**
 	 * @param grid
@@ -23,42 +24,37 @@ public class Colorizer extends PApplet implements Displayable {
 	 *            aspects
 	 */
 	public Colorizer(Grid g, PApplet pApplet) {
-		this.g =  g;
+		this.g = g;
 		this.pApplet = pApplet;
 		numRows = g.getNumRows();
 		numCols = g.getNumCols();
+		current = new Tile();
 	}
-	
-	public void setTileSep(int tileSep){
+
+	public void setTileSep(int tileSep) {
 		this.tileSep = tileSep;
 	}
 
 	public void color(int row, int col, int[] color) {
 		g.getSquare(row, col).setColor(color);
 	}
-	
+
 	public void spawnBlock() {
 		Random rand = new Random();
-		int x = rand.nextInt(7); 
+		int x = rand.nextInt(7);
 		if (x == 0) {
-			spawnJBlock();	
-		}	 
-		else if(x == 1) {
+			spawnJBlock();
+		} else if (x == 1) {
 			spawnIBlock();
-		}
-		else if(x == 2){
+		} else if (x == 2) {
 			spawnLBlock();
-		}
-		else if(x == 3) {
+		} else if (x == 3) {
 			spawnSBlock();
-		}
-		else if(x == 4){
+		} else if (x == 4) {
 			spawnTBlock();
-		}
-		else if(x == 5) {
+		} else if (x == 5) {
 			spawnZBlock();
-		}
-		else if (x == 6) {
+		} else if (x == 6) {
 			spawnOBlock();
 		}
 	}
@@ -68,7 +64,7 @@ public class Colorizer extends PApplet implements Displayable {
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
 				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
-				pApplet.rect(s.getXCor(), s.getYCor(), s.getSize(), s.getSize());	
+				pApplet.rect(s.getXCor(), s.getYCor(), s.getSize(), s.getSize());
 			}
 		}
 	}
@@ -85,89 +81,96 @@ public class Colorizer extends PApplet implements Displayable {
 			}
 		}
 	}
-	
+
 	public Tile spawnIBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setIBlock();
-		int [] color = (new int[] { 189, 219, 249});
+		int[] color = (new int[] { 189, 219, 249 });
 		t.setColor(color);
 		return t;
 	}
-	
+
 	public Tile spawnJBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setJBlock();
-		int [] color = new int[] {47, 0, 252};
-		t.setColor(color);	
+		int[] color = new int[] { 47, 0, 252 };
+		t.setColor(color);
 		return t;
 	}
-	
+
 	public Tile spawnSBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setSBlock();
-		int[] color = new int[] {0, 255, 55};
-		t.setColor(color);	
+		int[] color = new int[] { 0, 255, 55 };
+		t.setColor(color);
 		return t;
 	}
-	
+
 	public Tile spawnOBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setOBlock();
-		int[] color = new int[] {212, 243, 48};
+		int[] color = new int[] { 212, 243, 48 };
 		t.setColor(color);
 		return t;
 	}
-	
+
 	public Tile spawnTBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setTBlock();
-		int[] color = new int[] {40, 10, 62};
+		int[] color = new int[] { 40, 10, 62 };
 		t.setColor(color);
 		return t;
 	}
-	
+
 	public Tile spawnZBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setZBlock();
-		int[] color = new int[] {254, 0, 0};
+		int[] color = new int[] { 254, 0, 0 };
 		t.setColor(color);
 		return t;
 	}
-	
+
 	public Tile spawnLBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
-		t.setJBlock();
-		int[] color = new int[] {255,165,0};
+		t.setLBlock();
+		int[] color = new int[] { 255, 165, 0 };
 		t.setColor(color);
 		return t;
 	}
-	
-	public Tile drop(Tile t) {
-		int[] white = new int[] {255,255,255};
-		//t.setPivotY(-1);
+
+	public Tile drop(Tile t, int numberOfDrop) {
+		int[] white = new int[] { 255, 255, 255 };
+		// t.setPivotY(-1);
 		int x = 0;
 		int y = 0;
-		while (x < 16) {
-		//while (!hitBottom(t)) {
-			while (y < t.getSquares().size() ) {
+		while (x < numberOfDrop) {
+			y = 0;
+			int size1 = t.getSquares().size();
+			while (y < size1) {
 				t.remove().setColor(white);
 				y++;
-				//System.out.println("Calls remove");
+				// System.out.println("Calls remove");
 			}
-			Tile t1 = new Tile(g,t.getPivotY() + 1,t.getPivotX());
+			// while (!hitBottom(t)) {
+			Tile t1 = new Tile(g, t.getPivotY() + 1, t.getPivotX());
 			t1.setBlock(t.blockType());
 			t1.setColor(t.getColor());
-			//System.out.println("Calls remove");
-			t = t1;
+			// System.out.println("Calls remove");
+			// t = t1;
 			x++;
 		}
 		return t;
 	}
-	
+
+	/*
+	 * public void fall(Tile t) { while (current.getPivotY() < 16) { current =
+	 * drop(t); current.setPivotY(t.getPivotY() + 1); } }
+	 */
+
 	public boolean hitBottom(Tile t) {
 		int lowestYCor = t.getSquares().get(0).getYCor();
-		//System.out.println(lowestYCor);
-		for (Square s: t.getSquares()){
+		// System.out.println(lowestYCor);
+		for (Square s : t.getSquares()) {
 			if (s.getYCor() < lowestYCor) {
 				lowestYCor = s.getYCor();
 			}
@@ -177,6 +180,5 @@ public class Colorizer extends PApplet implements Displayable {
 		}
 		return false;
 	}
-	
-	
+
 }
