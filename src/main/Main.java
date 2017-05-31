@@ -15,7 +15,7 @@ public class Main extends PApplet {
 	private Leaderboard lb;
 	private Slider s;
 	private final int height = 800;
-	private final int width = 1200;
+	private final int width = 1400;
 	private int numRows, numCols;
 
 	public static void main(String[] args) {
@@ -65,8 +65,8 @@ public class Main extends PApplet {
 
 	public void draw() {
 		// Test cases to color individual square
-		grid.setNumRows(numRows);
-		grid.setNumCols(numCols);
-		colorizer.create();
+		background(50, 50, 50);
+		grid.updateGrid(numRows, numCols);; // should only be if changes
+		colorizer.refresh();
 	}
 }

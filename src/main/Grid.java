@@ -10,7 +10,7 @@ public class Grid {
 	public int numRows, numCols;
 	public int width, height, squareSep, squareSize;
 	public int sideMargin, vertMargin;
-	
+
 	public Grid(int numRows, int numCols) {
 		grid = new Square[numRows][numCols];
 		this.numRows = numRows;
@@ -31,7 +31,7 @@ public class Grid {
 		this.width = width;
 		this.height = height;
 		this.squareSep = squareSep;
-		
+
 		if ((width / (numCols + 3)) <= (height / (numRows + 3))) {
 			squareSize = width / (numCols + 3);
 		} else {
@@ -42,10 +42,34 @@ public class Grid {
 		vertMargin = (height - numRows * squareSize - (numRows - 1) * squareSep) / 2;
 	}
 
+	/**
+	 * Updates grid if the number of rows and columns are changed
+	 * 
+	 * @param newRows
+	 * @param newCols
+	 */
+	public void updateGrid(int newRows, int newCols) {
+		Square[][] gridNew = new Square[newRows][newCols];
+
+		for (int r = 0; r < newRows; r++) {
+			for (int c = 0; c < newCols; c++) {
+				if (r < numRows && c < numCols) {
+					gridNew[r][c] = grid[r][c];
+				} else {
+					gridNew[r][c] = null;
+				}
+			}
+		}
+
+		numRows = newRows;
+		numCols = newCols;
+		this.grid = gridNew;
+	}
+
 	public Square getSquare(int row, int col) {
 		return grid[row][col];
 	}
-	
+
 	public int getNumRows() {
 		return numRows;
 	}

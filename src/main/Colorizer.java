@@ -64,6 +64,8 @@ public class Colorizer extends PApplet implements Displayable {
 
 	@Override
 	public void refresh() {
+		g.setDimensions(pApplet.width, pApplet.height, tileSep);
+		g.loadGrid();
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
 				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
@@ -76,7 +78,6 @@ public class Colorizer extends PApplet implements Displayable {
 	public void create() {
 		g.setDimensions(pApplet.width, pApplet.height, tileSep);
 		g.loadGrid();
-
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
 				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
