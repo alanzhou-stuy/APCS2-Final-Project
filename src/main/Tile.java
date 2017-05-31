@@ -9,6 +9,8 @@ public class Tile implements Tilable {
 	private String blockType;
 	public int[] color;
 	private int height;
+	private int phase;
+	private int numOfPhases;
 
 	public Tile() {
 		squares = new ArrayList<Square>();
@@ -21,7 +23,7 @@ public class Tile implements Tilable {
 		this.pivotX = pivotX;
 		this.pivotY = pivotY;
 	}
-	
+
 	public int getHeight() {
 		return height;
 	}
@@ -41,65 +43,119 @@ public class Tile implements Tilable {
 		return squares;
 	}
 
-	public void setIBlock() {
-		squares.add(g.getSquare(pivotY, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX));
-		squares.add(g.getSquare(pivotY + 2, pivotX));
-		squares.add(g.getSquare(pivotY + 3, pivotX));
+	public void setIBlock(int x) {
+		if (x == 0) {
+			squares.add(g.getSquare(pivotY, pivotX));
+			squares.add(g.getSquare(pivotY + 1, pivotX));
+			squares.add(g.getSquare(pivotY + 2, pivotX));
+			squares.add(g.getSquare(pivotY + 3, pivotX));
+			height = 4;
+			phase = 0;
+		} else if (x == 1) {
+			squares.add(g.getSquare(pivotY, pivotX));
+			squares.add(g.getSquare(pivotY, pivotX + 1));
+			squares.add(g.getSquare(pivotY, pivotX + 2));
+			squares.add(g.getSquare(pivotY, pivotX + 3));
+			height = 1;
+			phase = 1;
+		}
 		blockType = "I";
-		height = 4;
+		numOfPhases = 2;
 	}
 
-	public void setJBlock() {
-		squares.add(g.getSquare(pivotY , pivotX + 1));
-		squares.add(g.getSquare(pivotY + 2, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
-		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
-		height = 3;
+	public void setJBlock(int x) {
+		if (x == 0) {
+			squares.add(g.getSquare(pivotY, pivotX + 1));
+			squares.add(g.getSquare(pivotY + 2, pivotX));
+			squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+			squares.add(g.getSquare(pivotY + 2, pivotX + 1));
+			height = 3;
+			phase = 0;
+		} else if (x == 1) {
+
+		} else if (x == 2) {
+
+		} else if (x == 3) {
+
+		}
 		blockType = "J";
+		numOfPhases = 4;
 	}
 
-	public void setLBlock() {
-		squares.add(g.getSquare(pivotY, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX));
-		squares.add(g.getSquare(pivotY + 2, pivotX ));
-		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
-		height = 3;
+	public void setLBlock(int x) {
+		if (x == 0) {
+			squares.add(g.getSquare(pivotY, pivotX));
+			squares.add(g.getSquare(pivotY + 1, pivotX));
+			squares.add(g.getSquare(pivotY + 2, pivotX));
+			squares.add(g.getSquare(pivotY + 2, pivotX + 1));
+			height = 3;
+			phase = 0;
+		} else if (x == 1) {
+
+		} else if (x == 2) {
+
+		} else if (x == 3) {
+
+		}
+		numOfPhases = 4;
 		blockType = "L";
 	}
 
-	public void setOBlock() {
-		squares.add(g.getSquare(pivotY, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
-		squares.add(g.getSquare(pivotY, pivotX + 1));
+	public void setOBlock(int x) {
+		if (x == 0) {
+			squares.add(g.getSquare(pivotY, pivotX));
+			squares.add(g.getSquare(pivotY + 1, pivotX));
+			squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+			squares.add(g.getSquare(pivotY, pivotX + 1));
+		}
+		height = 2;
+		numOfPhases = 1;
 		blockType = "O";
 	}
 
-	public void setSBlock() {
-		squares.add(g.getSquare(pivotY, pivotX + 1));
-		squares.add(g.getSquare(pivotY + 1, pivotX));
-		squares.add(g.getSquare(pivotY + 2, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
-		height = 3;
+	public void setSBlock(int x) {
+		if (x == 0) {
+			squares.add(g.getSquare(pivotY, pivotX + 1));
+			squares.add(g.getSquare(pivotY + 1, pivotX));
+			squares.add(g.getSquare(pivotY + 2, pivotX));
+			squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+			height = 3;
+		} else if (x == 1) {
+			height = 2;
+		}
+		numOfPhases = 2;
 		blockType = "S";
 	}
 
-	public void setTBlock() {
-		squares.add(g.getSquare(pivotY, pivotX + 1));
-		squares.add(g.getSquare(pivotY + 2, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
-		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
-		height = 3;
+	public void setTBlock(int x) {
+		if (x == 0) {
+			squares.add(g.getSquare(pivotY, pivotX + 1));
+			squares.add(g.getSquare(pivotY + 2, pivotX));
+			squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+			squares.add(g.getSquare(pivotY + 2, pivotX + 1));
+			height = 3;
+		} else if (x == 1) {
+
+		} else if (x == 2) {
+
+		} else if (x == 3) {
+
+		}
+		numOfPhases = 4;
 		blockType = "T";
 	}
 
-	public void setZBlock() {
-		squares.add(g.getSquare(pivotY, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX));
-		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
-		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
-		height = 3;
+	public void setZBlock(int x) {
+		if (x == 0) {
+			squares.add(g.getSquare(pivotY, pivotX));
+			squares.add(g.getSquare(pivotY + 1, pivotX));
+			squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+			squares.add(g.getSquare(pivotY + 2, pivotX + 1));
+			height = 3;
+		} else if (x == 1) {
+			height = 2;
+		}
+		numOfPhases = 2;
 		blockType = "Z";
 	}
 
@@ -109,6 +165,18 @@ public class Tile implements Tilable {
 		// squares.remove(1);
 		// squares.remove(2);
 		// squares.remove(3);
+	}
+
+	public int getNumOfPhases() {
+		return numOfPhases;
+	}
+
+	public int getPhase() {
+		return phase;
+	}
+
+	public void setPhase(int phase) {
+		this.phase = phase;
 	}
 
 	public void setPivotX(int x) {
@@ -131,15 +199,15 @@ public class Tile implements Tilable {
 		return blockType;
 	}
 
-	public void setBlock(String s) {
+	public void setBlock(String s, int x) {
 		if (s.equals("I")) {
-			setIBlock();
+			setIBlock(x);
 		} else if (s.equals("J")) {
-			setJBlock();
+			setJBlock(x);
 		} else if (s.equals("L")) {
 			setLBlock();
 		} else if (s.equals("O")) {
-			setOBlock();
+			setOBlock(x);
 		} else if (s.equals("S")) {
 			setSBlock();
 		} else if (s.equals("T")) {
@@ -149,7 +217,7 @@ public class Tile implements Tilable {
 		}
 	}
 
-	//not sure if it works
+	// not sure if it works
 	public boolean hitBottom() {
 		int lowestYCor = squares.get(0).getYCor();
 		int x = 0;
@@ -163,7 +231,7 @@ public class Tile implements Tilable {
 		}
 		return false;
 	}
-	
+
 	public void move() {
 	};
 

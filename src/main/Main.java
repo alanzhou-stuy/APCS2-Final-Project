@@ -42,11 +42,10 @@ public class Main extends PApplet {
 
 	public void draw() {
 		// Test cases to color individual squares
-		//
-		
-		current = colorizer.spawnBlock();
-		current = colorizer.drop(current,grid.getNumRows() - current.getHeight());
-		
+		current = colorizer.spawnIBlock();
+		current = colorizer.rotateRight(current,1);
+		//current = colorizer.rotateRight(current,1);
+		//current = colorizer.drop(current,grid.getNumRows() - current.getHeight());
 		//System.out.println(current.hitBottom());
 		//current = colorizer.drop(current);
 		//current = colorizer.drop(current);
