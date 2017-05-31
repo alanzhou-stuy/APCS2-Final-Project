@@ -23,7 +23,7 @@ public class Leaderboard extends RectangularElement {
 
 		setRectHeight((int) (relativeGridHeight * VERT_MULTIPLIER));
 
-		sideMargin = grid.width - (grid.sideMargin - getRectWidth())/2 - getRectWidth();
+		sideMargin = grid.pAppletWidth - (grid.sideMargin - getRectWidth())/2 - getRectWidth();
 	}
 
 	@Override

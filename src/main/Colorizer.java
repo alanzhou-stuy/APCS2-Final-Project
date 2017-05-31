@@ -1,8 +1,8 @@
 package main;
 
 import processing.core.PApplet;
+import java.util.LinkedList;
 import java.util.Random;
-import java.util.ArrayList;
 
 /**
  * Allows for the interaction with the Grid and provides for coloring of squares
@@ -11,9 +11,10 @@ import java.util.ArrayList;
 public class Colorizer extends PApplet implements Displayable {
 	private PApplet pApplet;
 	private Grid g;
+	private LinkedList<Tile> existingTiles;
+	public Tile current;
 	public int numRows, numCols;
-	public int tileSep = 2;
-	private Tile current;
+	public int tileSep = 1; // default is 1
 
 	/**
 	 * @param grid
@@ -22,6 +23,7 @@ public class Colorizer extends PApplet implements Displayable {
 	 * @param pApplet
 	 *            PApplet in which Colorizer has the ability to change visual
 	 *            aspects
+	 * @param current
 	 */
 	public Colorizer(Grid g, PApplet pApplet) {
 		this.g = g;
@@ -39,29 +41,32 @@ public class Colorizer extends PApplet implements Displayable {
 		g.getSquare(row, col).setColor(color);
 	}
 
-	public Tile spawnBlock() {
+	public void spawnBlock() {
 		Random rand = new Random();
 		int x = rand.nextInt(7);
-		if (x == 0) {
-			return spawnJBlock();
-		} else if (x == 1) {
-			return spawnIBlock();
-		} else if (x == 2) {
-			return spawnLBlock();
-		} else if (x == 3) {
-			return spawnSBlock();
-		} else if (x == 4) {
-			return spawnTBlock();
-		} else if (x == 5) {
-			return spawnZBlock();
-		} else if (x == 6) {
-			return spawnOBlock();
+
+		switch (x) {
+		case 0:
+			spawnJBlock();
+		case 1:
+			spawnIBlock();
+		case 2:
+			spawnLBlock();
+		case 3:
+			spawnSBlock();
+		case 4:
+			spawnTBlock();
+		case 5:
+			spawnZBlock();
+		case 6:
+			spawnOBlock();
 		}
-		return spawnIBlock();
 	}
 
 	@Override
 	public void refresh() {
+		g.setDimensions(pApplet.width, pApplet.height, tileSep);
+		g.loadGrid();
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
 				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
@@ -74,7 +79,6 @@ public class Colorizer extends PApplet implements Displayable {
 	public void create() {
 		g.setDimensions(pApplet.width, pApplet.height, tileSep);
 		g.loadGrid();
-
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
 				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
@@ -138,39 +142,15 @@ public class Colorizer extends PApplet implements Displayable {
 		t.setColor(color);
 		return t;
 	}
-	
-	/*public Tile rotateRight(Tile t, int numOfTimes){
-		int[] white = new int[] { 255, 255, 255 };
-		int y = 0;
-		int size1 = t.getSquares().size();
-		while (y < size1) {
-			t.remove().setColor(white);
-			y++;
-		}
-		Tile t1 = new Tile();
-		t1.setBlock(t.blockType());
-		t1.setColor(t.getColor());
-		int[] white = new int[] { 255, 255, 255 };
-		int y = 0;
-		int size1 = t.getSquares().size();
-		while (y < size1) {
-			t.remove().setColor(white);
-			y++;
-		}
-		Tile t1 = new Tile(g,t.getPivotY(),t.getPivotX());
-		t1.setBlock(t.blockType(),(t.getPhase() + numOfTimes) % t.getNumOfPhases());
-		t1.setColor(t.getColor());
-		return t1;
-	}*/
-	
+
 	public Tile rotateRight(Tile t, int numOfTimes) {
 		return t;
 	}
 	
-	public Tile rotateLeft(Tile t, int numOfTimes){
+	public Tile rotateLeft(Tile t, int numOfTimes) {
 		return t;
 	}
-	
+
 	public Tile drop(Tile t, int numberOfDrop) {
 		int[] white = new int[] { 255, 255, 255 };
 		// t.setPivotY(-1);
@@ -195,23 +175,16 @@ public class Colorizer extends PApplet implements Displayable {
 		}
 		return t;
 	}
-	
+
 	/*
 	 * public void fall(Tile t) { while (current.getPivotY() < 16) { current =
 	 * drop(t); current.setPivotY(t.getPivotY() + 1); } }
 	 */
 
-	/*public boolean hitBottom(Tile t) {
-		int lowestYCor = t.getSquares().get(0).getYCor();
-		for (Square s : t.getSquares()) {
-			if (s.getYCor() < lowestYCor) {
-				lowestYCor = s.getYCor();
-			}
-			if (lowestYCor == 0) {
-				return true;
-			}
-		}
-		return false;
-	}*/
-
+	/*
+	 * public boolean hitBottom(Tile t) { int lowestYCor =
+	 * t.getSquares().get(0).getYCor(); for (Square s : t.getSquares()) { if
+	 * (s.getYCor() < lowestYCor) { lowestYCor = s.getYCor(); } if (lowestYCor
+	 * == 0) { return true; } } return false; }
+	 */
 }

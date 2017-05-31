@@ -39,6 +39,7 @@ public class Tile implements Tilable {
 		for (Square s : squares) {
 			s.setColor(color);
 		}
+		// setBlockColor();
 	}
 
 	public ArrayList<Square> getSquares() {
@@ -198,8 +199,8 @@ public class Tile implements Tilable {
 	}
 
 	public void move() {
-	};
-
+		
+	}
 	/*
 	 * public void move() {
 	 * squares.add(g.getSquare(squares.get(0).,squares.get(0).));

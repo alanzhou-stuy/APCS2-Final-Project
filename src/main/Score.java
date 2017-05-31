@@ -29,6 +29,10 @@ public class Score extends RectangularElement {
 	public void setScore(int score) {
 		SCORE = score;
 	}
+	
+	public void displaySlider(){
+		
+	}
 
 	@Override
 	public void refresh() {
