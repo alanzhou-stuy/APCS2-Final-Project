@@ -8,25 +8,25 @@ public class Tile implements Tilable {
 	public int pivotX, pivotY;
 	private String blockType;
 	public int[] color;
-	
+
 	public Tile() {
 		squares = new ArrayList<Square>();
 	}
-	
-	public Tile(Grid g, int pivotX, int pivotY){
+
+	public Tile(Grid g, int pivotY, int pivotX) {
 		this();
 		this.g = g;
 		this.pivotX = pivotX;
 		this.pivotY = pivotY;
 	}
-	
-	public int[] getColor(){
+
+	public int[] getColor() {
 		return color;
 	}
-	
+
 	public void setColor(int[] color) {
 		this.color = color;
-		for (Square s: squares) {
+		for (Square s : squares) {
 			s.setColor(color);
 		}
 	}
@@ -36,125 +36,117 @@ public class Tile implements Tilable {
 	}
 
 	public void setIBlock() {
-		squares.add(g.getSquare(pivotX,pivotY));
-		squares.add(g.getSquare(pivotX + 1,pivotY));
-		squares.add(g.getSquare(pivotX + 2,pivotY));
-		squares.add(g.getSquare(pivotX + 3,pivotY));
+		squares.add(g.getSquare(pivotY, pivotX));
+		squares.add(g.getSquare(pivotY + 1, pivotX));
+		squares.add(g.getSquare(pivotY + 2, pivotX));
+		squares.add(g.getSquare(pivotY + 3, pivotX));
 		blockType = "I";
 	}
 
 	public void setJBlock() {
-		squares.add(g.getSquare(pivotX , pivotY));
-		squares.add(g.getSquare(pivotX + 1,pivotY));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		squares.add(g.getSquare(pivotY, pivotX));
+		squares.add(g.getSquare(pivotY + 1, pivotX));
+		squares.add(g.getSquare(pivotY + 2, pivotX ));
+		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
 		blockType = "J";
 	}
 
 	public void setLBlock() {
-		squares.add(g.getSquare(pivotX ,pivotY + 2));
-		squares.add(g.getSquare(pivotX + 1,pivotY));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		squares.add(g.getSquare(pivotY + 2, pivotX));
+		squares.add(g.getSquare(pivotY , pivotX + 1));
+		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
 		blockType = "L";
 	}
 
 	public void setOBlock() {
-		squares.add(g.getSquare(pivotX ,pivotY + 1));
-		squares.add(g.getSquare(pivotX ,pivotY));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
-		squares.add(g.getSquare(pivotX + 1,pivotY));
+		squares.add(g.getSquare(pivotY + 1, pivotX));
+		squares.add(g.getSquare(pivotY, pivotX));
+		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+		squares.add(g.getSquare(pivotY, pivotX + 1));
 		blockType = "O";
 	}
 
 	public void setSBlock() {
-		squares.add(g.getSquare(pivotX ,pivotY + 1));
-		squares.add(g.getSquare(pivotX ,pivotY + 2));
-		squares.add(g.getSquare(pivotX + 1,pivotY ));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
+		squares.add(g.getSquare(pivotY + 1, pivotX));
+		squares.add(g.getSquare(pivotY + 2, pivotX));
+		squares.add(g.getSquare(pivotY, pivotX + 1));
+		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
 		blockType = "S";
 	}
 
 	public void setTBlock() {
-		squares.add(g.getSquare(pivotX ,pivotY + 2));
-		squares.add(g.getSquare(pivotX + 1,pivotY));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		squares.add(g.getSquare(pivotY + 2, pivotX));
+		squares.add(g.getSquare(pivotY, pivotX + 1));
+		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+		squares.add(g.getSquare(pivotY + 2, pivotX + 1));
 		blockType = "T";
 	}
 
 	public void setZBlock() {
-		squares.add(g.getSquare(pivotX,pivotY));
-		squares.add(g.getSquare(pivotX ,pivotY + 1));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 1));
-		squares.add(g.getSquare(pivotX + 1,pivotY + 2));
+		squares.add(g.getSquare(pivotY, pivotX));
+		squares.add(g.getSquare(pivotY + 1, pivotX));
+		squares.add(g.getSquare(pivotY + 1, pivotX + 1));
+		squares.add(g.getSquare(pivotY + 2, pivotX + 2));
 		blockType = "Z";
 	}
-	
-	public void remove() {
-		squares.remove(0);
-		squares.remove(1);
-		squares.remove(2);
-		squares.remove(3);
-		//squares.remove(g.getSquare(pivotX,pivotY));
-		//squares.remove(1);
-		//squares.remove(2);
-		//squares.remove(3);
+
+	public Square remove() {
+		return squares.remove(0);
+		// System.out.println(squares.size());
+		// squares.remove(1);
+		// squares.remove(2);
+		// squares.remove(3);
 	}
-	
-	public void setPivotY(int x) {
-		pivotY += x;
-	}
-	
-	public void setPivotX(int x ){
+
+	public void setPivotX(int x) {
 		pivotX += x;
 	}
-	
+
+	public void setPivotY(int y) {
+		pivotY += y;
+	}
+
 	public int getPivotX() {
 		return pivotX;
 	}
-	
+
 	public int getPivotY() {
 		return pivotY;
 	}
-	
+
 	public String blockType() {
 		return blockType;
 	}
-	
+
 	public void setBlock(String s) {
-		if (s.equals("I")){
+		if (s.equals("I")) {
 			setIBlock();
-		}
-		else if (s.equals("J")) {
+		} else if (s.equals("J")) {
 			setJBlock();
-		}
-		else if (s.equals("L")) {
+		} else if (s.equals("L")) {
 			setLBlock();
-		}
-		else if (s.equals("O")) {
+		} else if (s.equals("O")) {
 			setOBlock();
-		}
-		else if (s.equals("S'")) {
+		} else if (s.equals("S'")) {
 			setSBlock();
-		}
-		else if (s.equals("T")) {
+		} else if (s.equals("T")) {
 			setTBlock();
-		}
-		else if (s.equals("Z")) {
+		} else if (s.equals("Z")) {
 			setZBlock();
 		}
 	}
-		
-	
-	public void move(){
+
+	public void move() {
 	};
-	/*public void move() {
-		squares.add(g.getSquare(squares.get(0).,squares.get(0).));
-		squares.add(g.getSquare(squares.get(0).,squares.get(1).);
-		squares.add(g.getSquare(squares.get(0).,squares.get(2).);
-		squares.add(g.getSquare(squares.get(0),squares.get(3).);
-	};*/
+
+	/*
+	 * public void move() {
+	 * squares.add(g.getSquare(squares.get(0).,squares.get(0).));
+	 * squares.add(g.getSquare(squares.get(0).,squares.get(1).);
+	 * squares.add(g.getSquare(squares.get(0).,squares.get(2).);
+	 * squares.add(g.getSquare(squares.get(0),squares.get(3).); };
+	 */
 
 	public void rotate() {
 	};

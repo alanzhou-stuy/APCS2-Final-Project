@@ -2,6 +2,7 @@ package main;
 
 import processing.core.PApplet;
 import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * Allows for the interaction with the Grid and provides for coloring of squares
@@ -142,25 +143,39 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 	
 	public Tile drop(Tile t) {
+		int[] white = new int[] {255,255,255};
 		//t.setPivotY(-1);
-		while (!hitBottom(t)) {
-			Tile t1 = new Tile(g,t.getPivotX(),t.getPivotY() - 1);
+		int x = 0;
+		int y = 0;
+		while (x < 16) {
+		//while (!hitBottom(t)) {
+			while (y < t.getSquares().size() ) {
+				t.remove().setColor(white);
+				y++;
+				//System.out.println("Calls remove");
+			}
+			Tile t1 = new Tile(g,t.getPivotY() + 1,t.getPivotX());
 			t1.setBlock(t.blockType());
 			t1.setColor(t.getColor());
-			t.remove();
+			//System.out.println("Calls remove");
 			t = t1;
+			x++;
 		}
 		return t;
 	}
 	
 	public boolean hitBottom(Tile t) {
 		int lowestYCor = t.getSquares().get(0).getYCor();
+		//System.out.println(lowestYCor);
 		for (Square s: t.getSquares()){
 			if (s.getYCor() < lowestYCor) {
 				lowestYCor = s.getYCor();
 			}
+			if (lowestYCor == 50) {
+				return true;
+			}
 		}
-		return (lowestYCor == 0);	
+		return false;
 	}
 	
 	

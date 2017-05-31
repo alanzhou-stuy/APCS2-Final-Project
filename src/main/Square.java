@@ -57,4 +57,5 @@ public class Square {
 	public int[] getColor() {
 		return color;
 	}
+	
 }
