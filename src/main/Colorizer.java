@@ -85,7 +85,7 @@ public class Colorizer extends PApplet implements Displayable {
 
 	public Tile spawnIBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
-		t.setIBlock(1);
+		t.setIBlock();
 		int[] color = (new int[] { 189, 219, 249 });
 		t.setColor(color);
 		return t;
@@ -93,7 +93,7 @@ public class Colorizer extends PApplet implements Displayable {
 
 	public Tile spawnJBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
-		t.setJBlock(0);
+		t.setJBlock();
 		int[] color = new int[] { 47, 0, 252 };
 		t.setColor(color);
 		return t;
@@ -101,7 +101,7 @@ public class Colorizer extends PApplet implements Displayable {
 
 	public Tile spawnSBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
-		t.setSBlock(1);
+		t.setSBlock();
 		int[] color = new int[] { 0, 255, 55 };
 		t.setColor(color);
 		return t;
@@ -109,7 +109,7 @@ public class Colorizer extends PApplet implements Displayable {
 
 	public Tile spawnOBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
-		t.setOBlock(0);
+		t.setOBlock();
 		int[] color = new int[] { 212, 243, 48 };
 		t.setColor(color);
 		return t;
@@ -117,7 +117,7 @@ public class Colorizer extends PApplet implements Displayable {
 
 	public Tile spawnTBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
-		t.setTBlock(1);
+		t.setTBlock();
 		int[] color = new int[] { 40, 10, 62 };
 		t.setColor(color);
 		return t;
@@ -125,22 +125,22 @@ public class Colorizer extends PApplet implements Displayable {
 
 	public Tile spawnZBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
-		t.setZBlock(1);
+		t.setZBlock();
 		int[] color = new int[] { 254, 0, 0 };
 		t.setColor(color);
 		return t;
 	}
 
 	public Tile spawnLBlock() {
-		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
-		t.setLBlock(1);
+		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
+		t.setLBlock();
 		int[] color = new int[] { 255, 165, 0 };
 		t.setColor(color);
 		return t;
 	}
 	
-	public Tile rotateRight(Tile t, int numOfTimes){
-		/*int[] white = new int[] { 255, 255, 255 };
+	/*public Tile rotateRight(Tile t, int numOfTimes){
+		int[] white = new int[] { 255, 255, 255 };
 		int y = 0;
 		int size1 = t.getSquares().size();
 		while (y < size1) {
@@ -149,7 +149,7 @@ public class Colorizer extends PApplet implements Displayable {
 		}
 		Tile t1 = new Tile();
 		t1.setBlock(t.blockType());
-		t1.setColor(t.getColor());*/
+		t1.setColor(t.getColor());
 		int[] white = new int[] { 255, 255, 255 };
 		int y = 0;
 		int size1 = t.getSquares().size();
@@ -161,6 +161,10 @@ public class Colorizer extends PApplet implements Displayable {
 		t1.setBlock(t.blockType(),(t.getPhase() + numOfTimes) % t.getNumOfPhases());
 		t1.setColor(t.getColor());
 		return t1;
+	}*/
+	
+	public Tile rotateRight(Tile t, int numOfTimes) {
+		return t;
 	}
 	
 	public Tile rotateLeft(Tile t, int numOfTimes){
@@ -183,7 +187,7 @@ public class Colorizer extends PApplet implements Displayable {
 			}
 			// while (!hitBottom(t)) {
 			Tile t1 = new Tile(g, t.getPivotY() + 1, t.getPivotX());
-			t1.setBlock(t.blockType(),t.getPhase());
+			t1.setBlock(t.blockType());
 			t1.setColor(t.getColor());
 			// System.out.println("Calls remove");
 			t = t1;
