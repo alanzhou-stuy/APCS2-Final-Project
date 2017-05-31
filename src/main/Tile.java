@@ -15,6 +15,7 @@ public class Tile implements Tilable {
 
 	public Tile() {
 		squares = new ArrayList<Square>();
+		respectiveCoords = new ArrayList<Integer[]>();
 		height = 2;
 	}
 
