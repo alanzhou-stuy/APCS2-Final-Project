@@ -15,6 +15,7 @@ public class Main extends PApplet {
 	private final int width = 1000;
 	private Tile current;
 	int timer = 0;
+	private Rules rule;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
@@ -23,6 +24,7 @@ public class Main extends PApplet {
 	public void setup() {
 		background(50, 50, 50);
 		grid = new Grid(20, 10);
+		
 
 		colorizer = new Colorizer(grid, this);
 		colorizer.setTileSep(1);
@@ -37,6 +39,8 @@ public class Main extends PApplet {
 		lb.create();
 
 		current = colorizer.spawnLBlock();
+		
+		rule = new Rules(colorizer,current,grid);
 	}
 
 	public void settings() {
@@ -47,20 +51,21 @@ public class Main extends PApplet {
 		// Test cases to color individual squares
 		// current = colorizer.rotateRight(current,1);
 		// current = colorizer.rotateRight(current,1);
-		if (timer % 40 == 0) {
-			current = colorizer.drop(current,
+		//if (timer % 40 == 0) {
+			//current = colorizer.drop(current,
 			// grid.getNumRows() - current.getHeight()
-					1);
-		}
+					//1);
+		//}
 		// System.out.println(current.hitBottom());
 		// current = colorizer.drop(current);
 		// current = colorizer.drop(current);
 		// current = colorizer.drop(current);
 		// current = colorizer.drop(current);
+		rule.run();
 		colorizer.refresh();
 		score.refresh();
 		lb.refresh();
 
-		timer++;
+		//timer++;
 	}
 }

@@ -49,6 +49,7 @@ public class Square {
 	public int getYCor() {
 		return yCor;
 	}
+	
 
 	public int getSize() {
 		return size;

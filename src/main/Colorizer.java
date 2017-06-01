@@ -139,29 +139,6 @@ public class Colorizer extends PApplet implements Displayable {
 		return t;
 	}
 	
-	/*public Tile rotateRight(Tile t, int numOfTimes){
-		int[] white = new int[] { 255, 255, 255 };
-		int y = 0;
-		int size1 = t.getSquares().size();
-		while (y < size1) {
-			t.remove().setColor(white);
-			y++;
-		}
-		Tile t1 = new Tile();
-		t1.setBlock(t.blockType());
-		t1.setColor(t.getColor());
-		int[] white = new int[] { 255, 255, 255 };
-		int y = 0;
-		int size1 = t.getSquares().size();
-		while (y < size1) {
-			t.remove().setColor(white);
-			y++;
-		}
-		Tile t1 = new Tile(g,t.getPivotY(),t.getPivotX());
-		t1.setBlock(t.blockType(),(t.getPhase() + numOfTimes) % t.getNumOfPhases());
-		t1.setColor(t.getColor());
-		return t1;
-	}*/
 	
 	public Tile rotateRight(Tile t, int numOfTimes) {
 		return t;
@@ -169,6 +146,34 @@ public class Colorizer extends PApplet implements Displayable {
 	
 	public Tile rotateLeft(Tile t, int numOfTimes){
 		return t;
+	}
+	
+	public Tile moveLeft(Tile t) {
+		int[] white = new int[] { 255, 255, 255 };
+		int y = 0;
+		int size1 = t.getSquares().size();
+		while (y < size1) {
+			t.remove().setColor(white);
+			y++;
+		}
+		Tile t1 = new Tile(g, t.getPivotY(), t.getPivotX() - 1);
+		t1.setBlock(t.blockType());
+		t1.setColor(t.getColor());
+		return t1;
+	}
+	
+	public Tile moveRight(Tile t) {
+		int[] white = new int[] { 255, 255, 255 };
+		int y = 0;
+		int size1 = t.getSquares().size();
+		while (y < size1) {
+			t.remove().setColor(white);
+			y++;
+		}
+		Tile t1 = new Tile(g, t.getPivotY(), t.getPivotX() + 1);
+		t1.setBlock(t.blockType());
+		t1.setColor(t.getColor());
+		return t1;
 	}
 	
 	public Tile drop(Tile t, int numberOfDrop) {

@@ -48,6 +48,7 @@ public class Grid {
 		return grid[row][col];
 	}
 	
+	
 	public int getNumRows() {
 		return numRows;
 	}
