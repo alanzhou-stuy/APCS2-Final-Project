@@ -86,8 +86,8 @@ public class Colorizer extends PApplet implements Displayable {
 			}
 		}
 	}
-	
-	public void setRowsCols(int numRows, int numCols){
+
+	public void setRowsCols(int numRows, int numCols) {
 		this.numRows = numRows;
 		this.numCols = numCols;
 	}
@@ -148,16 +148,14 @@ public class Colorizer extends PApplet implements Displayable {
 		return t;
 	}
 
-	
-	
 	public Tile rotateRight(Tile t, int numOfTimes) {
 		return t;
 	}
-	
-	public Tile rotateLeft(Tile t, int numOfTimes){
+
+	public Tile rotateLeft(Tile t, int numOfTimes) {
 		return t;
 	}
-	
+
 	public Tile moveLeft(Tile t) {
 		int[] white = new int[] { 255, 255, 255 };
 		int y = 0;
@@ -171,7 +169,7 @@ public class Colorizer extends PApplet implements Displayable {
 		t1.setColor(t.getColor());
 		return t1;
 	}
-	
+
 	public Tile moveRight(Tile t) {
 		int[] white = new int[] { 255, 255, 255 };
 		int y = 0;
