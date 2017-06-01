@@ -25,7 +25,6 @@ public class Main extends PApplet {
 	}
 
 	public void setup() {
-
 		numRows = 20;
 		numCols = 10;
 
@@ -52,7 +51,6 @@ public class Main extends PApplet {
 		colorizer = new Colorizer(grid, this);
 		colorizer.setTileSep(1);
 		colorizer.create(); // create grid
-		current = colorizer.spawnIBlock();
 
 		score = new Score(this, grid);
 		score.setBackgroundColor(new int[] { 200, 200, 200 });
@@ -71,18 +69,17 @@ public class Main extends PApplet {
 
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
-		grid.updateGrid(numRows, numCols);
+		// grid.updateGrid(numRows, numCols);
 		; // should only be if changes
 
 		if (timer % 40 == 0) {
-			current = colorizer.drop(current,
-					// grid.getNumRows() - current.getHeight()
-					1);
+			current = colorizer.drop(current, 1);
 		}
 
+		colorizer.setRowsCols(numRows, numCols);
 		colorizer.refresh();
-		score.refresh();
-		lb.refresh();
+		// score.refresh();
+		// lb.refresh();
 
 		timer++;
 	}
