@@ -27,9 +27,9 @@ public class Rules {
 				current = colorizer.spawnBlock();
 			} else {
 				current = colorizer.drop(current, 1);
-				current = colorizer.moveRight(current);
+				//current = colorizer.moveRight(current);
 				for (Square s : current.getSquares()) {
-					System.out.println(s.getXCor());
+					System.out.println(s.getYCor());
 				}
 			}
 		}
@@ -39,7 +39,7 @@ public class Rules {
 
 	public boolean hitBottom() {
 		for (Square s : current.getSquares()) {
-			if (s.getYCor() == 715) {
+			if (s.getYCor() == 620) {
 				return true;
 			}
 		}
@@ -58,10 +58,43 @@ public class Rules {
 
 	public boolean blockOffMap() {
 		for (Square s: current.getSquares()) {
-			if ((s.getXCor() < 325) || s.getYCor() > 715 || s.getXCor() > 640) { //need to change
+			//need to change
+			if ((s.getXCor() < 325) || s.getYCor() > 715 || s.getXCor() > 640) { 
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	public int calLowestYCorOfTile(Tile t) {
+		int lowest = t.getSquares().get(0).getYCor();
+		for (Square s: t.getSquares()) {
+			if (s.getYCor() < lowest) {
+				lowest = s.getYCor();
+			}
+		}
+		return lowest;
+	}
+	
+	public int calHighestYCorOfTile(Tile t) {
+		int highest = t.getSquares().get(0).getYCor();
+		for (Square s: t.getSquares()) {
+			if (s.getYCor() > highest) {
+				highest = s.getYCor();
+			}
+		}
+		return highest;
+	}
+	
+	public int calNextColoredSquare(Tile t) {
+		int[] white = new int[] { 255, 255, 255 };
+		for (Square[] rowOfSquares : g.grid) {
+			for (Square s: rowOfSquares) {
+				if ((calLowestYCorOfTile(t) == s.getYCor()) && (s.getColor() != white)){
+					return s.getXCor();
+				}
+			}
+		}
+		return -1;
 	}
 }

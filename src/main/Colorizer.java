@@ -46,20 +46,21 @@ public class Colorizer extends PApplet implements Displayable {
 		int x = rand.nextInt(7);
 		switch (x) {
 		case 0:
-			spawnJBlock();
+			return spawnJBlock();
 		case 1:
-			spawnIBlock();
+			return spawnIBlock();
 		case 2:
-			spawnLBlock();
+			return spawnLBlock();
 		case 3:
-			spawnSBlock();
+			return spawnSBlock();
 		case 4:
-			spawnTBlock();
+			return spawnTBlock();
 		case 5:
-			spawnZBlock();
+			return spawnZBlock();
 		case 6:
-			spawnOBlock();
+			return spawnOBlock();
 		}
+		return spawnIBlock();
 	}
 
 	@Override

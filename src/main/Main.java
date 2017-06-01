@@ -13,8 +13,8 @@ public class Main extends PApplet {
 	private Grid grid;
 	private Score score;
 	private Leaderboard lb;
-	private final int height = 900;
-	private final int width = 1600;
+	private final int height = 700;
+	private final int width = 1400;
 	private int numRows, numCols;
 	private int[] bgColor = { 20, 20, 20 };
 	private Tile current;
@@ -72,11 +72,12 @@ public class Main extends PApplet {
 
 	public void settings() {
 		size(width, height);
+
 	}
 
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
-		rule.run();
+		//rule.run();
 		colorizer.refresh();
 	}
 }
