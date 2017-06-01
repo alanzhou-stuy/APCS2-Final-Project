@@ -62,7 +62,8 @@ public class Grid {
 				if (r < numRows && c < numCols) {
 					gridNew[r][c] = grid[r][c];
 				} else {
-					gridNew[r][c] = null;
+					gridNew[r][c] = new Square();
+					gridNew[r][c].setColor(new int[]{255,255,255});
 				}
 			}
 		}
