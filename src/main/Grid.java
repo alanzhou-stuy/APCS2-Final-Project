@@ -76,7 +76,7 @@ public class Grid {
 	public Square getSquare(int row, int col) {
 		return grid[row][col];
 	}
-
+	
 	public int getNumRows() {
 		return numRows;
 	}

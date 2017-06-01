@@ -13,12 +13,13 @@ public class Main extends PApplet {
 	private Grid grid;
 	private Score score;
 	private Leaderboard lb;
-	private final int height = 900;
-	private final int width = 1600;
+	private final int height = 700;
+	private final int width = 1400;
 	private int numRows, numCols;
 	private int[] bgColor = { 20, 20, 20 };
 	private Tile current;
 	int timer = 0;
+	private Rules rule;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
@@ -48,6 +49,10 @@ public class Main extends PApplet {
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		grid = new Grid(numRows, numCols);
 
+		background(50, 50, 50);
+		grid = new Grid(20, 10);
+		
+
 		colorizer = new Colorizer(grid, this);
 		colorizer.setTileSep(1);
 		colorizer.create(); // create grid
@@ -61,26 +66,18 @@ public class Main extends PApplet {
 		lb.create();
 
 		current = colorizer.spawnLBlock();
+		
+		rule = new Rules(colorizer,current,grid);
 	}
 
 	public void settings() {
 		size(width, height);
+
 	}
 
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
-		// grid.updateGrid(numRows, numCols);
-		; // should only be if changes
-
-		if (timer % 40 == 0) {
-			current = colorizer.drop(current, 1);
-		}
-
-		colorizer.setRowsCols(numRows, numCols);
+		//rule.run();
 		colorizer.refresh();
-		// score.refresh();
-		// lb.refresh();
-
-		timer++;
 	}
 }
