@@ -55,14 +55,16 @@ public class Grid {
 	 * @param newCols
 	 */
 	public void updateGrid(int newRows, int newCols) {
+		System.out.println(newRows + ",  " + newCols);
+		
 		Square[][] gridNew = new Square[newRows][newCols];
-
 		for (int r = 0; r < newRows; r++) {
 			for (int c = 0; c < newCols; c++) {
 				if (r < numRows && c < numCols) {
 					gridNew[r][c] = grid[r][c];
 				} else {
-					gridNew[r][c] = null;
+					gridNew[r][c] = new Square();
+					gridNew[r][c].setColor(new int[]{255,255,255});
 				}
 			}
 		}

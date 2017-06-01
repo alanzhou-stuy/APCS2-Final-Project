@@ -9,7 +9,7 @@ public class Square {
 	public int[] color;
 
 	public Square() {
-		this(0, 0, 10, new int[] { 255, 255, 255 });
+		//this(0, 0, 10, new int[] { 255, 255, 255 });
 	}
 
 	/**

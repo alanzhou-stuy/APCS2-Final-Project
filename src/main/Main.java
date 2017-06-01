@@ -18,8 +18,8 @@ public class Main extends PApplet {
 	private int numRows, numCols;
 	private int[] bgColor = { 20, 20, 20 };
 	private Tile current;
-	int timer = 0;
 	private Rules rule;
+	private static int TIMER = 0;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
@@ -50,8 +50,6 @@ public class Main extends PApplet {
 		grid = new Grid(numRows, numCols);
 
 		background(50, 50, 50);
-		grid = new Grid(20, 10);
-		
 
 		colorizer = new Colorizer(grid, this);
 		colorizer.setTileSep(1);
@@ -66,16 +64,17 @@ public class Main extends PApplet {
 		lb.create();
 
 		current = colorizer.spawnLBlock();
-		
-		rule = new Rules(colorizer,current,grid);
+
+		rule = new Rules(colorizer, current, grid);
 	}
 
 	public void settings() {
 		size(width, height);
-
 	}
 
 	public void draw() {
+		colorizer.setRowsCols(numRows, numCols);
+		
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		rule.run();
 		colorizer.refresh();
