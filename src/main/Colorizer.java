@@ -41,10 +41,9 @@ public class Colorizer extends PApplet implements Displayable {
 		g.getSquare(row, col).setColor(color);
 	}
 
-	public void spawnBlock() {
+	public Tile spawnBlock() {
 		Random rand = new Random();
 		int x = rand.nextInt(7);
-
 		switch (x) {
 		case 0:
 			spawnJBlock();
@@ -66,7 +65,7 @@ public class Colorizer extends PApplet implements Displayable {
 	@Override
 	public void refresh() {
 		g.setDimensions(pApplet.width, pApplet.height, tileSep);
-		g.loadGrid();
+		g.updateGrid(numRows, numCols);
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
 				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
@@ -85,6 +84,11 @@ public class Colorizer extends PApplet implements Displayable {
 				pApplet.rect(s.getXCor(), s.getYCor(), s.getSize(), s.getSize());
 			}
 		}
+	}
+	
+	public void setRowsCols(int numRows, int numCols){
+		this.numRows = numRows;
+		this.numCols = numCols;
 	}
 
 	public Tile spawnIBlock() {
@@ -142,20 +146,13 @@ public class Colorizer extends PApplet implements Displayable {
 		t.setColor(color);
 		return t;
 	}
-<<<<<<< HEAD
 
-=======
 	
 	
->>>>>>> TestingAlanRotating
 	public Tile rotateRight(Tile t, int numOfTimes) {
 		return t;
 	}
 	
-<<<<<<< HEAD
-	public Tile rotateLeft(Tile t, int numOfTimes) {
-		return t;
-=======
 	public Tile rotateLeft(Tile t, int numOfTimes){
 		return t;
 	}
@@ -186,7 +183,6 @@ public class Colorizer extends PApplet implements Displayable {
 		t1.setBlock(t.blockType());
 		t1.setColor(t.getColor());
 		return t1;
->>>>>>> TestingAlanRotating
 	}
 
 	public Tile drop(Tile t, int numberOfDrop) {
