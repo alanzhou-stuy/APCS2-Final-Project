@@ -19,12 +19,14 @@ public class Main extends PApplet {
 	private int[] bgColor = { 20, 20, 20 };
 	private Tile current;
 	int timer = 0;
+	private Rules rule;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
 	}
 
 	public void setup() {
+<<<<<<< HEAD
 
 		numRows = 20;
 		numCols = 10;
@@ -48,6 +50,11 @@ public class Main extends PApplet {
 
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		grid = new Grid(numRows, numCols);
+=======
+		background(50, 50, 50);
+		grid = new Grid(20, 10);
+		
+>>>>>>> TestingAlanRotating
 
 		colorizer = new Colorizer(grid, this);
 		colorizer.setTileSep(1);
@@ -63,6 +70,8 @@ public class Main extends PApplet {
 		lb.create();
 
 		current = colorizer.spawnLBlock();
+		
+		rule = new Rules(colorizer,current,grid);
 	}
 
 	public void settings() {
@@ -70,6 +79,7 @@ public class Main extends PApplet {
 	}
 
 	public void draw() {
+<<<<<<< HEAD
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		grid.updateGrid(numRows, numCols);
 		; // should only be if changes
@@ -80,10 +90,26 @@ public class Main extends PApplet {
 					1);
 		}
 
+=======
+		// Test cases to color individual squares
+		// current = colorizer.rotateRight(current,1);
+		// current = colorizer.rotateRight(current,1);
+		//if (timer % 40 == 0) {
+			//current = colorizer.drop(current,
+			// grid.getNumRows() - current.getHeight()
+					//1);
+		//}
+		// System.out.println(current.hitBottom());
+		// current = colorizer.drop(current);
+		// current = colorizer.drop(current);
+		// current = colorizer.drop(current);
+		// current = colorizer.drop(current);
+		rule.run();
+>>>>>>> TestingAlanRotating
 		colorizer.refresh();
 		score.refresh();
 		lb.refresh();
 
-		timer++;
+		//timer++;
 	}
 }

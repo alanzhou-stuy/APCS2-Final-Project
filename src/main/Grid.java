@@ -75,7 +75,12 @@ public class Grid {
 	public Square getSquare(int row, int col) {
 		return grid[row][col];
 	}
+<<<<<<< HEAD
 
+=======
+	
+	
+>>>>>>> TestingAlanRotating
 	public int getNumRows() {
 		return numRows;
 	}
