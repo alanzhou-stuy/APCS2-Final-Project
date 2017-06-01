@@ -27,10 +27,11 @@ public class Rules {
 				current = colorizer.spawnBlock();
 			} else {
 				current = colorizer.drop(current, 1);
-				//current = colorizer.moveRight(current);
-				for (Square s : current.getSquares()) {
-					System.out.println(s.getYCor());
+				current = colorizer.moveRight(current);			
+				/*for (Square s : current.getSquares()) {
 				}
+					System.out.println(s.getYCor());
+				}*/
 			}
 		}
 		timer++;
@@ -47,19 +48,22 @@ public class Rules {
 	}
 
 	public boolean hitBlock() {
-/*		int[] white = new int[] { 255, 255, 255 };
+		int[] white = new int[] { 255, 255, 255 };
 		for (Square s: current.getSquares()) {
-			if (g.getColor((s.getYCor() + 35)) != white) {
+			if (g.getSquare(s.getXCor(), (s.getYCor() + g.squareSize)).getColor() != white) {
 				return true;
 			}
-		}*/
+		}
 		return false;
 	}
 
 	public boolean blockOffMap() {
+		int lowestX = g.getSquare(0,0).getXCor();
+		int highestX = g.getSquare(0,g.numCols - 1).getXCor();
+		int lowestY = g.getSquare(g.numRows - 1,0).getYCor();
 		for (Square s: current.getSquares()) {
 			//need to change
-			if ((s.getXCor() < 325) || s.getYCor() > 715 || s.getXCor() > 640) { 
+			if (s.getXCor() <= lowestX || s.getYCor() > lowestY || s.getXCor() > highestX) { 
 				return true;
 			}
 		}

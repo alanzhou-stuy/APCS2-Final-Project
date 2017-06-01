@@ -77,7 +77,7 @@ public class Main extends PApplet {
 
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
-		//rule.run();
+		rule.run();
 		colorizer.refresh();
 	}
 }
