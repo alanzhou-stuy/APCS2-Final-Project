@@ -1,11 +1,12 @@
 package main;
 
 
-import java.awt.event.KeyEvent;
 
 import processing.core.PApplet;
 import controlP5.*;
-import java.awt.event.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 
@@ -13,7 +14,7 @@ import java.awt.event.*;
  * Main class which sets up the frame and background, as well as creates the
  * grid through blocks
  */
-public class Main extends PApplet implements KeyListener{
+public class Main extends PApplet implements ActionListener {
 	private Colorizer colorizer;
 	private ControlP5 gui;
 	private Grid grid;
@@ -30,8 +31,13 @@ public class Main extends PApplet implements KeyListener{
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
 	}
-
+	
+    //public void actionPerformed(ActionEvent e) {
+    	//rule.keyPressed(e);
+    //}
+    
 	public void setup() {
+
 		numRows = 20;
 		numCols = 10;
 
@@ -79,23 +85,6 @@ public class Main extends PApplet implements KeyListener{
 	public void settings() {
 		size(width, height);
 
-	}
-	
-	public void keyTyped(KeyEvent e) {
-		
-	}
-	
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_KP_LEFT) {
-			current = colorizer.moveRight(current);
-			System.out.println("YAY");
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_KP_RIGHT) {
-			current = colorizer.moveLeft(current);
-		}
-	}
-	
-	public void keyReleased(KeyEvent e) {
 	}
 
 	public void draw() {

@@ -27,6 +27,7 @@ public class Rules implements KeyListener{
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			current = colorizer.moveRight(current);
+			System.out.println("yay");
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			current = colorizer.moveLeft(current);
