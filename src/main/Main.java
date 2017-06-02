@@ -1,13 +1,19 @@
 package main;
 
+
+import java.awt.event.KeyEvent;
+
 import processing.core.PApplet;
 import controlP5.*;
+import java.awt.event.*;
+
+
 
 /**
  * Main class which sets up the frame and background, as well as creates the
  * grid through blocks
  */
-public class Main extends PApplet {
+public class Main extends PApplet implements KeyListener{
 	private Colorizer colorizer;
 	private ControlP5 gui;
 	private Grid grid;
@@ -73,6 +79,23 @@ public class Main extends PApplet {
 	public void settings() {
 		size(width, height);
 
+	}
+	
+	public void keyTyped(KeyEvent e) {
+		
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_KP_LEFT) {
+			current = colorizer.moveRight(current);
+			System.out.println("YAY");
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_KP_RIGHT) {
+			current = colorizer.moveLeft(current);
+		}
+	}
+	
+	public void keyReleased(KeyEvent e) {
 	}
 
 	public void draw() {

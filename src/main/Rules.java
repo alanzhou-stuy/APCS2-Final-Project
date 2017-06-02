@@ -1,9 +1,8 @@
 package main;
 
-import java.awt.*;
 import java.awt.event.*;
 
-public class Rules {
+public class Rules implements KeyListener{
 	private Tile current;
 	int timer;
 	private Colorizer colorizer;
@@ -20,7 +19,22 @@ public class Rules {
 		this.current = current;
 		this.g = g;
 	}
-
+	
+	public void keyTyped(KeyEvent e) {
+		
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			current = colorizer.moveRight(current);
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			current = colorizer.moveLeft(current);
+		}
+	}
+	
+	public void keyReleased(KeyEvent e) {
+	}
 
 	public void run() {
 		if (timer % 20 == 0) {
