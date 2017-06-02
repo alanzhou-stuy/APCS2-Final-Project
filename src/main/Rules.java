@@ -1,20 +1,16 @@
 package main;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
+import javax.swing.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.KeyStroke;
-
-public class Rules implements KeyListener{
+public class Rules {
 	private Tile current;
-	int timer;
+	private static int TIMER;
 	private Colorizer colorizer;
 	Grid g;
 
 	public Rules() {
-		timer = 0;
+		TIMER = 0;
 	}
 
 	public Rules(Colorizer colorizer, Tile current,Grid g) {
@@ -25,8 +21,8 @@ public class Rules implements KeyListener{
 	}
 
 	public void run() {
-		if (timer % 20 == 0) {
-			if (hitBottom()) {
+		if (TIMER % 20 == 0) {
+			if (hitBottom() || hitBlock()) {
 				current = colorizer.spawnBlock();
 			} else {
 				current = colorizer.drop(current, 1);
@@ -37,7 +33,7 @@ public class Rules implements KeyListener{
 				}*/
 			}
 		}
-		timer++;
+		TIMER++;
 
 	}
 
@@ -149,7 +145,8 @@ public class Rules implements KeyListener{
 			this.sequence = sequence;
 		}
 		
-		public void actionPerformed(KeyStroke e) {
+		public void actionPerformed(ActionEvent e) {
+			/*
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				current = colorizer.moveRight(current);
 				System.out.println("yay");
@@ -157,7 +154,7 @@ public class Rules implements KeyListener{
 			else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				current = colorizer.moveLeft(current);
 			}
-		}
-		
+			*/
+		}	
 	}
 }
