@@ -1,13 +1,17 @@
 package main;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.AbstractAction;
+import javax.swing.KeyStroke;
 
 public class Rules implements KeyListener{
 	private Tile current;
 	int timer;
 	private Colorizer colorizer;
 	Grid g;
-	
 
 	public Rules() {
 		timer = 0;
@@ -18,23 +22,6 @@ public class Rules implements KeyListener{
 		this.colorizer = colorizer;
 		this.current = current;
 		this.g = g;
-	}
-	
-	public void keyTyped(KeyEvent e) {
-		
-	}
-	
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			current = colorizer.moveRight(current);
-			System.out.println("yay");
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			current = colorizer.moveLeft(current);
-		}
-	}
-	
-	public void keyReleased(KeyEvent e) {
 	}
 
 	public void run() {
@@ -152,6 +139,25 @@ public class Rules implements KeyListener{
 				g.grid[r][s].setColor(g.grid[r+1][s].getColor());
 			}
 		}
+	}
 
+	public class KeyAction extends AbstractAction {
+		private String sequence;
+		private KeyStroke keystroke;
+		
+		public KeyAction(String sequence) {
+			this.sequence = sequence;
+		}
+		
+		public void actionPerformed(KeyStroke e) {
+			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				current = colorizer.moveRight(current);
+				System.out.println("yay");
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				current = colorizer.moveLeft(current);
+			}
+		}
+		
 	}
 }

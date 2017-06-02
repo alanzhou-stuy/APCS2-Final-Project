@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
  * Main class which sets up the frame and background, as well as creates the
  * grid through blocks
  */
-public class Main extends PApplet implements ActionListener {
+public class Main extends PApplet {
 	private Colorizer colorizer;
 	private ControlP5 gui;
 	private Grid grid;
