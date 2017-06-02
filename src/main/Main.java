@@ -1,7 +1,14 @@
 package main;
 
+
+
 import processing.core.PApplet;
 import controlP5.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
 
 /**
  * Main class which sets up the frame and background, as well as creates the
@@ -24,8 +31,13 @@ public class Main extends PApplet {
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
 	}
-
+	
+    //public void actionPerformed(ActionEvent e) {
+    	//rule.keyPressed(e);
+    //}
+    
 	public void setup() {
+
 		numRows = 20;
 		numCols = 10;
 

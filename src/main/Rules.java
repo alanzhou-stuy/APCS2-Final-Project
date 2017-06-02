@@ -1,14 +1,17 @@
 package main;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class Rules {
+import javax.swing.AbstractAction;
+import javax.swing.KeyStroke;
+
+public class Rules implements KeyListener{
 	private Tile current;
 	int timer;
 	private Colorizer colorizer;
 	Grid g;
-	
 
 	public Rules() {
 		timer = 0;
@@ -23,11 +26,11 @@ public class Rules {
 
 	public void run() {
 		if (timer % 20 == 0) {
-			if (hitBottom() || hitBlock()) {
+			if (hitBottom()) {
 				current = colorizer.spawnBlock();
 			} else {
 				current = colorizer.drop(current, 1);
-				current = colorizer.moveRight(current);			
+				//current = colorizer.moveRight(current);			
 				/*for (Square s : current.getSquares()) {
 				}
 					System.out.println(s.getYCor());
@@ -39,8 +42,9 @@ public class Rules {
 	}
 
 	public boolean hitBottom() {
+		int lowestY = g.getSquare(g.numRows - 1,0).getYCor();
 		for (Square s : current.getSquares()) {
-			if (s.getYCor() == 620) {
+			if (s.getYCor() == lowestY) {
 				return true;
 			}
 		}
@@ -49,11 +53,22 @@ public class Rules {
 
 	public boolean hitBlock() {
 		int[] white = new int[] { 255, 255, 255 };
-		for (Square s: current.getSquares()) {
+		for (Square[] rowOfSquares : g.grid) {
+			for (Square s : rowOfSquares) {
+				for (Square s1: current.getSquares()) {
+					//System.out.println(s1.getYCor() + g.squareSize);
+					//System.out.println(s.getYCor());
+					if (((s1.getYCor() + g.squareSize + 1) == s.getYCor()) && (s.getColor() != white)) {
+						return true;
+					}
+				}
+			}
+		}
+		/*for (Square s: current.getSquares()) {
 			if (g.getSquare(s.getXCor(), (s.getYCor() + g.squareSize)).getColor() != white) {
 				return true;
 			}
-		}
+		}*/
 		return false;
 	}
 
@@ -100,5 +115,49 @@ public class Rules {
 			}
 		}
 		return -1;
+	}
+	
+	public void fullLine() {
+		int counter = g.getNumCols();
+		int[] white = new int[] { 255, 255, 255 };
+		for (Square[] rowOfSquares: g.grid) {
+			for (Square s: rowOfSquares) {
+				if (s.getColor() != white) {
+					counter --;
+				}
+				if (counter == 0) {
+					clearLine();
+				}
+			}
+			counter = g.getNumCols();
+		}
+	}
+	
+	public void clearLine() {
+		for (int r = 1; r < g.getNumRows(); r++) {
+			for (int s = 0; s < g.getNumCols(); s++) {
+				g.grid[r][s].setColor(g.grid[r+1][s].getColor());
+			}
+		}
+	}
+
+	public class KeyAction extends AbstractAction {
+		private String sequence;
+		private KeyStroke keystroke;
+		
+		public KeyAction(String sequence) {
+			this.sequence = sequence;
+		}
+		
+		public void actionPerformed(KeyStroke e) {
+			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				current = colorizer.moveRight(current);
+				System.out.println("yay");
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				current = colorizer.moveLeft(current);
+			}
+		}
+		
 	}
 }
