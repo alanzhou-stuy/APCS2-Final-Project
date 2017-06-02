@@ -1,16 +1,10 @@
 package main;
 
 import java.awt.event.*;
-<<<<<<< HEAD
 
-import javax.swing.*;
-
-public class Rules  {
-=======
 import javax.swing.*;
 
 public class Rules {
->>>>>>> ebe7dba868be6ca0d86b1f5c2062cce67dee085d
 	private Tile current;
 	private static int TIMER;
 	private Colorizer colorizer;
@@ -153,25 +147,14 @@ public class Rules {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
-			/*if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-=======
 			/*
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
->>>>>>> ebe7dba868be6ca0d86b1f5c2062cce67dee085d
 				current = colorizer.moveRight(current);
 				System.out.println("yay");
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				current = colorizer.moveLeft(current);
-<<<<<<< HEAD
 			}*/
-		}
-		
-=======
-			}
-			*/
 		}	
->>>>>>> ebe7dba868be6ca0d86b1f5c2062cce67dee085d
 	}
 }
