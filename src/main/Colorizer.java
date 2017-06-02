@@ -65,8 +65,11 @@ public class Colorizer extends PApplet implements Displayable {
 
 	@Override
 	public void refresh() {
+		/* GET TO WORK WITH DROPPING BLOCKS
 		g.setDimensions(pApplet.width, pApplet.height, tileSep);
 		g.updateGrid(numRows, numCols);
+		g.loadGrid();
+		*/
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
 				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
@@ -78,6 +81,7 @@ public class Colorizer extends PApplet implements Displayable {
 	@Override
 	public void create() {
 		g.setDimensions(pApplet.width, pApplet.height, tileSep);
+		g.updateGrid(numRows, numCols);
 		g.loadGrid();
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
@@ -184,13 +188,13 @@ public class Colorizer extends PApplet implements Displayable {
 		return t1;
 	}
 
-	public Tile drop(Tile t, int numberOfDrop) {
+	public Tile drop(Tile t, int numDrop) {
 		int[] white = new int[] { 255, 255, 255 };
 		// t.setPivotY(-1);
 		int x = 0;
 		int y = 0;
 		int size1 = t.getSquares().size();
-		while (x < numberOfDrop) {
+		while (x < numDrop) {
 			y = 0;
 			size1 = t.getSquares().size();
 			while (y < size1) {

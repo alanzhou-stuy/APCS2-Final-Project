@@ -19,7 +19,7 @@ public class Main extends PApplet {
 	private int[] bgColor = { 20, 20, 20 };
 	private Tile current;
 	private Rules rule;
-	private static int TIMER = 0;
+	//private static int TIMER = 0;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
@@ -27,7 +27,7 @@ public class Main extends PApplet {
 
 	public void setup() {
 		numRows = 20;
-		numCols = 10;
+		numCols = 20;
 
 		gui = new ControlP5(this);
 
@@ -48,13 +48,12 @@ public class Main extends PApplet {
 
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		grid = new Grid(numRows, numCols);
-
-		background(50, 50, 50);
-
+				
 		colorizer = new Colorizer(grid, this);
 		colorizer.setTileSep(1);
 		colorizer.create(); // create grid
 
+		/*
 		score = new Score(this, grid);
 		score.setBackgroundColor(new int[] { 200, 200, 200 });
 		score.create();
@@ -62,8 +61,9 @@ public class Main extends PApplet {
 		lb = new Leaderboard(this, grid);
 		lb.setBackgroundColor(new int[] { 200, 200, 200 });
 		lb.create();
-
-		current = colorizer.spawnLBlock();
+		*/
+		
+		current = colorizer.spawnLBlock(); // DON'T MOVE THIS
 
 		rule = new Rules(colorizer, current, grid);
 	}
@@ -73,10 +73,13 @@ public class Main extends PApplet {
 	}
 
 	public void draw() {
-		colorizer.setRowsCols(numRows, numCols);
+		background(bgColor[0], bgColor[1], bgColor[2]);		
 		
-		background(bgColor[0], bgColor[1], bgColor[2]);
 		rule.run();
+		//current = colorizer.drop(current, 1);
+		//System.out.println("Dropped!");
+		
+		colorizer.setRowsCols(numRows, numCols);
 		colorizer.refresh();
 	}
 }

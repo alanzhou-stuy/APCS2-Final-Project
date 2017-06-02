@@ -2,7 +2,7 @@ package main;
 
 import java.util.ArrayList;
 
-public class Tile implements Tilable {
+public class Tile {
 	public ArrayList<Square> squares;
 	public ArrayList<Integer[]> respectiveCoords;
 	private Grid g;
@@ -73,6 +73,13 @@ public class Tile implements Tilable {
 		squares.add(g.getSquare(pivotY + 1, pivotX)); // 1 0
 		squares.add(g.getSquare(pivotY + 2, pivotX)); // 2 0
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1)); // 2 1
+		
+		/*
+		squares.remove(0);
+		squares.remove(0);
+		squares.remove(0);
+		squares.remove(0);
+		*/
 		
 		respectiveCoords.add(new Integer[]{0,0});
 		respectiveCoords.add(new Integer[]{1,0});
@@ -197,33 +204,4 @@ public class Tile implements Tilable {
 		}
 		return false;
 	}
-
-	public void move() {
-		
-	}
-	/*
-	 * public void move() {
-	 * squares.add(g.getSquare(squares.get(0).,squares.get(0).));
-	 * squares.add(g.getSquare(squares.get(0).,squares.get(1).);
-	 * squares.add(g.getSquare(squares.get(0).,squares.get(2).);
-	 * squares.add(g.getSquare(squares.get(0),squares.get(3).); };
-	 */
-
-	public void rotate() {
-	};
-
-	// set all the color of the tile the same from Square file
-	/*
-	 * public void setBlockColor() { for (int i = 0;i < size; i++) { for(int j =
-	 * 0;j < size; j++) { if (tiles[i][j] == 1) {
-	 * 
-	 * } } }
-	 * 
-	 * public void rotateLeft() {
-	 * 
-	 * }
-	 * 
-	 * public void rotateRight() { }
-	 */
-
 }

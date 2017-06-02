@@ -1,17 +1,14 @@
 package main;
 
-import java.awt.*;
-import java.awt.event.*;
-
 public class Rules {
 	private Tile current;
-	int timer;
+	private static int TIMER;
 	private Colorizer colorizer;
 	Grid g;
 	
 
 	public Rules() {
-		timer = 0;
+		TIMER = 0;
 	}
 
 	public Rules(Colorizer colorizer, Tile current,Grid g) {
@@ -22,7 +19,7 @@ public class Rules {
 	}
 
 	public void run() {
-		if (timer % 20 == 0) {
+		if (TIMER % 20 == 0) {
 			if (hitBottom() || hitBlock()) {
 				current = colorizer.spawnBlock();
 			} else {
@@ -33,7 +30,7 @@ public class Rules {
 				}
 			}
 		}
-		timer++;
+		TIMER++;
 
 	}
 

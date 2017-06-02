@@ -5,11 +5,12 @@ package main;
  * frame.
  */
 public class Square {
+	private int rowIndex, colIndex;
 	public int xCor, yCor, size;
 	public int[] color;
 
-	public Square() {
-		//this(0, 0, 10, new int[] { 255, 255, 255 });
+	public Square(int[] color) {
+		this.color = color;
 	}
 
 	/**
@@ -22,9 +23,11 @@ public class Square {
 	 * @param color
 	 *            color of the square to be displayed in the visual grid
 	 */
-	public Square(int xCor, int yCor, int size, int[] color) {
+	public Square(int xCor, int yCor, int rowIndex, int colIndex, int size, int[] color) {
 		this.xCor = xCor;
 		this.yCor = yCor;
+		this.rowIndex = rowIndex;
+		this.colIndex = colIndex;
 		this.size = size;
 		this.color = color;
 	}
@@ -50,7 +53,14 @@ public class Square {
 		return yCor;
 	}
 	
+	public int getRowIndex(){
+		return rowIndex;
+	}
 
+	public int getColIndex(){
+		return colIndex;
+	}
+	
 	public int getSize() {
 		return size;
 	}
@@ -58,5 +68,4 @@ public class Square {
 	public int[] getColor() {
 		return color;
 	}
-	
 }
