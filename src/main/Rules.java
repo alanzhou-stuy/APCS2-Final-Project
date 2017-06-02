@@ -1,17 +1,23 @@
 package main;
 
 import java.awt.event.*;
+<<<<<<< HEAD
 
 import javax.swing.*;
 
 public class Rules  {
+=======
+import javax.swing.*;
+
+public class Rules {
+>>>>>>> ebe7dba868be6ca0d86b1f5c2062cce67dee085d
 	private Tile current;
-	int timer;
+	private static int TIMER;
 	private Colorizer colorizer;
 	Grid g;
 
 	public Rules() {
-		timer = 0;
+		TIMER = 0;
 	}
 
 	public Rules(Colorizer colorizer, Tile current,Grid g) {
@@ -22,8 +28,8 @@ public class Rules  {
 	}
 
 	public void run() {
-		if (timer % 20 == 0) {
-			if (hitBottom()) {
+		if (TIMER % 20 == 0) {
+			if (hitBottom() || hitBlock()) {
 				current = colorizer.spawnBlock();
 			} else {
 				current = colorizer.drop(current, 1);
@@ -34,7 +40,7 @@ public class Rules  {
 				}*/
 			}
 		}
-		timer++;
+		TIMER++;
 
 	}
 
@@ -147,14 +153,25 @@ public class Rules  {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
 			/*if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+=======
+			/*
+			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+>>>>>>> ebe7dba868be6ca0d86b1f5c2062cce67dee085d
 				current = colorizer.moveRight(current);
 				System.out.println("yay");
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				current = colorizer.moveLeft(current);
+<<<<<<< HEAD
 			}*/
 		}
 		
+=======
+			}
+			*/
+		}	
+>>>>>>> ebe7dba868be6ca0d86b1f5c2062cce67dee085d
 	}
 }
