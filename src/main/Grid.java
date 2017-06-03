@@ -59,15 +59,14 @@ public class Grid {
 				if (r < numRows && c < numCols) {
 					gridNew[r][c] = grid[r][c];
 				} else {
-					gridNew[r][c] = new Square(new int[] { 255, 255, 255 });
-					//gridNew[r][c] = null;
+					gridNew[r][c] = null; // so getColor() won't return null, causing exception
 				}
 			}
 		}
 
 		numRows = newRows;
 		numCols = newCols;
-		this.grid = gridNew;
+		grid = gridNew;
 	}
 
 	/**
@@ -75,16 +74,14 @@ public class Grid {
 	 */
 	public void loadGrid() {
 		int rowIncrement = 0;
-		for (int r = 0; r < numRows; r++) {
-			
+		for (int r = 0; r < numRows; r++) {		
 			int colIncrement = 0;
-			for (int c = 0; c < numCols; c++) {
-				
-				if (grid[r][c] != null
-						// && grid[r][c] part of tile
-						) {
-					int[] temp = grid[r][c].getColor();
-					grid[r][c] = new Square(sideMargin + colIncrement, vertMargin + rowIncrement, r, c, squareSize, temp);
+			for (int c = 0; c < numCols; c++) {						
+				if (grid[r][c] != null) {
+					grid[r][c].setXYCor(sideMargin + colIncrement, vertMargin + rowIncrement);
+					grid[r][c].setRowColIndex(r, c);
+					grid[r][c].setSize(squareSize);
+					grid[r][c].setColor(grid[r][c].getColor());	
 				} else {
 					grid[r][c] = new Square(sideMargin + colIncrement, vertMargin + rowIncrement, r, c, squareSize,
 							new int[] { 255, 255, 255 });
