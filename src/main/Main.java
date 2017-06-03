@@ -68,7 +68,7 @@ public class Main extends PApplet {
 		lb.create();
 		*/
 		
-		current = colorizer.spawnLBlock(); // DON'T MOVE THIS
+		current = colorizer.spawnLBlock(); // DON'T MOVE THIS	
 
 		rule = new Rules(colorizer, current, grid);
 	}
@@ -78,10 +78,12 @@ public class Main extends PApplet {
 	}
 
 	public void draw() {
-		background(bgColor[0], bgColor[1], bgColor[2]);		
+		background(bgColor[0], bgColor[1], bgColor[2]);	
+		
+		//current = colorizer.drop(current, 1);
 		
 		rule.run();
-		//current = colorizer.drop(current, 1);
+		
 		//System.out.println("Dropped!");
 		
 		colorizer.setRowsCols(numRows, numCols);
