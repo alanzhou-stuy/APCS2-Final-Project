@@ -23,7 +23,9 @@ public class Rules {
 
 	public void run() {
 		if (TIMER % 20 == 0) {
-			if (hitBottom() || hitBlock()) {
+			if (hitBottom() 
+					//|| hitBlock()
+					) {
 				current = colorizer.spawnBlock();
 			} else {
 				current = colorizer.drop(current, 1);

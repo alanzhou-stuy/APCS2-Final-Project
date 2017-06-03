@@ -22,7 +22,7 @@ public class Tile {
 	public Tile(Grid g, int pivotY, int pivotX) {
 		this();
 		this.g = g;
-		this.pivotX = pivotX;
+		this.pivotX = pivotX; 
 		this.pivotY = pivotY;
 	}
 
@@ -39,11 +39,36 @@ public class Tile {
 		for (Square s : squares) {
 			s.setColor(color);
 		}
-		// setBlockColor();
 	}
 
 	public ArrayList<Square> getSquares() {
 		return squares;
+	}
+
+	public void setBlock(String s) {
+		switch (s) {
+		case "I":
+			setIBlock();
+			break;
+		case "J":
+			setJBlock();
+			break;
+		case "L":
+			setLBlock();
+			break;
+		case "O":
+			setOBlock();
+			break;
+		case "S":
+			setSBlock();
+			break;
+		case "T":
+			setTBlock();
+			break;
+		case "Z":
+			setZBlock();
+			break;
+		}
 	}
 
 	public void setIBlock() {
@@ -73,19 +98,12 @@ public class Tile {
 		squares.add(g.getSquare(pivotY + 1, pivotX)); // 1 0
 		squares.add(g.getSquare(pivotY + 2, pivotX)); // 2 0
 		squares.add(g.getSquare(pivotY + 2, pivotX + 1)); // 2 1
-		
-		/*
-		squares.remove(0);
-		squares.remove(0);
-		squares.remove(0);
-		squares.remove(0);
-		*/
-		
-		respectiveCoords.add(new Integer[]{0,0});
-		respectiveCoords.add(new Integer[]{1,0});
-		respectiveCoords.add(new Integer[]{2,0});
-		respectiveCoords.add(new Integer[]{2,1});
-		
+
+		respectiveCoords.add(new Integer[] { 0, 0 });
+		respectiveCoords.add(new Integer[] { 1, 0 });
+		respectiveCoords.add(new Integer[] { 2, 0 });
+		respectiveCoords.add(new Integer[] { 2, 1 });
+
 		height = 3;
 		phase = 0;
 		numOfPhases = 4;
@@ -134,10 +152,6 @@ public class Tile {
 
 	public Square remove() {
 		return squares.remove(0);
-		// System.out.println(squares.size());
-		// squares.remove(1);
-		// squares.remove(2);
-		// squares.remove(3);
 	}
 
 	public int getNumOfPhases() {
@@ -170,24 +184,6 @@ public class Tile {
 
 	public String blockType() {
 		return blockType;
-	}
-
-	public void setBlock(String s) {
-		if (s.equals("I")) {
-			setIBlock();
-		} else if (s.equals("J")) {
-			setJBlock();
-		} else if (s.equals("L")) {
-			setLBlock();
-		} else if (s.equals("O")) {
-			setOBlock();
-		} else if (s.equals("S")) {
-			setSBlock();
-		} else if (s.equals("T")) {
-			setTBlock();
-		} else if (s.equals("Z")) {
-			setZBlock();
-		}
 	}
 
 	// not sure if it works

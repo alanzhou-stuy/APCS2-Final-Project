@@ -11,10 +11,11 @@ import java.util.Random;
 public class Colorizer extends PApplet implements Displayable {
 	private PApplet pApplet;
 	private Grid g;
-	private LinkedList<Tile> existingTiles;
+	// private LinkedList<Tile> existingTiles;
 	public Tile current;
 	public int numRows, numCols;
 	public int tileSep = 1; // default is 1
+	public static int[] WHITE = { 255, 255, 255 };
 
 	/**
 	 * @param grid
@@ -60,16 +61,15 @@ public class Colorizer extends PApplet implements Displayable {
 		case 6:
 			return spawnOBlock();
 		}
-		return spawnIBlock();
+
+		return null;
 	}
 
 	@Override
 	public void refresh() {
-		/* GET TO WORK WITH DROPPING BLOCKS
 		g.setDimensions(pApplet.width, pApplet.height, tileSep);
 		g.updateGrid(numRows, numCols);
 		g.loadGrid();
-		*/
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
 				pApplet.fill(s.getColor()[0], s.getColor()[1], s.getColor()[2]);
@@ -188,28 +188,23 @@ public class Colorizer extends PApplet implements Displayable {
 		return t1;
 	}
 
-	public Tile drop(Tile t, int numDrop) {
-		int[] white = new int[] { 255, 255, 255 };
-		// t.setPivotY(-1);
-		int x = 0;
-		int y = 0;
-		int size1 = t.getSquares().size();
-		while (x < numDrop) {
-			y = 0;
-			size1 = t.getSquares().size();
-			while (y < size1) {
-				t.remove().setColor(white);
-				y++;
-				// System.out.println("Calls remove");
+	public Tile drop(Tile t, int amount) {
+		int numSquares = t.getSquares().size();
+
+		while (amount-- > 0) {
+			numSquares = t.getSquares().size();
+
+			while (numSquares-- > 0) {
+				Square tR = t.remove(); // remove first square
+				tR.setColor(WHITE);
 			}
-			// while (!hitBottom(t)) {
+
 			Tile t1 = new Tile(g, t.getPivotY() + 1, t.getPivotX());
 			t1.setBlock(t.blockType());
 			t1.setColor(t.getColor());
-			// System.out.println("Calls remove");
 			t = t1;
-			x++;
 		}
+
 		return t;
 	}
 

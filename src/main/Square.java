@@ -37,6 +37,11 @@ public class Square {
 		this.yCor = yCor;
 	}
 	
+	public void setRowColIndex(int rowIndex, int colIndex){
+		this.rowIndex = rowIndex;
+		this.colIndex = colIndex;
+	}
+	
 	public void setSize(int size) {
 		this.size = size;
 	}
