@@ -51,20 +51,23 @@ public class Main extends PApplet {
 		 */
 
 		currentTile = colorizer.spawnLBlock(); // DON'T MOVE THIS
+		
 		rule = new Rules(colorizer, currentTile, grid);
 	}
 
 	public void settings() {
 		size(width, height);
-		// fullScreen(); MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to exit fullscreen)
+		//fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to exit fullscreen)
 	}
 
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		colorizer.setRowsCols(numRows, numCols);
-
-		//current = colorizer.drop(current, 1);
-		rule.run();
+		
+		currentTile = colorizer.drop(currentTile, 1);
+		currentTile = colorizer.rotate(false, currentTile, 1);
+		
+		//rule.run();
 
 		colorizer.refresh();
 	}

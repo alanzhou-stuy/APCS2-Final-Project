@@ -146,46 +146,77 @@ public class Colorizer extends PApplet implements Displayable {
 
 	public Tile spawnLBlock() {
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
-		t.setLBlock();
+		t.setLBlock(true);
 		int[] color = new int[] { 255, 165, 0 };
 		t.setColor(color);
 		return t;
 	}
 
-	public Tile rotateRight(Tile t, int numOfTimes) {
-		return t;
-	}
-
-	public Tile rotateLeft(Tile t, int numOfTimes) {
-		return t;
-	}
-
+	// eventually add EDGE DETECTION for moveLeft and moveRight
 	public Tile moveLeft(Tile t) {
-		int[] white = new int[] { 255, 255, 255 };
 		int y = 0;
 		int size1 = t.getSquares().size();
 		while (y < size1) {
-			t.remove().setColor(white);
+			t.remove().setColor(WHITE);
 			y++;
 		}
 		Tile t1 = new Tile(g, t.getPivotY(), t.getPivotX() - 1);
-		t1.setBlock(t.blockType());
+		t1.setRespectiveCoords(t.getRespectiveCoords());
+		t1.setBlock(t.blockType(), false);
 		t1.setColor(t.getColor());
 		return t1;
 	}
 
 	public Tile moveRight(Tile t) {
-		int[] white = new int[] { 255, 255, 255 };
 		int y = 0;
 		int size1 = t.getSquares().size();
 		while (y < size1) {
-			t.remove().setColor(white);
+			t.remove().setColor(WHITE);
 			y++;
 		}
 		Tile t1 = new Tile(g, t.getPivotY(), t.getPivotX() + 1);
-		t1.setBlock(t.blockType());
+		t1.setRespectiveCoords(t.getRespectiveCoords());
+		t1.setBlock(t.blockType(), false);
 		t1.setColor(t.getColor());
 		return t1;
+	}
+
+	/**
+	 * Rotates a tile either clockwise or counter clockwise. It utilizes the
+	 * respectiveCoords of a square, creates a coordinate transformation, and
+	 * then reassigns the grid values
+	 * 
+	 * @param left
+	 *            if true, rotate left, otherwise, rotate right
+	 * @param t
+	 *            tile that is to be rotated
+	 * @param numTimes
+	 *            number of times to rotate the tile
+	 * @return the tile with the rotated coordinates in the grid
+	 */
+	public Tile rotate(boolean clockwise, Tile t, int numTimes) {
+		while (numTimes-- > 0) {
+			int numSquares = t.getSquares().size();
+
+			// Adds new coords, then removes old ones!!!
+
+			for (int i = 0; i < numSquares; i++) {
+				int[] coord = t.respectiveCoords.get(i);
+				t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, coord));
+			}
+			
+			while (numSquares-- > 0) {
+				t.respectiveCoords.remove(0);
+				t.remove().setColor(WHITE);
+			}
+			
+			System.out.println(t.respectiveCoords.size());
+			
+			t.setBlock(t.blockType(), false);
+			t.setColor(t.getColor());
+		}
+
+		return t;
 	}
 
 	public Tile drop(Tile t, int amount) {
@@ -195,12 +226,12 @@ public class Colorizer extends PApplet implements Displayable {
 			numSquares = t.getSquares().size();
 
 			while (numSquares-- > 0) {
-				Square tR = t.remove(); // remove first square
-				tR.setColor(WHITE);
+				t.remove().setColor(WHITE);
 			}
 
 			Tile t1 = new Tile(g, t.getPivotY() + 1, t.getPivotX());
-			t1.setBlock(t.blockType());
+			t1.setRespectiveCoords(t.getRespectiveCoords());
+			t1.setBlock(t.blockType(), false);		
 			t1.setColor(t.getColor());
 			t = t1;
 		}

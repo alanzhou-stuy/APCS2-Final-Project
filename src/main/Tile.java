@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Tile {
 	public ArrayList<Square> squares;
-	public ArrayList<Integer[]> respectiveCoords;
+	public ArrayList<int[]> respectiveCoords;
 	private Grid g;
 	public int pivotX, pivotY;
 	private String blockType;
@@ -15,14 +15,14 @@ public class Tile {
 
 	public Tile() {
 		squares = new ArrayList<Square>();
-		respectiveCoords = new ArrayList<Integer[]>();
+		respectiveCoords = new ArrayList<int[]>();
 		height = 2;
 	}
 
 	public Tile(Grid g, int pivotY, int pivotX) {
 		this();
 		this.g = g;
-		this.pivotX = pivotX; 
+		this.pivotX = pivotX;
 		this.pivotY = pivotY;
 	}
 
@@ -45,7 +45,7 @@ public class Tile {
 		return squares;
 	}
 
-	public void setBlock(String s) {
+	public void setBlock(String s, boolean initiateCoords) {
 		switch (s) {
 		case "I":
 			setIBlock();
@@ -54,7 +54,7 @@ public class Tile {
 			setJBlock();
 			break;
 		case "L":
-			setLBlock();
+			setLBlock(initiateCoords);
 			break;
 		case "O":
 			setOBlock();
@@ -93,17 +93,19 @@ public class Tile {
 		numOfPhases = 4;
 	}
 
-	public void setLBlock() {
-		squares.add(g.getSquare(pivotY, pivotX)); // 0 0
-		squares.add(g.getSquare(pivotY + 1, pivotX)); // 1 0
-		squares.add(g.getSquare(pivotY + 2, pivotX)); // 2 0
-		squares.add(g.getSquare(pivotY + 2, pivotX + 1)); // 2 1
-
-		respectiveCoords.add(new Integer[] { 0, 0 });
-		respectiveCoords.add(new Integer[] { 1, 0 });
-		respectiveCoords.add(new Integer[] { 2, 0 });
-		respectiveCoords.add(new Integer[] { 2, 1 });
-
+	public void setLBlock(boolean initiateCoords) {
+		if (initiateCoords) {
+			/* Coordinates respective to pivotY and pivotX */
+			respectiveCoords.add(new int[] { 0, 0 });
+			respectiveCoords.add(new int[] { 1, 0 });
+			respectiveCoords.add(new int[] { 2, 0 });
+			respectiveCoords.add(new int[] { 2, 1 });
+		}
+		
+		for (int[] coord : respectiveCoords) {
+			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
+		}
+		
 		height = 3;
 		phase = 0;
 		numOfPhases = 4;
@@ -181,6 +183,10 @@ public class Tile {
 	public int getPivotY() {
 		return pivotY;
 	}
+	
+	public ArrayList<int[]> getRespectiveCoords() {
+		return respectiveCoords;
+	}
 
 	public String blockType() {
 		return blockType;
@@ -199,5 +205,21 @@ public class Tile {
 			}
 		}
 		return false;
+	}
+
+	public void addRespectiveCoord(int[] coord) {
+		respectiveCoords.add(coord);
+	}
+	
+	public void setRespectiveCoords(ArrayList<int[]> respectiveCoords){
+		this.respectiveCoords = respectiveCoords;
+	}
+
+	public static int[] returnTransformedCoords(boolean clockwise, int[] coords) {
+		if (!clockwise) {
+			return new int[] { coords[1], -1 * coords[0] };
+		} else {
+			return new int[] { -1 * coords[1], coords[0] };
+		}
 	}
 }
