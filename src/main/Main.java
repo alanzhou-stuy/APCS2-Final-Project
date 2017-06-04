@@ -52,7 +52,7 @@ public class Main extends PApplet {
 		 * 200, 200, 200 }); lb.create();
 		 */
 
-		currentTile = colorizer.spawnLBlock(); // DON'T MOVE THIS
+		currentTile = colorizer.spawnTBlock(); // DON'T MOVE THIS
 		
 		rule = new Rules(colorizer, currentTile, grid);
 		rule.setSpeed(SPEED);
@@ -61,7 +61,7 @@ public class Main extends PApplet {
 
 	public void settings() {
 		size(width, height);
-		//fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to exit fullscreen)
+		fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to exit fullscreen)
 	}
 
 	public void draw() {
