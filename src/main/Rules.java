@@ -32,7 +32,8 @@ public class Rules {
 	}
 
 	public void run() {
-		int run_period = (int) ((30 - 2.5 * SPEED) * (FRAMERATE / 60.0)) + 1;
+		// Polynomial regression
+		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35) * (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
 			if (hitBottom()
