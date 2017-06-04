@@ -8,6 +8,8 @@ public class Rules {
 	private Tile current;
 	private static int TIMER;
 	private Colorizer colorizer;
+	private int SPEED = 5;
+	private int FRAMERATE = 60;
 	Grid g;
 
 	public Rules() {
@@ -20,9 +22,21 @@ public class Rules {
 		this.current = current;
 		this.g = g;
 	}
+	
+	public void setSpeed(int speed){
+		SPEED = speed;
+	}
+	
+	public void setFR(int framerate){
+		FRAMERATE = framerate;
+	}
 
 	public void run() {
-		if (TIMER % 20 == 0) {
+		int run_period = (int)((30 - 2.5 * SPEED) * (FRAMERATE / 60.0)) + 1;
+		
+		System.out.println(run_period);
+		
+		if (TIMER % run_period == 0) {
 			if (hitBottom() 
 					//|| hitBlock()
 					) {
@@ -44,6 +58,15 @@ public class Rules {
 		int lowestY = g.getSquare(g.numRows - 1,0).getYCor();
 		for (Square s : current.getSquares()) {
 			if (s.getYCor() == lowestY) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hitSides(){
+		for(Square s : current.getSquares()){
+			if(s.getColIndex() < 0 || s.getColIndex() > g.getNumCols()-1){
 				return true;
 			}
 		}

@@ -11,11 +11,13 @@ public class Main extends PApplet {
 	private Colorizer colorizer;
 	private ControlP5 gui;
 	private Grid grid;
-	private final int height = 700;
+	private final int height = 800;
 	private final int width = 1400;
 	private int numRows = 20;
 	private int numCols = 10;
 	private int[] bgColor = { 20, 20, 20 };
+	private int SPEED = 5;
+	private int FRAMERATE = 60;
 	private Tile currentTile;
 	private Rules rule;
 	// To be implemented later!
@@ -31,7 +33,7 @@ public class Main extends PApplet {
 	// }
 
 	public void setup() {
-		frameRate(60); // shouldn't be changed
+		frameRate(FRAMERATE); // shouldn't be changed
 		
 		createGUI();
 
@@ -53,6 +55,8 @@ public class Main extends PApplet {
 		currentTile = colorizer.spawnLBlock(); // DON'T MOVE THIS
 		
 		rule = new Rules(colorizer, currentTile, grid);
+		rule.setSpeed(SPEED);
+		rule.setFR(FRAMERATE);
 	}
 
 	public void settings() {
@@ -63,11 +67,12 @@ public class Main extends PApplet {
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		colorizer.setRowsCols(numRows, numCols);
+		rule.setSpeed(SPEED);
 		
-		currentTile = colorizer.drop(currentTile, 1);
-		currentTile = colorizer.rotate(false, currentTile, 1);
+		//currentTile = colorizer.drop(currentTile, 1);
+		//currentTile = colorizer.rotate(false, currentTile, 1);
 		
-		//rule.run();
+		rule.run();
 
 		colorizer.refresh();
 	}
@@ -75,8 +80,8 @@ public class Main extends PApplet {
 	public void createGUI() {
 		gui = new ControlP5(this);
 
-		gui.addSlider("speed").setSize(225, 50).setRange(0, 100).setPosition(40, 100).setValue(50)
-				.setNumberOfTickMarks(21);
+		gui.addSlider("SPEED").setSize(225, 50).setRange(0, 10).setPosition(40, 100).setValue(SPEED)
+				.setNumberOfTickMarks(11);
 
 		gui.addSlider("difficulty").setSize(225, 50).setRange(0, 100).setPosition(40, 200).setValue(50)
 				.setNumberOfTickMarks(21);
