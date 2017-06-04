@@ -61,7 +61,7 @@ public class Main extends PApplet {
 
 	public void settings() {
 		size(width, height);
-		fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to exit fullscreen)
+		//fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to exit fullscreen)
 	}
 
 	public void draw() {
