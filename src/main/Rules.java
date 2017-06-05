@@ -23,7 +23,7 @@ public class Rules {
 
 	public void run() {
 		if (TIMER % 20 == 0) {
-			if (hitBottom() || hitBlock()) {
+			if (hitBottom() ) {
 				current = colorizer.spawnBlock();
 			} else {
 				current = colorizer.drop(current, 1);
@@ -68,7 +68,18 @@ public class Rules {
 		}*/
 		return false;
 	}
-
+	
+	/*public boolean hitBlock() {
+		int[] white = new int[] { 255, 255, 255 };
+		for (int x = 0; x < g.numRows; x++) {
+			for (int y = 0; y < g.numCols; y ++) {
+				if (g.grid[x][y].getColor() != white) {
+					if 
+				}
+			}
+		}
+	}*/
+	
 	public boolean blockOffMap() {
 		int lowestX = g.getSquare(0,0).getXCor();
 		int highestX = g.getSquare(0,g.numCols - 1).getXCor();
