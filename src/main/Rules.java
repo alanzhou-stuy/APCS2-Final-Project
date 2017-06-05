@@ -1,7 +1,6 @@
 package main;
 
-import java.awt.event.*;
-
+import java.awt.event.ActionEvent;
 import javax.swing.*;
 
 public class Rules {
@@ -10,7 +9,8 @@ public class Rules {
 	private Colorizer colorizer;
 	private int SPEED = 5;
 	private int FRAMERATE = 60;
-	Grid g;
+	private Grid g;
+	private Main main;
 
 	public Rules() {
 		TIMER = 0;
@@ -31,9 +31,14 @@ public class Rules {
 		FRAMERATE = framerate;
 	}
 
+	public void setMain(Main main) {
+		this.main = main;
+	}
+
 	public void run() {
 		// Polynomial regression
-		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35) * (FRAMERATE / 60.0)) + 1;
+		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35)
+				* (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
 			if (hitBottom()
@@ -49,6 +54,16 @@ public class Rules {
 				 * for (Square s : current.getSquares()) { }
 				 * System.out.println(s.getYCor()); }
 				 */
+
+				if (main.keyPressed && main.key == main.CODED) {
+					if (main.keyCode == main.RIGHT) {
+						current = colorizer.moveRight(current);
+					} else if (main.keyCode == main.LEFT) {
+						current = colorizer.moveLeft(current);
+					} else if (main.keyCode == main.UP) {
+						current = colorizer.rotate(false, current, 1);
+					}
+				}
 			}
 		}
 		TIMER++;
@@ -171,6 +186,21 @@ public class Rules {
 		}
 
 		public void actionPerformed(ActionEvent e) {
+			switch (sequence) {
+			case "clockwise":
+				colorizer.rotate(true, current, 1);
+				break;
+			case "counterclockwise":
+				colorizer.rotate(false, current, 1);
+				break;
+			case "left":
+				colorizer.moveLeft(current);
+				break;
+			case "right":
+				colorizer.moveRight(current);
+				break;
+			}
+
 			/*
 			 * if (e.getKeyCode() == KeyEvent.VK_LEFT) { current =
 			 * colorizer.moveRight(current); System.out.println("yay"); } else

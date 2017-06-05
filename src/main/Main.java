@@ -59,6 +59,7 @@ public class Main extends PApplet {
 		rule = new Rules(colorizer, currentTile, grid);
 		rule.setSpeed(SPEED);
 		rule.setFR(FRAMERATE);
+		rule.setMain(this);
 	}
 
 	public void settings() {
@@ -70,9 +71,11 @@ public class Main extends PApplet {
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		rule.setSpeed(SPEED);
-		
-		if(start.getBooleanValue() == false){
-			colorizer.setRowsCols(numRows, numCols);	
+
+		if (start.getBooleanValue() == false) {
+			colorizer.setRowsCols(numRows, numCols);
+
+			start.setCaptionLabel("START ");
 		}
 
 		// currentTile = colorizer.drop(currentTile, 1);
@@ -80,6 +83,10 @@ public class Main extends PApplet {
 
 		if (start.getBooleanValue() == true) {
 			rule.run();
+
+			
+
+			start.setCaptionLabel("STOP");
 		}
 
 		colorizer.refresh();
@@ -109,7 +116,7 @@ public class Main extends PApplet {
 		start = gui.addButton("START").setValue(0).setPosition(4 * width / 5, 50).setSize(200, 60);
 
 		start.getCaptionLabel().setFont(largeFont);
-		
+
 		speedSlider.getCaptionLabel().setFont(textFont);
 		diffSlider.getCaptionLabel().setFont(textFont);
 		varietySlider.getCaptionLabel().setFont(textFont);
