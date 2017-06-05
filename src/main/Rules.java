@@ -41,15 +41,13 @@ public class Rules {
 				* (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
-			if (hitBottom()) {
+			if (hitBottom() || hitBlock()) {
+				System.out.println(current.getSquares().get(0).partOfCurrentBlock);
 				current = colorizer.spawnBlock();
 			} else {
-				if (hitBlock()) {
-					current = colorizer.spawnBlock();
-				} 
-				else {
 					current = colorizer.drop(current, 1);
-				}
+					System.out.println(current.getSquares().get(0).partOfCurrentBlock);
+
 
 				// current = colorizer.rotate(false, current, 1);
 
@@ -91,10 +89,15 @@ public class Rules {
 		return false;
 	}
 
+	public boolean part(Square t) {
+		return t.partOfCurrentBlock;
+	}
+	
 	public boolean hitBlock() {
 		for (Square s: current.getSquares()) {
 			//if (s.getYCor() == calLowestYCorOfTile(current)) {
-			if (colorizer.colored(s.getRowIndex(),s.getColIndex())) {
+				if ((colorizer.colored(s.getRowIndex(),s.getColIndex())) 
+						&& !part(g.grid[s.getRowIndex() + 1][s.getColIndex()])){
 					return true;
 				}
 			//}

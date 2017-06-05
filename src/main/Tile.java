@@ -24,6 +24,9 @@ public class Tile {
 		this.g = g;
 		this.pivotX = pivotX;
 		this.pivotY = pivotY;
+		for (Square s: squares) {
+			s.partOfCurrentBlock = true;
+		}
 	}
 
 	public int getHeight() {
@@ -194,6 +197,7 @@ public class Tile {
 	}
 
 	public Square remove() {
+		squares.get(0).partOfCurrentBlock = false;
 		return squares.remove(0);
 	}
 

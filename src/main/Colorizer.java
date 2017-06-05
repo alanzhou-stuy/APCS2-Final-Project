@@ -181,9 +181,11 @@ public class Colorizer extends PApplet implements Displayable {
 		return t1;
 	}
 	
-	public boolean colored(int x, int y) {
-		return g.grid[x + 1][y].color == WHITE; 
+	public boolean colored(int y, int x) {
+		return g.grid[y][x].color != WHITE; 
 	}
+	
+	
 
 	/**
 	 * Rotates a tile either clockwise or counter clockwise. It utilizes the
@@ -237,7 +239,7 @@ public class Colorizer extends PApplet implements Displayable {
 			t1.setColor(t.getColor());
 			t = t1;
 		}
-
+		
 		return t;
 	}
 
