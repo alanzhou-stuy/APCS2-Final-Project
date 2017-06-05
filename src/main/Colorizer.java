@@ -216,8 +216,6 @@ public class Colorizer extends PApplet implements Displayable {
 				t.remove().setColor(WHITE);
 			}
 			
-			System.out.println(t.respectiveCoords.size());
-			
 			t.setBlock(t.blockType(), false);
 			t.setColor(t.getColor());
 		}
@@ -237,7 +235,7 @@ public class Colorizer extends PApplet implements Displayable {
 
 			Tile t1 = new Tile(g, t.getPivotY() + 1, t.getPivotX());
 			t1.setRespectiveCoords(t.getRespectiveCoords());
-			t1.setBlock(t.blockType(), false);		
+			t1.setBlock(t.blockType(), false);
 			t1.setColor(t.getColor());
 			t = t1;
 		}
