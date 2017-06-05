@@ -39,12 +39,7 @@ public class Rules {
 			if (hitBottom()) {
 				current = colorizer.spawnBlock();
 			} else {
-				if (hitBlock()) {
-					current = colorizer.spawnBlock();
-				} 
-				else {
 					current = colorizer.drop(current, 1);
-				}
 
 				// current = colorizer.rotate(false, current, 1);
 
