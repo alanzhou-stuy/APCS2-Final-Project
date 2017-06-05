@@ -1,4 +1,4 @@
-package main;
+ package main;
 
 /**
  * Class for the grid in the Main frame. Contains a 2-D array of Squares. Grid
@@ -115,4 +115,7 @@ public class Grid {
 	public void setNumCols(int numCols) {
 		this.numCols = numCols;
 	}
+	
+
+	
 }

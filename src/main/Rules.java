@@ -41,12 +41,15 @@ public class Rules {
 				* (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
-			if (hitBottom()
-			// || hitBlock()
-			) {
+			if (hitBottom()) {
 				current = colorizer.spawnBlock();
 			} else {
-				current = colorizer.drop(current, 1);
+				if (hitBlock()) {
+					current = colorizer.spawnBlock();
+				} 
+				else {
+					current = colorizer.drop(current, 1);
+				}
 
 				// current = colorizer.rotate(false, current, 1);
 
@@ -89,22 +92,13 @@ public class Rules {
 	}
 
 	public boolean hitBlock() {
-		int[] white = new int[] { 255, 255, 255 };
-		for (Square[] rowOfSquares : g.grid) {
-			for (Square s : rowOfSquares) {
-				for (Square s1 : current.getSquares()) {
-					// System.out.println(s1.getYCor() + g.squareSize);
-					// System.out.println(s.getYCor());
-					if (((s1.getYCor() + g.squareSize + 1) == s.getYCor()) && (s.getColor() != white)) {
-						return true;
-					}
+		for (Square s: current.getSquares()) {
+			//if (s.getYCor() == calLowestYCorOfTile(current)) {
+			if (colorizer.colored(s.getRowIndex(),s.getColIndex())) {
+					return true;
 				}
-			}
+			//}
 		}
-		/*
-		 * for (Square s: current.getSquares()) { if (g.getSquare(s.getXCor(),
-		 * (s.getYCor() + g.squareSize)).getColor() != white) { return true; } }
-		 */
 		return false;
 	}
 
@@ -126,6 +120,17 @@ public class Rules {
 		for (Square s : t.getSquares()) {
 			if (s.getYCor() < lowest) {
 				lowest = s.getYCor();
+			}
+		}
+		return lowest;
+	}
+	
+	public int calLowestYCorOfTileX(Tile t) {
+		int lowest = t.getSquares().get(0).getYCor();
+		for (Square s : t.getSquares()) {
+			if (s.getYCor() < lowest) {
+				lowest = s.getXCor();
+				return lowest;
 			}
 		}
 		return lowest;
@@ -176,6 +181,19 @@ public class Rules {
 			}
 		}
 	}
+	
+	/*public boolean hit() {
+		int[] white = new int[] { 255, 255, 255 };
+		int lowX = current.getSquares().get(0).getColIndex();
+		int lowY = current.getSquares().get(0).getRowIndex();
+		int highX = current.getSquares().get(0).getColIndex();
+		int highY = current.getSquares().get(0).getRowIndex();
+		for (Square s: current.getSquares()) {
+			if (s.getColIndex() < lowX) {
+			}
+		}
+		return false;
+	}*/
 
 	public class KeyAction extends AbstractAction {
 		private String sequence;
