@@ -1,6 +1,6 @@
 package main;
 
-import controlP5.ControlP5;
+import controlP5.*;
 import processing.core.PApplet;
 
 /**
@@ -23,6 +23,8 @@ public class Main extends PApplet {
 	// To be implemented later!
 	// private Score score;
 	// private Leaderboard lb;
+	private Slider speedSlider, diffSlider, varietySlider, numRowsSlider, numColsSlider;
+	private Button start;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
@@ -34,7 +36,7 @@ public class Main extends PApplet {
 
 	public void setup() {
 		frameRate(FRAMERATE); // shouldn't be changed
-		
+
 		createGUI();
 
 		background(bgColor[0], bgColor[1], bgColor[2]);
@@ -53,7 +55,7 @@ public class Main extends PApplet {
 		 */
 
 		currentTile = colorizer.spawnTBlock(); // DON'T MOVE THIS
-		
+
 		rule = new Rules(colorizer, currentTile, grid);
 		rule.setSpeed(SPEED);
 		rule.setFR(FRAMERATE);
@@ -61,38 +63,57 @@ public class Main extends PApplet {
 
 	public void settings() {
 		size(width, height);
-		//fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to exit fullscreen)
+		// fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
+		// exit fullscreen)
 	}
 
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
-		colorizer.setRowsCols(numRows, numCols);
 		rule.setSpeed(SPEED);
 		
-		//currentTile = colorizer.drop(currentTile, 1);
-		//currentTile = colorizer.rotate(false, currentTile, 1);
-		
-		rule.run();
+		if(start.getBooleanValue() == false){
+			colorizer.setRowsCols(numRows, numCols);	
+		}
+
+		// currentTile = colorizer.drop(currentTile, 1);
+		// currentTile = colorizer.rotate(false, currentTile, 1);
+
+		if (start.getBooleanValue() == true) {
+			rule.run();
+		}
 
 		colorizer.refresh();
 	}
-	
+
 	public void createGUI() {
 		gui = new ControlP5(this);
 
-		gui.addSlider("SPEED").setSize(225, 50).setRange(0, 10).setPosition(40, 100).setValue(SPEED)
+		ControlFont largeFont = new ControlFont(createFont("Arial", 22));
+		ControlFont textFont = new ControlFont(createFont("Arial", 16));
+
+		speedSlider = gui.addSlider("SPEED").setSize(225, 50).setRange(0, 10).setPosition(40, 100).setValue(SPEED)
 				.setNumberOfTickMarks(11);
 
-		gui.addSlider("difficulty").setSize(225, 50).setRange(0, 100).setPosition(40, 200).setValue(50)
+		diffSlider = gui.addSlider("difficulty").setSize(225, 50).setRange(0, 100).setPosition(40, 200).setValue(50)
 				.setNumberOfTickMarks(21);
 
-		gui.addSlider("variety").setSize(225, 50).setRange(0, 100).setPosition(40, 300).setValue(50)
+		varietySlider = gui.addSlider("variety").setSize(225, 50).setRange(0, 100).setPosition(40, 300).setValue(50)
 				.setNumberOfTickMarks(11);
 
-		gui.addSlider("numRows").setSize(225, 50).setRange(4, 40).setPosition(40, 400).setValue(20)
+		numRowsSlider = gui.addSlider("numRows").setSize(225, 50).setRange(4, 40).setPosition(40, 400).setValue(20)
 				.setNumberOfTickMarks(37);
 
-		gui.addSlider("numCols").setSize(225, 50).setRange(4, 40).setPosition(40, 500).setValue(10)
+		numColsSlider = gui.addSlider("numCols").setSize(225, 50).setRange(4, 40).setPosition(40, 500).setValue(10)
 				.setNumberOfTickMarks(37);
+
+		start = gui.addButton("START").setValue(0).setPosition(4 * width / 5, 50).setSize(200, 60);
+
+		start.getCaptionLabel().setFont(largeFont);
+		
+		speedSlider.getCaptionLabel().setFont(textFont);
+		diffSlider.getCaptionLabel().setFont(textFont);
+		varietySlider.getCaptionLabel().setFont(textFont);
+		numRowsSlider.getCaptionLabel().setFont(textFont);
+		numColsSlider.getCaptionLabel().setFont(textFont);
 	}
 }
