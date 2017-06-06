@@ -3,7 +3,9 @@ package main;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-public class Rules {
+import processing.core.PApplet;
+
+public class Rules extends PApplet {
 	private Tile current;
 	private static int TIMER;
 	private Colorizer colorizer;
@@ -41,13 +43,14 @@ public class Rules {
 				* (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
-			if (hitBottom() || hitBlock()) {
+			if (hitBottom()
+			// || hitBlock()
+			) {
 				System.out.println(current.getSquares().get(0).partOfCurrentBlock);
 				current = colorizer.spawnBlock();
 			} else {
-					current = colorizer.drop(current, 1);
-					System.out.println(current.getSquares().get(0).partOfCurrentBlock);
-
+				current = colorizer.drop(current, 1);
+				System.out.println(current.getSquares().get(0).partOfCurrentBlock);
 
 				// current = colorizer.rotate(false, current, 1);
 
@@ -55,19 +58,19 @@ public class Rules {
 				 * for (Square s : current.getSquares()) { }
 				 * System.out.println(s.getYCor()); }
 				 */
-
-				if (main.keyPressed && main.key == main.CODED) {
-					if (main.keyCode == main.RIGHT) {
-						current = colorizer.moveRight(current);
-					} else if (main.keyCode == main.LEFT) {
-						current = colorizer.moveLeft(current);
-					} else if (main.keyCode == main.UP) {
-						current = colorizer.rotate(false, current, 1);
-					}
-				}
 			}
 		}
 		TIMER++;
+	}
+
+	public void registerKeyPress(int keyCode) {
+		if (keyCode == RIGHT) {
+			current = colorizer.moveRight(current);
+		} else if (keyCode == LEFT) {
+			current = colorizer.moveLeft(current);
+		} else if (keyCode == UP) {
+			current = colorizer.rotate(false, current, 1);
+		}
 	}
 
 	public boolean hitBottom() {
@@ -92,15 +95,15 @@ public class Rules {
 	public boolean part(Square t) {
 		return t.partOfCurrentBlock;
 	}
-	
+
 	public boolean hitBlock() {
-		for (Square s: current.getSquares()) {
-			//if (s.getYCor() == calLowestYCorOfTile(current)) {
-				if ((colorizer.colored(s.getRowIndex(),s.getColIndex())) 
-						&& !part(g.grid[s.getRowIndex() + 1][s.getColIndex()])){
-					return true;
-				}
-			//}
+		for (Square s : current.getSquares()) {
+			// if (s.getYCor() == calLowestYCorOfTile(current)) {
+			if ((colorizer.colored(s.getRowIndex(), s.getColIndex()))
+					&& !part(g.grid[s.getRowIndex() + 1][s.getColIndex()])) {
+				return true;
+			}
+			// }
 		}
 		return false;
 	}
@@ -127,7 +130,7 @@ public class Rules {
 		}
 		return lowest;
 	}
-	
+
 	public int calLowestYCorOfTileX(Tile t) {
 		int lowest = t.getSquares().get(0).getYCor();
 		for (Square s : t.getSquares()) {
@@ -184,19 +187,15 @@ public class Rules {
 			}
 		}
 	}
-	
-	/*public boolean hit() {
-		int[] white = new int[] { 255, 255, 255 };
-		int lowX = current.getSquares().get(0).getColIndex();
-		int lowY = current.getSquares().get(0).getRowIndex();
-		int highX = current.getSquares().get(0).getColIndex();
-		int highY = current.getSquares().get(0).getRowIndex();
-		for (Square s: current.getSquares()) {
-			if (s.getColIndex() < lowX) {
-			}
-		}
-		return false;
-	}*/
+
+	/*
+	 * public boolean hit() { int[] white = new int[] { 255, 255, 255 }; int
+	 * lowX = current.getSquares().get(0).getColIndex(); int lowY =
+	 * current.getSquares().get(0).getRowIndex(); int highX =
+	 * current.getSquares().get(0).getColIndex(); int highY =
+	 * current.getSquares().get(0).getRowIndex(); for (Square s:
+	 * current.getSquares()) { if (s.getColIndex() < lowX) { } } return false; }
+	 */
 
 	public class KeyAction extends AbstractAction {
 		private String sequence;

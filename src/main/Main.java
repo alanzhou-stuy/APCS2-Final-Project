@@ -16,16 +16,19 @@ public class Main extends PApplet {
 	private int numRows = 20;
 	private int numCols = 10;
 	private int[] bgColor = { 20, 20, 20 };
-	private int SPEED = 5;
-	private int FRAMERATE = 60;
 	private Tile currentTile;
 	private Rules rule;
 	// To be implemented later!
-	private int SCORE = 0;
 	// private Leaderboard lb;
 	private Slider speedSlider, diffSlider, varietySlider, numRowsSlider, numColsSlider;
 	private Textlabel score;
 	private Button start;
+
+	private static int SPEED = 5;
+	private static int FRAMERATE = 60;
+	private static int CONTROL_RESPONSIVENESS = 7;
+	private int COUNTER = 0;
+	private int SCORE = 0;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
@@ -83,6 +86,10 @@ public class Main extends PApplet {
 
 		if (start.getBooleanValue() == true) {
 			rule.run();
+			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
+				rule.registerKeyPress(keyCode);
+			}
+
 			start.setCaptionLabel("STOP");
 			score.setText("SCORE: " + SCORE);
 		}
