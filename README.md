@@ -27,7 +27,8 @@
 
 <h4>Unresolved bugs:</h4>
 <ul>
-<li>Rotating tiles can overlap each other. (game-mechanic)</li>
+<li>Rotating tiles can overlap each other; can violate bounds of grid(game-mechanic)</li>
+<li>Tiles may sometimes spawn on the top repeatedly after the grid is filled up </li
 </ul>
 
 <h4>Contributors:</h4>
