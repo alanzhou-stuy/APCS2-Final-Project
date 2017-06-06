@@ -27,7 +27,7 @@
 
 <h4>Unresolved bugs:</h4>
 <ul>
-<li></li>
+<li>Rotating tiles can overlap each other. (game-mechanic)</li>
 </ul>
 
 <h4>Contributors:</h4>
