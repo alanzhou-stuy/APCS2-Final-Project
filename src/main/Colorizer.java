@@ -118,7 +118,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnSBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setSBlock(true);
-		int[] color = new int[] { 0, 255, 55 };
+		int[] color = new int[] { 0, 254, 55 };
 		t.setColor(color);
 		return t;
 	}
@@ -134,7 +134,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnTBlock() {
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setTBlock(true);
-		int[] color = new int[] { 153, 51, 255 }; // 40 10 62
+		int[] color = new int[] { 153, 51, 254 }; // 40 10 62
 		t.setColor(color);
 		return t;
 	}
@@ -150,7 +150,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnLBlock() {
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setLBlock(true);
-		int[] color = new int[] { 255, 165, 0 };
+		int[] color = new int[] { 254, 165, 0 };
 		t.setColor(color);
 		return t;
 	}
@@ -183,12 +183,10 @@ public class Colorizer extends PApplet implements Displayable {
 		t1.setColor(t.getColor());
 		return t1;
 	}
-	
+
 	public boolean colored(int y, int x) {
-		return g.grid[y][x].color != WHITE; 
+		return g.grid[y][x].color != WHITE;
 	}
-	
-	
 
 	/**
 	 * Rotates a tile either clockwise or counter clockwise. It utilizes the
@@ -213,12 +211,12 @@ public class Colorizer extends PApplet implements Displayable {
 				int[] coord = t.respectiveCoords.get(i);
 				t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, coord));
 			}
-			
+
 			while (numSquares-- > 0) {
 				t.respectiveCoords.remove(0);
 				t.remove().setColor(WHITE);
 			}
-			
+
 			t.setBlock(t.blockType(), false);
 			t.setColor(t.getColor());
 		}
@@ -241,18 +239,17 @@ public class Colorizer extends PApplet implements Displayable {
 			t1.setBlock(t.blockType(), false);
 			t1.setColor(t.getColor());
 			t = t1;
-			for (Square s: t.getSquares()) {
-				s.setPartOfCurrentBlock(true);
-			}
+			/*
+			 * for (Square s: t.getSquares()) { s.setPartOfCurrentBlock(true); }
+			 */
 		}
-		
+
 		return t;
 	}
-	
+
 	public Tile drop(Tile t) {
 		return drop(t, r.calNextColoredSquare(t));
 	}
-	
 
 	/*
 	 * public void fall(Tile t) { while (current.getPivotY() < 16) { current =
