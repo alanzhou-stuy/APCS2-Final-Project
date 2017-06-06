@@ -7,6 +7,7 @@ public class Score extends RectangularElement {
 	private static int SCORE; // to be displayed
 	private static final double SIDE_MULTIPLIER = .75;
 	private static final double VERT_MULTIPLIER = .75;
+	private Rules r;
 
 	public Score(PApplet pApplet) {
 		this(pApplet, null);
@@ -30,6 +31,10 @@ public class Score extends RectangularElement {
 		SCORE = score;
 	}
 	
+	public int getScore() {
+		return SCORE;
+	}
+	
 	public void displaySlider(){
 		
 	}
@@ -46,4 +51,5 @@ public class Score extends RectangularElement {
 		pApplet.fill(bgColor[0], bgColor[1], bgColor[2]);
 		pApplet.rect(sideMargin, grid.vertMargin, getRectWidth(), getRectHeight());
 	}
+	
 }

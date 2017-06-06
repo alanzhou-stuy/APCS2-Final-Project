@@ -15,6 +15,7 @@ public class Rules extends PApplet {
 	private int FRAMERATE = 60;
 	private Grid g;
 	private Main main;
+	private Score s;
 
 	public Rules() {
 		TIMER = 0;
@@ -46,16 +47,14 @@ public class Rules extends PApplet {
 
 		if (TIMER % run_period == 0) {
 			if (hitBottom()) {
-				//System.out.println(current.getSquares().get(0).getXCor());
+				// System.out.println(current.getSquares().get(0).getXCor());
 				current = colorizer.spawnBlock();
-			}
-			else if (hitBlock()) {
+			} else if (hitBlock()) {
 				System.out.println("Triggered");
 				current = colorizer.spawnBlock();
-			}
-			else {
+			} else {
 				current = colorizer.drop(current, 1);
-				clearLine();
+				// clearLine();
 			}
 		}
 		TIMER++;
@@ -63,14 +62,17 @@ public class Rules extends PApplet {
 
 	public void registerKeyPress(int keyCode) {
 		if (keyCode == RIGHT) {
-			current = colorizer.moveRight(current);
+			if (!hitSides()) {
+				current = colorizer.moveRight(current);
+			}
 		} else if (keyCode == LEFT) {
-			current = colorizer.moveLeft(current);
+			if (!hitSides()) {
+				current = colorizer.moveLeft(current);
+			}
 		} else if (keyCode == UP) {
 			current = colorizer.rotate(false, current, 1);
-		}
-		else if (main.keyCode == main.DOWN) {
-			//current = colorizer.drop(current);
+		} else if (main.keyCode == main.DOWN) {
+			// current = colorizer.drop(current);
 		}
 	}
 
@@ -85,71 +87,73 @@ public class Rules extends PApplet {
 	}
 
 	public boolean hitSides() {
-		if (leftest() == g.getSquare(0,0).getXCor() || rightest() == g.getSquare(0,g.numCols - 1).getXCor()) {
-				return true;
+		if (leftest() == g.getSquare(0, 0).getXCor()
+				|| rightest() == g.getSquare(0, g.numCols - 1).getXCor()) {
+			return true;
 		}
 		return false;
 	}
-	
+
 	public int leftest() {
 		Square leftest = current.getSquares().get(0);
-			for (Square s: current.getSquares()) {
-				if (s.getXCor() < leftest.getXCor()) {
-					leftest = s;
+		for (Square s : current.getSquares()) {
+			if (s.getXCor() < leftest.getXCor()) {
+				leftest = s;
 			}
 		}
 		return leftest.getXCor();
 	}
-	
+
 	public int rightest() {
 		Square rightest = current.getSquares().get(0);
-			for (Square s: current.getSquares()) {
-				if (s.getXCor() > rightest.getXCor()) {
-					rightest = s;
+		for (Square s : current.getSquares()) {
+			if (s.getXCor() > rightest.getXCor()) {
+				rightest = s;
 			}
 		}
 		return rightest.getXCor();
 	}
-	
+
 	public ArrayList<Square> lowest() {
 		ArrayList<Square> ans = new ArrayList<Square>();
 		Square lowest = current.getSquares().get(0);
-		for (Square s:current.getSquares()) {
+		for (Square s : current.getSquares()) {
 			if (s.getYCor() < lowest.getYCor()) {
 				lowest = s;
 			}
 		}
 		int counter = 0;
-		for(Square s: current.getSquares()) {
+		for (Square s : current.getSquares()) {
 			if (s.getYCor() <= lowest.getYCor()) {
-				ans.get(counter).setXYCor(s.getYCor(),s.getXCor());
-				counter ++;
+				ans.get(counter).setXYCor(s.getYCor(), s.getXCor());
+				counter++;
 			}
 		}
 		return ans;
 	}
-	
-	/*public void hitBlock() {
-		for (Square s: lowest()) {
-			
-		}
-	}*/
+
+	/*
+	 * public void hitBlock() { for (Square s: lowest()) {
+	 * 
+	 * } }
+	 */
 
 	public boolean part(Square t) {
 		return t.partOfCurrentBlock;
 	}
 
 	public boolean hitBlock() {
-		if (current.getSquares().get(0).getXCor() > 500) {
-			return false;
-		} else {
-			for (Square s : current.getSquares()) {
-				if ((colorizer.colored(s.getRowIndex() + 1, s.getColIndex()))
-						&& part(g.grid[s.getRowIndex() + 1][s.getColIndex()])) {
-					return true;
-				}
+		/*
+		 * if (current.getSquares().get(0).getXCor() > 500) { return false; }
+		 * else {
+		 */
+		for (Square s : current.getSquares()) {
+			if ((colorizer.colored(s.getRowIndex() + 1, s.getColIndex()))
+					&& part(g.grid[s.getRowIndex() + 1][s.getColIndex()])) {
+				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -205,15 +209,42 @@ public class Rules extends PApplet {
 		for (int r = 0; r < g.getNumRows(); r++) {
 			for (int s = 0; s < g.getNumCols(); s++) {
 				if (g.grid[r][s].color != white) {
-					counter --;
+					counter--;
 					System.out.println(counter);
 				}
 				if (counter == 0) {
+					numOfLines++;
 					clearLine(r);
 				}
 			}
 			counter = g.getNumCols();
 		}
+	}
+
+	public void clearLine1() {
+		boolean gapBetweenLines;
+		int numOfLines;
+		int[] white = new int[] { 255, 255, 255 };
+		for (int r = 0; r < g.getNumRows(); r++) {
+			gapBetweenLines = false;
+			for (int s = 0; s < g.getNumCols(); s++) {
+				if (g.grid[r][s].color ) {
+					gapBetweenLines = true;
+					break;
+				}
+			}
+			if (!gapBetweenLines) {
+				lowerRow(s);
+				r --;
+				numOfLines++;
+			}
+		}	
+		int n = numOfLines;
+		s.setScore(s.getScore() + 40 * (n + 1) + 100 * (n + 1) + 300 * (n + 1)
+				+ 1200 * (n + 1));
+	}
+	
+	public void lowerRow(int s1) {
 	}
 
 	/*

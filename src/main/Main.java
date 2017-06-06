@@ -86,7 +86,7 @@ public class Main extends PApplet {
 
 		if (start.getBooleanValue() == true) {
 			rule.run();
-			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0 && !rule.hitSides()) {
+			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
 				rule.registerKeyPress(keyCode);
 			}
 
