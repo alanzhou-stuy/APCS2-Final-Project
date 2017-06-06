@@ -44,6 +44,7 @@ public class Score extends RectangularElement {
 		/* TESTING REFRESH */
 		pApplet.fill(bgColor[0], bgColor[1], bgColor[2]);
 		pApplet.rect(sideMargin, grid.vertMargin, getRectWidth(), getRectHeight());
+		updateScore();
 	}
 
 	@Override
@@ -52,4 +53,9 @@ public class Score extends RectangularElement {
 		pApplet.rect(sideMargin, grid.vertMargin, getRectWidth(), getRectHeight());
 	}
 	
+	public void updateScore() {
+		int n = r.getNumOfLines();
+		SCORE  += 40 * (n + 1) + 100 * (n + 1) + 300* (n + 1) + 1200 * (n + 1);
+		r.setNumOfLines(0);
+	}
 }

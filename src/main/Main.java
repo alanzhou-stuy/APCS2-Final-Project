@@ -94,7 +94,7 @@ public class Main extends PApplet {
 			score.setText("SCORE: " + SCORE);
 		}
 
-		SCORE += 5; // test
+		//SCORE += 5; // test
 
 		colorizer.refresh();
 	}
