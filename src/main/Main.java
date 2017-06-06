@@ -12,19 +12,23 @@ public class Main extends PApplet {
 	private ControlP5 gui;
 	private Grid grid;
 	private final int height = 800;
-	private final int width = 1400;
+	private final int width = 1600;
 	private int numRows = 20;
 	private int numCols = 10;
 	private int[] bgColor = { 20, 20, 20 };
-	private int SPEED = 5;
-	private int FRAMERATE = 60;
 	private Tile currentTile;
 	private Rules rule;
 	// To be implemented later!
-	// private Score score;
 	// private Leaderboard lb;
 	private Slider speedSlider, diffSlider, varietySlider, numRowsSlider, numColsSlider;
+	private Textlabel score;
 	private Button start;
+
+	private static int SPEED = 5;
+	private static int FRAMERATE = 60;
+	private static int CONTROL_RESPONSIVENESS = 7;
+	private int COUNTER = 0;
+	private int SCORE = 0;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
@@ -74,7 +78,6 @@ public class Main extends PApplet {
 
 		if (start.getBooleanValue() == false) {
 			colorizer.setRowsCols(numRows, numCols);
-
 			start.setCaptionLabel("START ");
 		}
 
@@ -83,11 +86,15 @@ public class Main extends PApplet {
 
 		if (start.getBooleanValue() == true) {
 			rule.run();
-
-			
+			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
+				rule.registerKeyPress(keyCode);
+			}
 
 			start.setCaptionLabel("STOP");
+			score.setText("SCORE: " + SCORE);
 		}
+
+		SCORE += 5; // test
 
 		colorizer.refresh();
 	}
@@ -98,29 +105,41 @@ public class Main extends PApplet {
 		ControlFont largeFont = new ControlFont(createFont("Arial", 22));
 		ControlFont textFont = new ControlFont(createFont("Arial", 16));
 
-		speedSlider = gui.addSlider("SPEED").setSize(225, 50).setRange(0, 10).setPosition(40, 100).setValue(SPEED)
-				.setNumberOfTickMarks(11);
+		int sliderWidth = (int) (width * .17);
+		int sliderHeight = (int) (height * 0.075);
+		int sliderSideMargin = (int) (width * .03);
+		int sliderTopMargin = (int) (height * .1);
+		int sliderVertSpacing = 130;
 
-		diffSlider = gui.addSlider("difficulty").setSize(225, 50).setRange(0, 100).setPosition(40, 200).setValue(50)
+		speedSlider = gui.addSlider("SPEED").setSize(sliderWidth, sliderHeight).setRange(0, 10)
+				.setPosition(sliderSideMargin, sliderTopMargin).setValue(SPEED).setNumberOfTickMarks(11);
+
+		diffSlider = gui.addSlider("difficulty").setSize(sliderWidth, sliderHeight).setRange(0, 100)
+				.setPosition(sliderSideMargin, sliderTopMargin + (sliderVertSpacing)).setValue(50)
 				.setNumberOfTickMarks(21);
 
-		varietySlider = gui.addSlider("variety").setSize(225, 50).setRange(0, 100).setPosition(40, 300).setValue(50)
+		varietySlider = gui.addSlider("variety").setSize(sliderWidth, sliderHeight).setRange(0, 100)
+				.setPosition(sliderSideMargin, sliderTopMargin + (2 * sliderVertSpacing)).setValue(50)
 				.setNumberOfTickMarks(11);
 
-		numRowsSlider = gui.addSlider("numRows").setSize(225, 50).setRange(4, 40).setPosition(40, 400).setValue(20)
-				.setNumberOfTickMarks(37);
+		numRowsSlider = gui.addSlider("numRows").setSize(sliderWidth, sliderHeight).setRange(5, 50)
+				.setPosition(sliderSideMargin, sliderTopMargin + (3 * sliderVertSpacing)).setValue(20)
+				.setNumberOfTickMarks(46);
 
-		numColsSlider = gui.addSlider("numCols").setSize(225, 50).setRange(4, 40).setPosition(40, 500).setValue(10)
-				.setNumberOfTickMarks(37);
+		numColsSlider = gui.addSlider("numCols").setSize(sliderWidth, sliderHeight).setRange(5, 50)
+				.setPosition(sliderSideMargin, sliderTopMargin + (4 * sliderVertSpacing)).setValue(10)
+				.setNumberOfTickMarks(46);
 
-		start = gui.addButton("START").setValue(0).setPosition(4 * width / 5, 50).setSize(200, 60);
+		score = gui.addTextlabel("score").setText("SCORE: " + SCORE).setPosition(4 * width / 5, 50).setSize(200, 60);
+		start = gui.addButton("START").setValue(0).setPosition(4 * width / 5, 150).setSize(200, 60);
 
+		// Setting fonts
 		start.getCaptionLabel().setFont(largeFont);
-
 		speedSlider.getCaptionLabel().setFont(textFont);
 		diffSlider.getCaptionLabel().setFont(textFont);
 		varietySlider.getCaptionLabel().setFont(textFont);
 		numRowsSlider.getCaptionLabel().setFont(textFont);
 		numColsSlider.getCaptionLabel().setFont(textFont);
+		score.setFont(largeFont);
 	}
 }

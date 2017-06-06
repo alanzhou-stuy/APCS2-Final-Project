@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 
-public class Rules {
+import processing.core.PApplet;
+
+public class Rules extends PApplet {
 	private Tile current;
 	private static int TIMER;
 	private Colorizer colorizer;
@@ -71,6 +73,16 @@ public class Rules {
 			}
 		}
 		TIMER++;
+	}
+
+	public void registerKeyPress(int keyCode) {
+		if (keyCode == RIGHT) {
+			current = colorizer.moveRight(current);
+		} else if (keyCode == LEFT) {
+			current = colorizer.moveLeft(current);
+		} else if (keyCode == UP) {
+			current = colorizer.rotate(false, current, 1);
+		}
 	}
 
 	public boolean hitBottom() {
