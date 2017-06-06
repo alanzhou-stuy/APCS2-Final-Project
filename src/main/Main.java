@@ -63,7 +63,6 @@ public class Main extends PApplet {
 		rule = new Rules(colorizer, currentTile, grid);
 		rule.setSpeed(SPEED);
 		rule.setFR(FRAMERATE);
-		rule.setMain(this);
 	}
 
 	public void settings() {

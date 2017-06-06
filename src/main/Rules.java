@@ -10,11 +10,10 @@ import processing.core.PApplet;
 public class Rules extends PApplet {
 	private Tile current;
 	private static int TIMER;
+	private static int SPEED = 5;
+	private static int FRAMERATE = 60;
 	private Colorizer colorizer;
-	private int SPEED = 5;
-	private int FRAMERATE = 60;
 	private Grid g;
-	private Main main;
 
 	public Rules() {
 		TIMER = 0;
@@ -34,11 +33,7 @@ public class Rules extends PApplet {
 	public void setFR(int framerate) {
 		FRAMERATE = framerate;
 	}
-
-	public void setMain(Main main) {
-		this.main = main;
-	}
-
+	
 	public void run() {
 		// Polynomial regression
 		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35)
@@ -52,7 +47,7 @@ public class Rules extends PApplet {
 				System.out.println("Triggered");
 				current = colorizer.spawnBlock();
 			} else {
-				current = colorizer.drop(current, 1);
+				//current = colorizer.drop(current, 1);
 				// clearLine();
 			}
 		}
@@ -61,14 +56,40 @@ public class Rules extends PApplet {
 
 	public void registerKeyPress(int keyCode) {
 		if (keyCode == RIGHT) {
-			current = colorizer.moveRight(current);
+			if (!hitBlockSide(false))
+				current = colorizer.moveRight(current);
 		} else if (keyCode == LEFT) {
-			current = colorizer.moveLeft(current);
+			if (!hitBlockSide(true))
+				current = colorizer.moveLeft(current);
 		} else if (keyCode == UP) {
 			current = colorizer.rotate(false, current, 1);
-		} else if (main.keyCode == main.DOWN) {
-			// current = colorizer.drop(current);
+		} else if (keyCode == DOWN) {
+			current = colorizer.drop(current);
 		}
+	}
+
+	private boolean hitBlockSide(boolean left) {
+		for (Square s : current.getSquares()) {
+			boolean notPartOfCurrent = true;
+			Square next;
+
+			if (left) {
+				next = g.getSquare(s.getRowIndex(), s.getColIndex() - 1);
+			} else {
+				next = g.getSquare(s.getRowIndex(), s.getColIndex() + 1);
+			}
+			for (Square square : current.getSquares()) {
+				if (next.equals(square)) {
+					notPartOfCurrent = false;
+				}
+			}
+
+			if (notPartOfCurrent && next.getColor()[0] != 255 && next.getColor()[1] != 255
+					&& next.getColor()[2] != 255) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean hitBottom() {
@@ -137,25 +158,19 @@ public class Rules extends PApplet {
 	}
 
 	public boolean hitBlock() {
-		/*
-		 * if (current.getSquares().get(0).getXCor() > 500) { return false; }
-		 * else {
-		 * 
-		 * }
-		 */
-
 		for (Square s : current.getSquares()) {
 			boolean notPartOfCurrent = true;
-			
-			Square next = g.getSquare(s.getRowIndex()+1, s.getColIndex());
-			
-			for(Square square : current.getSquares()){
-				if(next.equals(square)){
+
+			Square bottomSquare = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
+
+			for (Square square : current.getSquares()) {
+				if (bottomSquare.equals(square)) {
 					notPartOfCurrent = false;
 				}
 			}
-			
-			if(notPartOfCurrent && next.getColor()[0] != 255 && next.getColor()[1] != 255 && next.getColor()[2] != 255){
+
+			if (notPartOfCurrent && !(bottomSquare.getColor()[0] == 255 && bottomSquare.getColor()[1] == 255
+					&& bottomSquare.getColor()[2] == 255)) {
 				return true;
 			}
 		}
