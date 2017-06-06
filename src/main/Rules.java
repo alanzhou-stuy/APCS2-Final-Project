@@ -16,7 +16,7 @@ public class Rules extends PApplet {
 	private Grid g;
 	private Main main;
 	private int numOfLines;
-	
+
 	public Rules() {
 		TIMER = 0;
 	}
@@ -61,25 +61,25 @@ public class Rules extends PApplet {
 	}
 
 	public void registerKeyPress(int keyCode) {
-		if (keyCode == RIGHT) {
-			if (!hitSides()) {
+		try {
+			if (keyCode == RIGHT) {
 				current = colorizer.moveRight(current);
-			}
-		} else if (keyCode == LEFT) {
-			if (!hitSides()) {
+			} else if (keyCode == LEFT) {
 				current = colorizer.moveLeft(current);
+			} else if (keyCode == UP) {
+				current = colorizer.rotate(false, current, 1);
+			} else if (main.keyCode == main.DOWN) {
+				// current = colorizer.drop(current);
 			}
-		} else if (keyCode == UP) {
-			current = colorizer.rotate(false, current, 1);
-		} else if (main.keyCode == main.DOWN) {
-			// current = colorizer.drop(current);
+		}
+		catch (Exception e) {
 		}
 	}
-	
+
 	public int getNumOfLines() {
 		return numOfLines;
 	}
-	
+
 	public void setNumOfLines(int x) {
 		numOfLines = x;
 	}
@@ -215,7 +215,7 @@ public class Rules extends PApplet {
 						&& g.grid[r][s].color[1] != 255
 						&& g.grid[r][s].color[2] != 255) {
 					counter--;
-					//System.out.println(counter);
+					// System.out.println(counter);
 				}
 				if (counter == 0) {
 					numOfLines++;

@@ -209,7 +209,8 @@ public class Colorizer extends PApplet implements Displayable {
 
 			for (int i = 0; i < numSquares; i++) {
 				int[] coord = t.respectiveCoords.get(i);
-				t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, coord));
+				t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise,
+						coord));
 			}
 
 			while (numSquares-- > 0) {
@@ -247,9 +248,9 @@ public class Colorizer extends PApplet implements Displayable {
 		return t;
 	}
 
-	/*public Tile drop(Tile t) {
-		return drop(t, r.calNextColoredSquare(t));
-	}*/
+	/*
+	 * public Tile drop(Tile t) { return drop(t, r.calNextColoredSquare(t)); }
+	 */
 
 	/*
 	 * public void fall(Tile t) { while (current.getPivotY() < 16) { current =
