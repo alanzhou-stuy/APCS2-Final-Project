@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -44,32 +45,17 @@ public class Rules extends PApplet {
 				* Math.pow(SPEED, 2) - 7.85 * SPEED + 35) * (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
-			if (hitBottom() || hitBlock()) {
+			if (hitBottom()) {
 				//System.out.println(current.getSquares().get(0).getXCor());
-				System.out.println(current.getSquares().get(0).partOfCurrentBlock);
 				current = colorizer.spawnBlock();
-			} else {
+			}
+			else if (hitBlock()) {
+				System.out.println("Triggered");
+				current = colorizer.spawnBlock();
+			}
+			else {
 				current = colorizer.drop(current, 1);
-				try {
-					if (main.keyPressed && main.key == main.CODED && !hitSides()) {
-					//System.out.println(leftest());
-					if (main.keyCode == main.RIGHT) {
-							current = colorizer.moveRight(current);
-					} else if (main.keyCode == main.LEFT) {
-						current = colorizer.moveLeft(current);
-					} else if (main.keyCode == main.UP) {
-						current = colorizer.rotate(false, current, 1);
-						}
-					else if (main.keyCode == main.DOWN) {
-						current = colorizer.drop(current, 1);
-					}
-					/*else if(main.keyCode == main.SPACE) {
-						current = colorizer.fullDrop(current);
-					}*/
-					}
-				}
-				catch(ArrayIndexOutOfBoundsException a) {
-					}
+				clearLine();
 			}
 		}
 		TIMER++;
@@ -82,6 +68,9 @@ public class Rules extends PApplet {
 			current = colorizer.moveLeft(current);
 		} else if (keyCode == UP) {
 			current = colorizer.rotate(false, current, 1);
+		}
+		else if (main.keyCode == main.DOWN) {
+			//current = colorizer.drop(current);
 		}
 	}
 
@@ -121,6 +110,30 @@ public class Rules extends PApplet {
 		}
 		return rightest.getXCor();
 	}
+	
+	public ArrayList<Square> lowest() {
+		ArrayList<Square> ans = new ArrayList<Square>();
+		Square lowest = current.getSquares().get(0);
+		for (Square s:current.getSquares()) {
+			if (s.getYCor() < lowest.getYCor()) {
+				lowest = s;
+			}
+		}
+		int counter = 0;
+		for(Square s: current.getSquares()) {
+			if (s.getYCor() <= lowest.getYCor()) {
+				ans.get(counter).setXYCor(s.getYCor(),s.getXCor());
+				counter ++;
+			}
+		}
+		return ans;
+	}
+	
+	/*public void hitBlock() {
+		for (Square s: lowest()) {
+			
+		}
+	}*/
 
 	public boolean part(Square t) {
 		return t.partOfCurrentBlock;
@@ -131,16 +144,13 @@ public class Rules extends PApplet {
 			return false;
 		} else {
 			for (Square s : current.getSquares()) {
-				// if (s.getYCor() == calLowestYCorOfTile(current)) {
 				if ((colorizer.colored(s.getRowIndex() + 1, s.getColIndex()))
-						&& !part(g.grid[s.getRowIndex() + 1][s.getColIndex()])) {
+						&& part(g.grid[s.getRowIndex() + 1][s.getColIndex()])) {
 					return true;
 				}
-				// }
 			}
 		}
 		return false;
-
 	}
 
 	public boolean blockOffMap() {
@@ -167,17 +177,6 @@ public class Rules extends PApplet {
 		return lowest;
 	}
 
-	public int calLowestYCorOfTileX(Tile t) {
-		int lowest = t.getSquares().get(0).getYCor();
-		for (Square s : t.getSquares()) {
-			if (s.getYCor() < lowest) {
-				lowest = s.getXCor();
-				return lowest;
-			}
-		}
-		return lowest;
-	}
-
 	public int calHighestYCorOfTile(Tile t) {
 		int highest = t.getSquares().get(0).getYCor();
 		for (Square s : t.getSquares()) {
@@ -190,38 +189,30 @@ public class Rules extends PApplet {
 
 	public int calNextColoredSquare(Tile t) {
 		int[] white = new int[] { 255, 255, 255 };
-		for (Square[] rowOfSquares : g.grid) {
-			for (Square s : rowOfSquares) {
-				if ((calLowestYCorOfTile(t) == s.getYCor())
-						&& (s.getColor() != white)) {
-					return s.getXCor();
-				}
-			}
-		}
-		return -1;
+		return 1;
 	}
 
-	public void fullLine() {
-		int counter = g.getNumCols();
+	public void clearLine(int r) {
 		int[] white = new int[] { 255, 255, 255 };
-		for (Square[] rowOfSquares : g.grid) {
-			for (Square s : rowOfSquares) {
-				if (s.getColor() != white) {
-					counter--;
-				}
-				if (counter == 0) {
-					clearLine();
-				}
-			}
-			counter = g.getNumCols();
+		for (int s = 0; s < g.numCols; s++) {
+			g.grid[r][s].color = white;
 		}
 	}
 
 	public void clearLine() {
-		for (int r = 1; r < g.getNumRows(); r++) {
+		int[] white = new int[] { 255, 255, 255 };
+		int counter = g.getNumCols();
+		for (int r = 0; r < g.getNumRows(); r++) {
 			for (int s = 0; s < g.getNumCols(); s++) {
-				g.grid[r][s].setColor(g.grid[r + 1][s].getColor());
+				if (g.grid[r][s].color != white) {
+					counter --;
+					System.out.println(counter);
+				}
+				if (counter == 0) {
+					clearLine(r);
+				}
 			}
+			counter = g.getNumCols();
 		}
 	}
 

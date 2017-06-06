@@ -17,6 +17,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public int numRows, numCols;
 	public int tileSep = 1; // default is 1
 	public static int[] WHITE = { 255, 255, 255 };
+	public Rules r;
 
 	/**
 	 * @param grid
@@ -33,6 +34,7 @@ public class Colorizer extends PApplet implements Displayable {
 		numRows = g.getNumRows();
 		numCols = g.getNumCols();
 		current = new Tile();
+		r = new Rules();
 	}
 
 	public void setTileSep(int tileSep) {
@@ -248,7 +250,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 	
 	public Tile drop(Tile t) {
-		return drop(t, t.calDistanceDrop());
+		return drop(t, r.calNextColoredSquare(t));
 	}
 	
 
