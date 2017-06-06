@@ -10,11 +10,10 @@ import processing.core.PApplet;
 public class Rules extends PApplet {
 	private Tile current;
 	private static int TIMER;
+	private static int SPEED = 5;
+	private static int FRAMERATE = 60;
 	private Colorizer colorizer;
-	private int SPEED = 5;
-	private int FRAMERATE = 60;
 	private Grid g;
-	private Main main;
 	private int numOfLines;
 
 	public Rules() {
@@ -36,14 +35,10 @@ public class Rules extends PApplet {
 		FRAMERATE = framerate;
 	}
 
-	public void setMain(Main main) {
-		this.main = main;
-	}
-
 	public void run() {
 		// Polynomial regression
-		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69
-				* Math.pow(SPEED, 2) - 7.85 * SPEED + 35) * (FRAMERATE / 60.0)) + 1;
+		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35)
+				* (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
 			if (hitBottom()) {
@@ -61,19 +56,49 @@ public class Rules extends PApplet {
 	}
 
 	public void registerKeyPress(int keyCode) {
-		try {
-			if (keyCode == RIGHT) {
+		if (keyCode == RIGHT) {
+			if (!hitSides() && !hitBlockSide(false))
 				current = colorizer.moveRight(current);
-			} else if (keyCode == LEFT) {
+		} else if (keyCode == LEFT) {
+			if (!hitSides() && !hitBlockSide(true))
 				current = colorizer.moveLeft(current);
-			} else if (keyCode == UP) {
-				current = colorizer.rotate(false, current, 1);
-			} else if (main.keyCode == main.DOWN) {
-				// current = colorizer.drop(current);
+			/*
+			 * if (!hitSides()) { current = colorizer.moveRight(current); }
+			 */
+		}
+		/*
+		 * else if (keyCode == LEFT) { if (!hitSides()) { current =
+		 * colorizer.moveLeft(current); }
+		 */
+		else if (keyCode == UP) {
+			current = colorizer.rotate(false, current, 1);
+		} else if (keyCode == DOWN) {
+			// current = colorizer.drop(current);
+		}
+	}
+
+	private boolean hitBlockSide(boolean left) {
+		for (Square s : current.getSquares()) {
+			boolean notPartOfCurrent = true;
+			Square next;
+
+			if (left) {
+				next = g.getSquare(s.getRowIndex(), s.getColIndex() - 1);
+			} else {
+				next = g.getSquare(s.getRowIndex(), s.getColIndex() + 1);
+			}
+			for (Square square : current.getSquares()) {
+				if (next.equals(square)) {
+					notPartOfCurrent = false;
+				}
+			}
+
+			if (notPartOfCurrent && next.getColor()[0] != 255 && next.getColor()[1] != 255
+					&& next.getColor()[2] != 255) {
+				return true;
 			}
 		}
-		catch (Exception e) {
-		}
+		return false;
 	}
 
 	public int getNumOfLines() {
@@ -95,8 +120,7 @@ public class Rules extends PApplet {
 	}
 
 	public boolean hitSides() {
-		if (leftest() == g.getSquare(0, 0).getXCor()
-				|| rightest() == g.getSquare(0, g.numCols - 1).getXCor()) {
+		if (leftest() == g.getSquare(0, 0).getXCor() || rightest() == g.getSquare(0, g.numCols - 1).getXCor()) {
 			return true;
 		}
 		return false;
@@ -140,12 +164,6 @@ public class Rules extends PApplet {
 		return ans;
 	}
 
-	/*
-	 * public void hitBlock() { for (Square s: lowest()) {
-	 * 
-	 * } }
-	 */
-
 	public boolean part(Square t) {
 		return t.partOfCurrentBlock;
 	}
@@ -154,16 +172,16 @@ public class Rules extends PApplet {
 		for (Square s : current.getSquares()) {
 			boolean notPartOfCurrent = true;
 
-			Square next = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
+			Square bottomSquare = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
 
 			for (Square square : current.getSquares()) {
-				if (next.equals(square)) {
+				if (bottomSquare.equals(square)) {
 					notPartOfCurrent = false;
 				}
 			}
 
-			if (notPartOfCurrent && next.getColor()[0] != 255
-					&& next.getColor()[1] != 255 && next.getColor()[2] != 255) {
+			if (notPartOfCurrent && !(bottomSquare.getColor()[0] == 255 && bottomSquare.getColor()[1] == 255
+					&& bottomSquare.getColor()[2] == 255)) {
 				return true;
 			}
 		}
@@ -177,8 +195,7 @@ public class Rules extends PApplet {
 		int lowestY = g.getSquare(g.numRows - 1, 0).getYCor();
 		for (Square s : current.getSquares()) {
 			// need to change
-			if (s.getXCor() <= lowestX || s.getYCor() > lowestY
-					|| s.getXCor() > highestX) {
+			if (s.getXCor() <= lowestX || s.getYCor() > lowestY || s.getXCor() > highestX) {
 				return true;
 			}
 		}
@@ -211,9 +228,7 @@ public class Rules extends PApplet {
 		int counter = g.getNumCols();
 		for (int r = g.getNumRows() - 1; r > 0; r--) {
 			for (int s = 0; s < g.getNumCols(); s++) {
-				if (g.grid[r][s].color[0] != 255
-						&& g.grid[r][s].color[1] != 255
-						&& g.grid[r][s].color[2] != 255) {
+				if (g.grid[r][s].color[0] != 255 && g.grid[r][s].color[1] != 255 && g.grid[r][s].color[2] != 255) {
 					counter--;
 					// System.out.println(counter);
 				}
@@ -253,36 +268,21 @@ public class Rules extends PApplet {
 	 * current.getSquares()) { if (s.getColIndex() < lowX) { } } return false; }
 	 */
 
-	public class KeyAction extends AbstractAction {
-		private String sequence;
-		private KeyStroke keystroke;
-
-		public KeyAction(String sequence) {
-			this.sequence = sequence;
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			switch (sequence) {
-			case "clockwise":
-				colorizer.rotate(true, current, 1);
-				break;
-			case "counterclockwise":
-				colorizer.rotate(false, current, 1);
-				break;
-			case "left":
-				colorizer.moveLeft(current);
-				break;
-			case "right":
-				colorizer.moveRight(current);
-				break;
-			}
-
-			/*
-			 * if (e.getKeyCode() == KeyEvent.VK_LEFT) { current =
-			 * colorizer.moveRight(current); System.out.println("yay"); } else
-			 * if (e.getKeyCode() == KeyEvent.VK_RIGHT) { current =
-			 * colorizer.moveLeft(current); }
-			 */
-		}
-	}
+	/*
+	 * public class KeyAction extends AbstractAction { private String sequence;
+	 * private KeyStroke keystroke;
+	 * 
+	 * public KeyAction(String sequence) { this.sequence = sequence; }
+	 * 
+	 * public void actionPerformed(ActionEvent e) { switch (sequence) { case
+	 * "clockwise": colorizer.rotate(true, current, 1); break; case
+	 * "counterclockwise": colorizer.rotate(false, current, 1); break; case
+	 * "left": colorizer.moveLeft(current); break; case "right":
+	 * colorizer.moveRight(current); break; }
+	 * 
+	 * /* if (e.getKeyCode() == KeyEvent.VK_LEFT) { current =
+	 * colorizer.moveRight(current); System.out.println("yay"); } else if
+	 * (e.getKeyCode() == KeyEvent.VK_RIGHT) { current =
+	 * colorizer.moveLeft(current); }
+	 */
 }
