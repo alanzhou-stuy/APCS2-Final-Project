@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.event.ActionEvent;
+
 import javax.swing.*;
 
 public class Rules {
@@ -37,34 +38,36 @@ public class Rules {
 
 	public void run() {
 		// Polynomial regression
-		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35)
-				* (FRAMERATE / 60.0)) + 1;
+		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69
+				* Math.pow(SPEED, 2) - 7.85 * SPEED + 35) * (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
 			if (hitBottom() || hitBlock()) {
+				//System.out.println(current.getSquares().get(0).getXCor());
 				System.out.println(current.getSquares().get(0).partOfCurrentBlock);
 				current = colorizer.spawnBlock();
 			} else {
-					current = colorizer.drop(current, 1);
-					System.out.println(current.getSquares().get(0).partOfCurrentBlock);
-
-
-				// current = colorizer.rotate(false, current, 1);
-
-				/*
-				 * for (Square s : current.getSquares()) { }
-				 * System.out.println(s.getYCor()); }
-				 */
-
-				if (main.keyPressed && main.key == main.CODED) {
+				current = colorizer.drop(current, 1);
+				try {
+					if (main.keyPressed && main.key == main.CODED && !hitSides()) {
+					//System.out.println(leftest());
 					if (main.keyCode == main.RIGHT) {
-						current = colorizer.moveRight(current);
+							current = colorizer.moveRight(current);
 					} else if (main.keyCode == main.LEFT) {
 						current = colorizer.moveLeft(current);
 					} else if (main.keyCode == main.UP) {
 						current = colorizer.rotate(false, current, 1);
+						}
+					else if (main.keyCode == main.DOWN) {
+						current = colorizer.drop(current, 1);
+					}
+					/*else if(main.keyCode == main.SPACE) {
+						current = colorizer.fullDrop(current);
+					}*/
 					}
 				}
+				catch(ArrayIndexOutOfBoundsException a) {
+					}
 			}
 		}
 		TIMER++;
@@ -81,28 +84,51 @@ public class Rules {
 	}
 
 	public boolean hitSides() {
-		for (Square s : current.getSquares()) {
-			if (s.getColIndex() < 0 || s.getColIndex() > g.getNumCols() - 1) {
+		if (leftest() == g.getSquare(0,0).getXCor() || rightest() == g.getSquare(0,g.numCols - 1).getXCor()) {
 				return true;
-			}
 		}
 		return false;
+	}
+	
+	public int leftest() {
+		Square leftest = current.getSquares().get(0);
+			for (Square s: current.getSquares()) {
+				if (s.getXCor() < leftest.getXCor()) {
+					leftest = s;
+			}
+		}
+		return leftest.getXCor();
+	}
+	
+	public int rightest() {
+		Square rightest = current.getSquares().get(0);
+			for (Square s: current.getSquares()) {
+				if (s.getXCor() > rightest.getXCor()) {
+					rightest = s;
+			}
+		}
+		return rightest.getXCor();
 	}
 
 	public boolean part(Square t) {
 		return t.partOfCurrentBlock;
 	}
-	
+
 	public boolean hitBlock() {
-		for (Square s: current.getSquares()) {
-			//if (s.getYCor() == calLowestYCorOfTile(current)) {
-				if ((colorizer.colored(s.getRowIndex(),s.getColIndex())) 
-						&& !part(g.grid[s.getRowIndex() + 1][s.getColIndex()])){
+		if (current.getSquares().get(0).getXCor() > 500) {
+			return false;
+		} else {
+			for (Square s : current.getSquares()) {
+				// if (s.getYCor() == calLowestYCorOfTile(current)) {
+				if ((colorizer.colored(s.getRowIndex() + 1, s.getColIndex()))
+						&& !part(g.grid[s.getRowIndex() + 1][s.getColIndex()])) {
 					return true;
 				}
-			//}
+				// }
+			}
 		}
 		return false;
+
 	}
 
 	public boolean blockOffMap() {
@@ -111,7 +137,8 @@ public class Rules {
 		int lowestY = g.getSquare(g.numRows - 1, 0).getYCor();
 		for (Square s : current.getSquares()) {
 			// need to change
-			if (s.getXCor() <= lowestX || s.getYCor() > lowestY || s.getXCor() > highestX) {
+			if (s.getXCor() <= lowestX || s.getYCor() > lowestY
+					|| s.getXCor() > highestX) {
 				return true;
 			}
 		}
@@ -127,7 +154,7 @@ public class Rules {
 		}
 		return lowest;
 	}
-	
+
 	public int calLowestYCorOfTileX(Tile t) {
 		int lowest = t.getSquares().get(0).getYCor();
 		for (Square s : t.getSquares()) {
@@ -153,7 +180,8 @@ public class Rules {
 		int[] white = new int[] { 255, 255, 255 };
 		for (Square[] rowOfSquares : g.grid) {
 			for (Square s : rowOfSquares) {
-				if ((calLowestYCorOfTile(t) == s.getYCor()) && (s.getColor() != white)) {
+				if ((calLowestYCorOfTile(t) == s.getYCor())
+						&& (s.getColor() != white)) {
 					return s.getXCor();
 				}
 			}
@@ -184,19 +212,15 @@ public class Rules {
 			}
 		}
 	}
-	
-	/*public boolean hit() {
-		int[] white = new int[] { 255, 255, 255 };
-		int lowX = current.getSquares().get(0).getColIndex();
-		int lowY = current.getSquares().get(0).getRowIndex();
-		int highX = current.getSquares().get(0).getColIndex();
-		int highY = current.getSquares().get(0).getRowIndex();
-		for (Square s: current.getSquares()) {
-			if (s.getColIndex() < lowX) {
-			}
-		}
-		return false;
-	}*/
+
+	/*
+	 * public boolean hit() { int[] white = new int[] { 255, 255, 255 }; int
+	 * lowX = current.getSquares().get(0).getColIndex(); int lowY =
+	 * current.getSquares().get(0).getRowIndex(); int highX =
+	 * current.getSquares().get(0).getColIndex(); int highY =
+	 * current.getSquares().get(0).getRowIndex(); for (Square s:
+	 * current.getSquares()) { if (s.getColIndex() < lowX) { } } return false; }
+	 */
 
 	public class KeyAction extends AbstractAction {
 		private String sequence;

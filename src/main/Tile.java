@@ -21,11 +21,16 @@ public class Tile {
 
 	public Tile(Grid g, int pivotY, int pivotX) {
 		this();
+		intializeCurrentBlock();
 		this.g = g;
 		this.pivotX = pivotX;
 		this.pivotY = pivotY;
+	}
+	
+	public void intializeCurrentBlock() {
 		for (Square s: squares) {
-			s.partOfCurrentBlock = true;
+			s.setPartOfCurrentBlock(true);
+			System.out.println("OK");
 		}
 	}
 
@@ -237,19 +242,8 @@ public class Tile {
 		return blockType;
 	}
 
-	// not sure if it works
-	public boolean hitBottom() {
-		int lowestYCor = squares.get(0).getYCor();
-		int x = 0;
-		while (x < squares.size()) {
-			if (squares.get(x).getYCor() < lowestYCor) {
-				lowestYCor = squares.get(x).getYCor();
-			}
-			if (lowestYCor == 0) {
-				return true;
-			}
-		}
-		return false;
+	public int calDistanceDrop() {
+		return 10;
 	}
 
 	public void addRespectiveCoord(int[] coord) {

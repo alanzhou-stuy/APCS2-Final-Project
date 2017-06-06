@@ -9,7 +9,7 @@ public class Square {
 	public int xCor, yCor, size;
 	public int[] color;
 	public boolean partOfCurrentBlock;
-
+	
 	public Square(int[] color) {
 		this.color = color;
 	}
@@ -31,6 +31,11 @@ public class Square {
 		this.colIndex = colIndex;
 		this.size = size;
 		this.color = color;
+		partOfCurrentBlock = true;
+	}
+	
+	public void setPartOfCurrentBlock(boolean b) {
+		partOfCurrentBlock = b;
 	}
 	
 	public void setXYCor(int xCor, int yCor) {

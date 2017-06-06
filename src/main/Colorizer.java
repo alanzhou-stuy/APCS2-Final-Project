@@ -1,6 +1,7 @@
 package main;
 
 import processing.core.PApplet;
+
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -238,10 +239,18 @@ public class Colorizer extends PApplet implements Displayable {
 			t1.setBlock(t.blockType(), false);
 			t1.setColor(t.getColor());
 			t = t1;
+			for (Square s: t.getSquares()) {
+				s.setPartOfCurrentBlock(true);
+			}
 		}
 		
 		return t;
 	}
+	
+	public Tile drop(Tile t) {
+		return drop(t, t.calDistanceDrop());
+	}
+	
 
 	/*
 	 * public void fall(Tile t) { while (current.getPivotY() < 16) { current =
