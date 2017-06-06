@@ -67,6 +67,10 @@ public class Colorizer extends PApplet implements Displayable {
 
 		return null;
 	}
+	
+	public Tile smartSpawn(){
+		return null;
+	}
 
 	@Override
 	public void refresh() {

@@ -6,12 +6,13 @@ import processing.core.PApplet;
 
 public class Rules extends PApplet {
 	private Tile current;
-	private static int TIMER;
-	private static int SPEED = 5;
-	private static int FRAMERATE = 60;
 	private Colorizer colorizer;
 	private Grid g;
 	private int numOfLines;
+	private static int TIMER;
+	private static int SPEED = 5;
+	private static int FRAMERATE = 60;
+	public static int SCORE;
 
 	public Rules() {
 		TIMER = 0;
@@ -39,17 +40,28 @@ public class Rules extends PApplet {
 
 		if (TIMER % run_period == 0) {
 			if (hitBottom()) {
-				// System.out.println(current.getSquares().get(0).getXCor());
-				current = colorizer.spawnBlock();
+				if (clearLine()) {
+					updateScore();
+				}
+				current = colorizer.spawnOBlock();
 			} else if (hitBlock()) {
+				if (clearLine()) {
+					updateScore();
+				}
 				System.out.println("Triggered");
-				current = colorizer.spawnBlock();
+				current = colorizer.spawnOBlock();
 			} else {
 				current = colorizer.drop(current, 1);
-				clearLine();
 			}
 		}
+
 		TIMER++;
+	}
+
+	public void updateScore() {
+		int n = numOfLines;
+		SCORE += 40 * (n + 1) + 100 * (n + 1) + 300 * (n + 1) + 1200 * (n + 1);
+		numOfLines = 0;
 	}
 
 	public void registerKeyPress(int keyCode) {
@@ -59,15 +71,7 @@ public class Rules extends PApplet {
 		} else if (keyCode == LEFT) {
 			if (!hitSides() && !hitBlockSide(true))
 				current = colorizer.moveLeft(current);
-			/*
-			 * if (!hitSides()) { current = colorizer.moveRight(current); }
-			 */
-		}
-		/*
-		 * else if (keyCode == LEFT) { if (!hitSides()) { current =
-		 * colorizer.moveLeft(current); }
-		 */
-		else if (keyCode == UP) {
+		} else if (keyCode == UP) {
 			if (!hitSides() && !hitBlockSide(false))
 				current = colorizer.rotate(false, current, 1);
 		} else if (keyCode == DOWN) {
@@ -100,39 +104,28 @@ public class Rules extends PApplet {
 	}
 
 	/*
-	public boolean hitBlockAround(boolean left) {
-		for (Square s : current.getSquares()) {
-			boolean notPartOfCurrent = true;
-			
-			
-			Square next = s;
-			
-			Square[] toCheck = new Square[] { g.getSquare(s.getRowIndex() + 1, s.getColIndex()),
-					g.getSquare(s.getRowIndex() - 1, s.getColIndex()),
-					g.getSquare(s.getRowIndex(), s.getColIndex() + 1),
-					g.getSquare(s.getRowIndex(), s.getColIndex() - 1) };
-			
-
-			int count = 0;
-			for (Square square : current.getSquares()) {
-				for (Square next : toCheck) {
-					if (next.equals(square)) {
-						notPartOfCurrent = false;
-						break;
-					}
-					count++;
-				}
-			}
-
-			if (notPartOfCurrent && toCheck[count].getColor()[0] != 255 && toCheck[count].getColor()[1] != 255
-					&& toCheck[count].getColor()[2] != 255) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-	*/
+	 * public boolean hitBlockAround(boolean left) { for (Square s :
+	 * current.getSquares()) { boolean notPartOfCurrent = true;
+	 * 
+	 * 
+	 * Square next = s;
+	 * 
+	 * Square[] toCheck = new Square[] { g.getSquare(s.getRowIndex() + 1,
+	 * s.getColIndex()), g.getSquare(s.getRowIndex() - 1, s.getColIndex()),
+	 * g.getSquare(s.getRowIndex(), s.getColIndex() + 1),
+	 * g.getSquare(s.getRowIndex(), s.getColIndex() - 1) };
+	 * 
+	 * 
+	 * int count = 0; for (Square square : current.getSquares()) { for (Square
+	 * next : toCheck) { if (next.equals(square)) { notPartOfCurrent = false;
+	 * break; } count++; } }
+	 * 
+	 * if (notPartOfCurrent && toCheck[count].getColor()[0] != 255 &&
+	 * toCheck[count].getColor()[1] != 255 && toCheck[count].getColor()[2] !=
+	 * 255) { return true; } }
+	 * 
+	 * return false; }
+	 */
 
 	public int getNumOfLines() {
 		return numOfLines;
@@ -248,30 +241,39 @@ public class Rules extends PApplet {
 	 * 255, 255 }; return 1; }
 	 */
 
+	
+	/**
+	 * Sets the squares in an entire row to have a color of white (255,255,255)
+	 * @param r the row to be cleared
+	 */
 	public void clearLine(int r) {
 		int[] white = new int[] { 255, 255, 255 };
-		for (int s = 0; s < g.numCols; s++) {
-			g.grid[r][s].color = white;
+		for (int c = 0; c < g.numCols; c++) {
+			g.grid[r][c].color = white;
 		}
-		lowerRow(r);
+		//lowerRow(r);
 	}
 
-	public void clearLine() {
-		int[] white = new int[] { 255, 255, 255 };
+	public boolean clearLine() {
 		int counter = g.getNumCols();
-		for (int r = g.getNumRows() - 1; r > 0; r--) {
-			for (int s = 0; s < g.getNumCols(); s++) {
-				if (g.grid[r][s].color[0] != 255 && g.grid[r][s].color[1] != 255 && g.grid[r][s].color[2] != 255) {
+		boolean cleared = false;
+		
+		for (int r = g.getNumRows() - 1; r >= 0; r--) {
+			counter = g.getNumCols();
+			for (int c = 0; c < g.getNumCols(); c++) {
+				if (!(g.grid[r][c].color[0] == 255 && g.grid[r][c].color[1] == 255 && g.grid[r][c].color[2] == 255)) {
 					counter--;
 					// System.out.println(counter);
 				}
-				if (counter == 0) {
-					numOfLines++;
-					clearLine(r);
-				}
+				
 			}
-			counter = g.getNumCols();
+			if (counter == 0) {
+				numOfLines++;
+				clearLine(r);
+				cleared = true;
+			}
 		}
+		return cleared;
 	}
 
 	/*
@@ -299,23 +301,5 @@ public class Rules extends PApplet {
 	 * current.getSquares().get(0).getColIndex(); int highY =
 	 * current.getSquares().get(0).getRowIndex(); for (Square s:
 	 * current.getSquares()) { if (s.getColIndex() < lowX) { } } return false; }
-	 */
-
-	/*
-	 * public class KeyAction extends AbstractAction { private String sequence;
-	 * private KeyStroke keystroke;
-	 * 
-	 * public KeyAction(String sequence) { this.sequence = sequence; }
-	 * 
-	 * public void actionPerformed(ActionEvent e) { switch (sequence) { case
-	 * "clockwise": colorizer.rotate(true, current, 1); break; case
-	 * "counterclockwise": colorizer.rotate(false, current, 1); break; case
-	 * "left": colorizer.moveLeft(current); break; case "right":
-	 * colorizer.moveRight(current); break; }
-	 * 
-	 * /* if (e.getKeyCode() == KeyEvent.VK_LEFT) { current =
-	 * colorizer.moveRight(current); System.out.println("yay"); } else if
-	 * (e.getKeyCode() == KeyEvent.VK_RIGHT) { current =
-	 * colorizer.moveLeft(current); }
 	 */
 }
