@@ -1,9 +1,6 @@
 package main;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-
-import javax.swing.*;
 
 import processing.core.PApplet;
 
@@ -71,7 +68,8 @@ public class Rules extends PApplet {
 		 * colorizer.moveLeft(current); }
 		 */
 		else if (keyCode == UP) {
-			current = colorizer.rotate(false, current, 1);
+			if (!hitSides() && !hitBlockSide(false))
+				current = colorizer.rotate(false, current, 1);
 		} else if (keyCode == DOWN) {
 			// current = colorizer.drop(current);
 		}
@@ -100,6 +98,41 @@ public class Rules extends PApplet {
 		}
 		return false;
 	}
+
+	/*
+	public boolean hitBlockAround(boolean left) {
+		for (Square s : current.getSquares()) {
+			boolean notPartOfCurrent = true;
+			
+			
+			Square next = s;
+			
+			Square[] toCheck = new Square[] { g.getSquare(s.getRowIndex() + 1, s.getColIndex()),
+					g.getSquare(s.getRowIndex() - 1, s.getColIndex()),
+					g.getSquare(s.getRowIndex(), s.getColIndex() + 1),
+					g.getSquare(s.getRowIndex(), s.getColIndex() - 1) };
+			
+
+			int count = 0;
+			for (Square square : current.getSquares()) {
+				for (Square next : toCheck) {
+					if (next.equals(square)) {
+						notPartOfCurrent = false;
+						break;
+					}
+					count++;
+				}
+			}
+
+			if (notPartOfCurrent && toCheck[count].getColor()[0] != 255 && toCheck[count].getColor()[1] != 255
+					&& toCheck[count].getColor()[2] != 255) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	*/
 
 	public int getNumOfLines() {
 		return numOfLines;

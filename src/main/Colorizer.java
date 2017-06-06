@@ -184,10 +184,6 @@ public class Colorizer extends PApplet implements Displayable {
 		return t1;
 	}
 
-	public boolean colored(int y, int x) {
-		return g.grid[y][x].color != WHITE;
-	}
-
 	/**
 	 * Rotates a tile either clockwise or counter clockwise. It utilizes the
 	 * respectiveCoords of a square, creates a coordinate transformation, and
