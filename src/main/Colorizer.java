@@ -247,9 +247,9 @@ public class Colorizer extends PApplet implements Displayable {
 		return t;
 	}
 
-	public Tile drop(Tile t) {
+	/*public Tile drop(Tile t) {
 		return drop(t, r.calNextColoredSquare(t));
-	}
+	}*/
 
 	/*
 	 * public void fall(Tile t) { while (current.getPivotY() < 16) { current =

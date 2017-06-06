@@ -14,6 +14,7 @@ public class Rules extends PApplet {
 	private static int FRAMERATE = 60;
 	private Colorizer colorizer;
 	private Grid g;
+	private int numOfLines;
 
 	public Rules() {
 		TIMER = 0;
@@ -33,7 +34,7 @@ public class Rules extends PApplet {
 	public void setFR(int framerate) {
 		FRAMERATE = framerate;
 	}
-	
+
 	public void run() {
 		// Polynomial regression
 		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35)
@@ -47,8 +48,8 @@ public class Rules extends PApplet {
 				System.out.println("Triggered");
 				current = colorizer.spawnBlock();
 			} else {
-				//current = colorizer.drop(current, 1);
-				// clearLine();
+				current = colorizer.drop(current, 1);
+				clearLine();
 			}
 		}
 		TIMER++;
@@ -56,15 +57,23 @@ public class Rules extends PApplet {
 
 	public void registerKeyPress(int keyCode) {
 		if (keyCode == RIGHT) {
-			if (!hitBlockSide(false))
+			if (!hitSides() && !hitBlockSide(false))
 				current = colorizer.moveRight(current);
 		} else if (keyCode == LEFT) {
-			if (!hitBlockSide(true))
+			if (!hitSides() && !hitBlockSide(true))
 				current = colorizer.moveLeft(current);
-		} else if (keyCode == UP) {
+			/*
+			 * if (!hitSides()) { current = colorizer.moveRight(current); }
+			 */
+		}
+		/*
+		 * else if (keyCode == LEFT) { if (!hitSides()) { current =
+		 * colorizer.moveLeft(current); }
+		 */
+		else if (keyCode == UP) {
 			current = colorizer.rotate(false, current, 1);
 		} else if (keyCode == DOWN) {
-			current = colorizer.drop(current);
+			// current = colorizer.drop(current);
 		}
 	}
 
@@ -90,6 +99,14 @@ public class Rules extends PApplet {
 			}
 		}
 		return false;
+	}
+
+	public int getNumOfLines() {
+		return numOfLines;
+	}
+
+	public void setNumOfLines(int x) {
+		numOfLines = x;
 	}
 
 	public boolean hitBottom() {
@@ -147,12 +164,6 @@ public class Rules extends PApplet {
 		return ans;
 	}
 
-	/*
-	 * public void hitBlock() { for (Square s: lowest()) {
-	 * 
-	 * } }
-	 */
-
 	public boolean part(Square t) {
 		return t.partOfCurrentBlock;
 	}
@@ -174,6 +185,7 @@ public class Rules extends PApplet {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -190,52 +202,60 @@ public class Rules extends PApplet {
 		return false;
 	}
 
-	public int calLowestYCorOfTile(Tile t) {
-		int lowest = t.getSquares().get(0).getYCor();
-		for (Square s : t.getSquares()) {
-			if (s.getYCor() < lowest) {
-				lowest = s.getYCor();
-			}
-		}
-		return lowest;
-	}
-
-	public int calHighestYCorOfTile(Tile t) {
-		int highest = t.getSquares().get(0).getYCor();
-		for (Square s : t.getSquares()) {
-			if (s.getYCor() > highest) {
-				highest = s.getYCor();
-			}
-		}
-		return highest;
-	}
-
-	public int calNextColoredSquare(Tile t) {
-		int[] white = new int[] { 255, 255, 255 };
-		return 1;
-	}
+	/*
+	 * public int calLowestYCorOfTile(Tile t) { int lowest =
+	 * t.getSquares().get(0).getYCor(); for (Square s : t.getSquares()) { if
+	 * (s.getYCor() < lowest) { lowest = s.getYCor(); } } return lowest; }
+	 * 
+	 * public int calHighestYCorOfTile(Tile t) { int highest =
+	 * t.getSquares().get(0).getYCor(); for (Square s : t.getSquares()) { if
+	 * (s.getYCor() > highest) { highest = s.getYCor(); } } return highest; }
+	 * 
+	 * public int calNextColoredSquare(Tile t) { int[] white = new int[] { 255,
+	 * 255, 255 }; return 1; }
+	 */
 
 	public void clearLine(int r) {
 		int[] white = new int[] { 255, 255, 255 };
 		for (int s = 0; s < g.numCols; s++) {
 			g.grid[r][s].color = white;
 		}
+		lowerRow(r);
 	}
 
 	public void clearLine() {
 		int[] white = new int[] { 255, 255, 255 };
 		int counter = g.getNumCols();
-		for (int r = 0; r < g.getNumRows(); r++) {
+		for (int r = g.getNumRows() - 1; r > 0; r--) {
 			for (int s = 0; s < g.getNumCols(); s++) {
-				if (g.grid[r][s].color != white) {
+				if (g.grid[r][s].color[0] != 255 && g.grid[r][s].color[1] != 255 && g.grid[r][s].color[2] != 255) {
 					counter--;
-					System.out.println(counter);
+					// System.out.println(counter);
 				}
 				if (counter == 0) {
+					numOfLines++;
 					clearLine(r);
 				}
 			}
 			counter = g.getNumCols();
+		}
+	}
+
+	/*
+	 * public void clearLine1() { boolean gapBetweenLines; int numOfLines = 0;
+	 * int[] white = new int[] { 255, 255, 255 }; for (int r = 0; r <
+	 * g.getNumRows(); r++) { gapBetweenLines = false; for (int s = 0; s <
+	 * g.getNumCols(); s++) { if (g.grid[r][s].color == white) { gapBetweenLines
+	 * = true; break; } } if (!gapBetweenLines) { lowerRow(r); r --;
+	 * numOfLines++; } } int n = numOfLines; score.setScore(score.getScore() +
+	 * 40 * (n + 1) + 100 * (n + 1) + 300 * (n + 1) + 1200 * (n + 1)); }
+	 */
+
+	public void lowerRow(int r) {
+		for (int r1 = r - 1; r1 > 0; r1--) {
+			for (int s2 = 0; s2 < g.getNumCols(); s2++) {
+				g.grid[r1 + 1][s2].color = g.grid[r1][s2].color;
+			}
 		}
 	}
 
@@ -248,36 +268,21 @@ public class Rules extends PApplet {
 	 * current.getSquares()) { if (s.getColIndex() < lowX) { } } return false; }
 	 */
 
-	public class KeyAction extends AbstractAction {
-		private String sequence;
-		private KeyStroke keystroke;
-
-		public KeyAction(String sequence) {
-			this.sequence = sequence;
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			switch (sequence) {
-			case "clockwise":
-				colorizer.rotate(true, current, 1);
-				break;
-			case "counterclockwise":
-				colorizer.rotate(false, current, 1);
-				break;
-			case "left":
-				colorizer.moveLeft(current);
-				break;
-			case "right":
-				colorizer.moveRight(current);
-				break;
-			}
-
-			/*
-			 * if (e.getKeyCode() == KeyEvent.VK_LEFT) { current =
-			 * colorizer.moveRight(current); System.out.println("yay"); } else
-			 * if (e.getKeyCode() == KeyEvent.VK_RIGHT) { current =
-			 * colorizer.moveLeft(current); }
-			 */
-		}
-	}
+	/*
+	 * public class KeyAction extends AbstractAction { private String sequence;
+	 * private KeyStroke keystroke;
+	 * 
+	 * public KeyAction(String sequence) { this.sequence = sequence; }
+	 * 
+	 * public void actionPerformed(ActionEvent e) { switch (sequence) { case
+	 * "clockwise": colorizer.rotate(true, current, 1); break; case
+	 * "counterclockwise": colorizer.rotate(false, current, 1); break; case
+	 * "left": colorizer.moveLeft(current); break; case "right":
+	 * colorizer.moveRight(current); break; }
+	 * 
+	 * /* if (e.getKeyCode() == KeyEvent.VK_LEFT) { current =
+	 * colorizer.moveRight(current); System.out.println("yay"); } else if
+	 * (e.getKeyCode() == KeyEvent.VK_RIGHT) { current =
+	 * colorizer.moveLeft(current); }
+	 */
 }

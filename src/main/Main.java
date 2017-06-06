@@ -85,7 +85,7 @@ public class Main extends PApplet {
 
 		if (start.getBooleanValue() == true) {
 			rule.run();
-			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0 && !rule.hitSides()) {
+			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
 				rule.registerKeyPress(keyCode);
 			}
 
@@ -93,7 +93,7 @@ public class Main extends PApplet {
 			score.setText("SCORE: " + SCORE);
 		}
 
-		SCORE += 5; // test
+		//SCORE += 5; // test
 
 		colorizer.refresh();
 	}
