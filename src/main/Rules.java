@@ -139,8 +139,7 @@ public class Rules extends PApplet {
 				}
 			}
 
-			if (notPartOfCurrent && next.getColor()[0] != 255
-					&& next.getColor()[1] != 255 && next.getColor()[2] != 255) {
+			if (notPartOfCurrent && Colorizer.isColored(next)) {
 				return true;
 			}
 		}
@@ -222,9 +221,7 @@ public class Rules extends PApplet {
 			}
 
 			if (notPartOfCurrent
-					&& !(bottomSquare.getColor()[0] == 255
-							&& bottomSquare.getColor()[1] == 255 && bottomSquare
-							.getColor()[2] == 255)) {
+					&& Colorizer.isColored(bottomSquare)) {
 				return true;
 			}
 		}
