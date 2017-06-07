@@ -15,9 +15,11 @@ public class Rules extends PApplet {
 	private Colorizer colorizer;
 	private Grid g;
 	private int numOfLines;
+	public static int SCORE;
 
 	public Rules() {
 		TIMER = 0;
+		SCORE = 0;
 	}
 
 	public Rules(Colorizer colorizer, Tile current, Grid g) {
@@ -50,6 +52,7 @@ public class Rules extends PApplet {
 			} else {
 				current = colorizer.drop(current, 1);
 				clearLine();
+				updateScore();
 			}
 		}
 		TIMER++;
@@ -57,15 +60,17 @@ public class Rules extends PApplet {
 
 	public void registerKeyPress(int keyCode) {
 		if (keyCode == RIGHT) {
-			if (!hitSides() && !hitBlockSide(false))
+			if (!hitSides() && !hitBlockSide(false)) {
 				current = colorizer.moveRight(current);
+			}
 		} else if (keyCode == LEFT) {
-			if (!hitSides() && !hitBlockSide(true))
+			if(!hitSides() && !hitBlockSide(true)) {
 				current = colorizer.moveLeft(current);
 			/*
 			 * if (!hitSides()) { current = colorizer.moveRight(current); }
 			 */
-		}
+			}
+		}		
 		/*
 		 * else if (keyCode == LEFT) { if (!hitSides()) { current =
 		 * colorizer.moveLeft(current); }
@@ -73,7 +78,7 @@ public class Rules extends PApplet {
 		else if (keyCode == UP) {
 			current = colorizer.rotate(false, current, 1);
 		} else if (keyCode == DOWN) {
-			// current = colorizer.drop(current);
+			current = fullDrop();
 		}
 	}
 
@@ -188,6 +193,15 @@ public class Rules extends PApplet {
 
 		return false;
 	}
+	
+	public Tile fullDrop() {
+		int counter = 0;
+		while (!hitBlock()) {
+			counter ++;
+		}
+		current = colorizer.drop(current,counter);
+		return current;
+	}
 
 	public boolean blockOffMap() {
 		int lowestX = g.getSquare(0, 0).getXCor();
@@ -257,6 +271,12 @@ public class Rules extends PApplet {
 				g.grid[r1 + 1][s2].color = g.grid[r1][s2].color;
 			}
 		}
+	}
+	
+	public void updateScore() {
+		int n = getNumOfLines();
+		SCORE  += 40 * (n + 1) + 100 * (n + 1) + 300* (n + 1) + 1200 * (n + 1);
+		numOfLines = 0;
 	}
 
 	/*

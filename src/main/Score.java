@@ -44,7 +44,6 @@ public class Score extends RectangularElement {
 		/* TESTING REFRESH */
 		pApplet.fill(bgColor[0], bgColor[1], bgColor[2]);
 		pApplet.rect(sideMargin, grid.vertMargin, getRectWidth(), getRectHeight());
-		updateScore();
 	}
 
 	@Override
