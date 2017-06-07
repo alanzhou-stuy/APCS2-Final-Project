@@ -209,10 +209,6 @@ public class Rules extends PApplet {
 		return ans;
 	}
 
-	public boolean part(Square t) {
-		return t.partOfCurrentBlock;
-	}
-
 	public boolean hitBlock() {
 		for (Square s : current.getSquares()) {
 			boolean notPartOfCurrent = true;
