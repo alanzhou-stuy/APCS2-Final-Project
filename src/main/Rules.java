@@ -17,6 +17,7 @@ public class Rules extends PApplet {
 
 	public Rules() {
 		TIMER = 0;
+		SCORE = 0;
 	}
 
 	public Rules(Colorizer colorizer, Tile current, Grid g) {
@@ -53,6 +54,8 @@ public class Rules extends PApplet {
 				current = colorizer.spawnOBlock();
 			} else {
 				current = colorizer.drop(current, 1);
+				clearLine();
+				updateScore();
 			}
 		}
 
@@ -67,16 +70,19 @@ public class Rules extends PApplet {
 
 	public void registerKeyPress(int keyCode) {
 		if (keyCode == RIGHT) {
-			if (!hitSides() && !hitBlockSide(false))
+			if (!hitSides() && !hitBlockSide(false)) {
 				current = colorizer.moveRight(current);
+			}
 		} else if (keyCode == LEFT) {
-			if (!hitSides() && !hitBlockSide(true))
+			if (!hitSides() && !hitBlockSide(true)) {
 				current = colorizer.moveLeft(current);
+			}
 		} else if (keyCode == UP) {
-			if (!hitSides() && !hitBlockSide(false))
+			if (!hitSides() && !hitBlockSide(false)) {
 				current = colorizer.rotate(false, current, 1);
+			}
 		} else if (keyCode == DOWN) {
-			// current = colorizer.drop(current);
+			// current = fullDrop();
 		}
 	}
 
@@ -216,6 +222,15 @@ public class Rules extends PApplet {
 		return false;
 	}
 
+	public Tile fullDrop() {
+		int counter = 0;
+		while (!hitBlock()) {
+			counter++;
+		}
+		current = colorizer.drop(current, counter);
+		return current;
+	}
+
 	public boolean blockOffMap() {
 		int lowestX = g.getSquare(0, 0).getXCor();
 		int highestX = g.getSquare(0, g.numCols - 1).getXCor();
@@ -277,7 +292,7 @@ public class Rules extends PApplet {
 		}
 
 		Collections.reverse(toClear); // do not remove!!!
-		
+
 		for (Integer i : toClear) {
 			clearLine(i.intValue());
 			lowerRow(i.intValue(), 1);
@@ -293,23 +308,4 @@ public class Rules extends PApplet {
 			}
 		}
 	}
-
-	/*
-	 * public void clearLine1() { boolean gapBetweenLines; int numOfLines = 0;
-	 * int[] white = new int[] { 255, 255, 255 }; for (int r = 0; r <
-	 * g.getNumRows(); r++) { gapBetweenLines = false; for (int s = 0; s <
-	 * g.getNumCols(); s++) { if (g.grid[r][s].color == white) { gapBetweenLines
-	 * = true; break; } } if (!gapBetweenLines) { lowerRow(r); r --;
-	 * numOfLines++; } } int n = numOfLines; score.setScore(score.getScore() +
-	 * 40 * (n + 1) + 100 * (n + 1) + 300 * (n + 1) + 1200 * (n + 1)); }
-	 */
-
-	/*
-	 * public boolean hit() { int[] white = new int[] { 255, 255, 255 }; int
-	 * lowX = current.getSquares().get(0).getColIndex(); int lowY =
-	 * current.getSquares().get(0).getRowIndex(); int highX =
-	 * current.getSquares().get(0).getColIndex(); int highY =
-	 * current.getSquares().get(0).getRowIndex(); for (Square s:
-	 * current.getSquares()) { if (s.getColIndex() < lowX) { } } return false; }
-	 */
 }

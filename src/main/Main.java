@@ -12,7 +12,7 @@ public class Main extends PApplet {
 	private ControlP5 gui;
 	private Grid grid;
 	private final int height = 800;
-	private final int width = 1500;
+	private final int width = 1400;
 	private int numRows = 20;
 	private int numCols = 10;
 	private int[] bgColor = { 20, 20, 20 };
@@ -26,7 +26,7 @@ public class Main extends PApplet {
 
 	private static int SPEED = 5;
 	private static int FRAMERATE = 60;
-	private static int CONTROL_RESPONSIVENESS = 7;
+	private static int CONTROL_RESPONSIVENESS = 5;
 	private int COUNTER = 0;
 
 	public static void main(String[] args) {
