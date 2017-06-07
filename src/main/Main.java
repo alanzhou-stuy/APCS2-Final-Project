@@ -11,8 +11,8 @@ public class Main extends PApplet {
 	private Colorizer colorizer;
 	private ControlP5 gui;
 	private Grid grid;
-	private final int height = 800;
-	private final int width = 1400;
+	private final int height = 600;
+	private final int width = 1000;
 	private int numRows = 20;
 	private int numCols = 10;
 	private int[] bgColor = { 20, 20, 20 };
@@ -28,46 +28,43 @@ public class Main extends PApplet {
 	private static int FRAMERATE = 60;
 	private static int CONTROL_RESPONSIVENESS = 5;
 	private int COUNTER = 0;
-	private int SCORE = 0;
 
 	public static void main(String[] args) {
 		PApplet.main("main.Main");
 	}
 
-	// public void actionPerformed(ActionEvent e) {
-	// rule.keyPressed(e);
-	// }
-
 	public void setup() {
 		frameRate(FRAMERATE); // shouldn't be changed
-
 		createGUI();
-
 		background(bgColor[0], bgColor[1], bgColor[2]);
-		grid = new Grid(numRows, numCols);
-
-		colorizer = new Colorizer(grid, this);
-		colorizer.setTileSep(1);
-		colorizer.create(); // create grid
 
 		/*
-		 * score = new Score(this, grid); score.setBackgroundColor(new int[] {
-		 * 200, 200, 200 }); score.create();
-		 * 
 		 * lb = new Leaderboard(this, grid); lb.setBackgroundColor(new int[] {
 		 * 200, 200, 200 }); lb.create();
 		 */
 
-		currentTile = colorizer.spawnTBlock(); // DON'T MOVE THIS
+		setupColorizer();
+		currentTile = colorizer.spawnBlock(); // DON'T MOVE THIS
+		setupRules();
+	}
 
+	private void setupRules() {
 		rule = new Rules(colorizer, currentTile, grid);
 		rule.setSpeed(SPEED);
 		rule.setFR(FRAMERATE);
 	}
 
+	private void setupColorizer() {
+		grid = new Grid(numRows, numCols);
+
+		colorizer = new Colorizer(grid, this);
+		colorizer.setTileSep(1);
+		colorizer.create(); // create grid
+	}
+
 	public void settings() {
 		size(width, height);
-		fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
+		// fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
 		// exit fullscreen)
 	}
 
@@ -93,7 +90,7 @@ public class Main extends PApplet {
 			score.setText("SCORE: " + rule.SCORE);
 		}
 
-		//SCORE += 5; // test
+		// SCORE += 5; // test
 
 		colorizer.refresh();
 	}
@@ -101,6 +98,7 @@ public class Main extends PApplet {
 	public void createGUI() {
 		gui = new ControlP5(this);
 
+		ControlFont scoreFont = new ControlFont(createFont("Arial",34));
 		ControlFont largeFont = new ControlFont(createFont("Arial", 22));
 		ControlFont textFont = new ControlFont(createFont("Arial", 16));
 
@@ -129,7 +127,8 @@ public class Main extends PApplet {
 				.setPosition(sliderSideMargin, sliderTopMargin + (4 * sliderVertSpacing)).setValue(10)
 				.setNumberOfTickMarks(46);
 
-		score = gui.addTextlabel("score").setText("SCORE: " + SCORE).setPosition(4 * width / 5, 50).setSize(200, 60);
+		score = gui.addTextlabel("score").setText("SCORE: " + Rules.SCORE).setPosition(4 * width / 5, 50).setSize(200,
+				60);
 		start = gui.addButton("START").setValue(0).setPosition(4 * width / 5, 150).setSize(200, 60);
 
 		// Setting fonts
@@ -139,6 +138,6 @@ public class Main extends PApplet {
 		varietySlider.getCaptionLabel().setFont(textFont);
 		numRowsSlider.getCaptionLabel().setFont(textFont);
 		numColsSlider.getCaptionLabel().setFont(textFont);
-		score.setFont(largeFont);
+		score.setFont(scoreFont);
 	}
 }

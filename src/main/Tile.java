@@ -202,7 +202,7 @@ public class Tile {
 	}
 
 	public Square remove() {
-		squares.get(0).partOfCurrentBlock = false;
+		//squares.get(0).partOfCurrentBlock = false;
 		return squares.remove(0);
 	}
 
