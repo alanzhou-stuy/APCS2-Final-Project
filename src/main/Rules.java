@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import processing.core.PApplet;
 
@@ -241,39 +242,56 @@ public class Rules extends PApplet {
 	 * 255, 255 }; return 1; }
 	 */
 
-	
 	/**
 	 * Sets the squares in an entire row to have a color of white (255,255,255)
-	 * @param r the row to be cleared
+	 * 
+	 * @param r
+	 *            the row to be cleared
 	 */
 	public void clearLine(int r) {
 		int[] white = new int[] { 255, 255, 255 };
 		for (int c = 0; c < g.numCols; c++) {
 			g.grid[r][c].color = white;
 		}
-		//lowerRow(r);
+
 	}
 
 	public boolean clearLine() {
+		ArrayList<Integer> toClear = new ArrayList<Integer>();
 		int counter = g.getNumCols();
 		boolean cleared = false;
-		
+
 		for (int r = g.getNumRows() - 1; r >= 0; r--) {
 			counter = g.getNumCols();
 			for (int c = 0; c < g.getNumCols(); c++) {
 				if (!(g.grid[r][c].color[0] == 255 && g.grid[r][c].color[1] == 255 && g.grid[r][c].color[2] == 255)) {
 					counter--;
-					// System.out.println(counter);
 				}
-				
 			}
+
 			if (counter == 0) {
 				numOfLines++;
-				clearLine(r);
+				toClear.add(r);
 				cleared = true;
 			}
 		}
+
+		Collections.reverse(toClear); // do not remove!!!
+		
+		for (Integer i : toClear) {
+			clearLine(i.intValue());
+			lowerRow(i.intValue(), 1);
+		}
+
 		return cleared;
+	}
+
+	public void lowerRow(int row, int num) {
+		for (int r = row - num; r >= 0; r--) {
+			for (int c = 0; c < g.getNumCols(); c++) {
+				g.grid[r + num][c].setColor(g.grid[r][c].getColor());
+			}
+		}
 	}
 
 	/*
@@ -285,14 +303,6 @@ public class Rules extends PApplet {
 	 * numOfLines++; } } int n = numOfLines; score.setScore(score.getScore() +
 	 * 40 * (n + 1) + 100 * (n + 1) + 300 * (n + 1) + 1200 * (n + 1)); }
 	 */
-
-	public void lowerRow(int r) {
-		for (int r1 = r - 1; r1 > 0; r1--) {
-			for (int s2 = 0; s2 < g.getNumCols(); s2++) {
-				g.grid[r1 + 1][s2].color = g.grid[r1][s2].color;
-			}
-		}
-	}
 
 	/*
 	 * public boolean hit() { int[] white = new int[] { 255, 255, 255 }; int
