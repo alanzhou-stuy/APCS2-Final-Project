@@ -17,6 +17,8 @@ public class Rules extends PApplet {
 	private Tile saved;
 	private boolean savedTile;
 	private int numAllowedShifted;
+	private int level;
+	private int totalLinesCleared;
 
 	public Rules() {
 		TIMER = 0;
@@ -78,7 +80,7 @@ public class Rules extends PApplet {
 				}
 				current = colorizer.spawnBlock();
 				savedTile = true;
-				numAllowedShifted ++;
+				numAllowedShifted++;
 			} else {
 				Tile temp1 = new Tile();
 				temp1 = saved;
@@ -91,16 +93,42 @@ public class Rules extends PApplet {
 					current.remove().setColor(WHITE);
 				}
 				current = temp1;
-				numAllowedShifted ++;
+				numAllowedShifted++;
 			}
 		}
 		return current;
 	}
-	
+
 	public void updateScore() {
+		levelUp();
 		int n = numOfLines;
-		SCORE += 40 * (n + 1) + 100 * (n + 1) + 300 * (n + 1) + 1200 * (n + 1);
+		if (n == 1) {
+			SCORE += 40 * (level + 1);
+		} else if (n == 2) {
+			SCORE += 100 * (level + 1);
+		} else if (n == 3) {
+			SCORE += 300 * (level + 1);
+		} else {
+			SCORE += 1200 * (level + 1);
+		}
+		totalLinesCleared += numOfLines;
 		numOfLines = 0;
+	}
+
+	public void levelUp() {
+		// System.out.println("Level: " + level);
+		// System.out.println("Total lines cleared: " + totalLinesCleared);
+		if (level == 0) {
+			if (totalLinesCleared == 4) {
+				// update speed;
+				level += 1;
+			}
+		} else {
+			if (totalLinesCleared == level * 4) {
+				// speed goes up;
+				level += 1;
+			}
+		}
 	}
 
 	public void registerKeyPress(int keyCode) {
@@ -117,7 +145,7 @@ public class Rules extends PApplet {
 				current = colorizer.rotate(false, current, 1);
 			}
 		} else if (keyCode == DOWN) {
-			// current = fullDrop();
+			current = fullDrop();
 		} else if (keyCode == SHIFT) {
 			current = storeShifted();
 		}
@@ -146,7 +174,6 @@ public class Rules extends PApplet {
 		}
 		return false;
 	}
-
 
 	public void setNumOfLines(int x) {
 		numOfLines = x;
@@ -233,11 +260,9 @@ public class Rules extends PApplet {
 	}
 
 	public Tile fullDrop() {
-		int counter = 0;
-		while (!hitBlock()) {
-			counter++;
+		while (!hitBottom() && !hitBlock()) {
+			current = colorizer.drop(current, 1);
 		}
-		current = colorizer.drop(current, counter);
 		return current;
 	}
 
@@ -290,7 +315,8 @@ public class Rules extends PApplet {
 		for (int r = g.getNumRows() - 1; r >= 0; r--) {
 			counter = g.getNumCols();
 			for (int c = 0; c < g.getNumCols(); c++) {
-				if (!(g.grid[r][c].color[0] == 255 && g.grid[r][c].color[1] == 255 && g.grid[r][c].color[2] == 255)) {
+				if (!(g.grid[r][c].color[0] == 255
+						&& g.grid[r][c].color[1] == 255 && g.grid[r][c].color[2] == 255)) {
 					counter--;
 				}
 			}

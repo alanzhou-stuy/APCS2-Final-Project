@@ -11,8 +11,8 @@ public class Main extends PApplet {
 	private Colorizer colorizer;
 	private ControlP5 gui;
 	private Grid grid;
-	private final int height = 600;
-	private final int width = 1000;
+	private final int height = 800;
+	private final int width = 1400;
 	private int numRows = 20;
 	private int numCols = 10;
 	private int[] bgColor = { 20, 20, 20 };
@@ -64,7 +64,7 @@ public class Main extends PApplet {
 
 	public void settings() {
 		size(width, height);
-		// fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
+		 fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
 		// exit fullscreen)
 	}
 

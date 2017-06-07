@@ -106,7 +106,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnIBlock() {
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setIBlock(true);
-		int[] color = (new int[] { 189, 219, 249 });
+		int[] color = (new int[] { 102, 116, 248});
 		t.setColor(color);
 		return t;
 	}
