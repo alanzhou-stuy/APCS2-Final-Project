@@ -144,10 +144,12 @@ public class Rules extends PApplet {
 			if (!hitSides() && !hitBlockSide(false)) {
 				current = colorizer.rotate(false, current, 1);
 			}
-		}else if (keyCode == DOWN) { 
+		} else if (keyCode == DOWN) {
 			//current = fullDrop();
 		} else if (keyCode == SHIFT) {
 			current = storeShifted();
+		} else if (keyCode == ' '){
+			current = fullDrop();
 		}
 	}
 

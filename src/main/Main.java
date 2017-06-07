@@ -68,7 +68,7 @@ public class Main extends PApplet {
 
 	public void settings() {
 		size(width, height);
-		 fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
+		// fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
 		// exit fullscreen)
 	}
 
@@ -88,6 +88,8 @@ public class Main extends PApplet {
 			rule.run();
 			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
 				rule.registerKeyPress(keyCode);
+			} else if (keyPressed && key != CODED && key == ' ' && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
+				rule.registerKeyPress(key);
 			}
 
 			start.setCaptionLabel("STOP");
