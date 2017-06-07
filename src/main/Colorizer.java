@@ -189,8 +189,6 @@ public class Colorizer extends PApplet implements Displayable {
 				&& g.grid[y][x].color[1] != 255
 				&& g.grid[y][x].color[2] != 255;
 	}
-	
-	
 
 	/**
 	 * Rotates a tile either clockwise or counter clockwise. It utilizes the
