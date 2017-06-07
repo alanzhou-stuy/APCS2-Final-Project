@@ -58,7 +58,6 @@ public class Rules extends PApplet {
 				numAllowedShifted = 0;
 			} else {
 				current = colorizer.drop(current, 1);
-				updateScore();
 			}
 		}
 
