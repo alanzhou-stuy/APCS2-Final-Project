@@ -27,7 +27,7 @@ public class Main extends PApplet {
 
 	private static int SPEED = 5;
 	private static int FRAMERATE = 60;
-	private static int CONTROL_RESPONSIVENESS = 7;
+	private static int CONTROL_RESPONSIVENESS = 2;
 	private int COUNTER = 0;
 
 	public static void main(String[] args) {
@@ -84,19 +84,19 @@ public class Main extends PApplet {
 		// currentTile = colorizer.drop(currentTile, 1);
 		// currentTile = colorizer.rotate(false, currentTile, 1);
 
-		if (start.getBooleanValue() == true) {
+		if (start.getBooleanValue() == true && rule.GAME_OVER == false) {
 			rule.run();
 			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
 				rule.registerKeyPress(keyCode);
+				keyPressed = false;
 			} else if (keyPressed && key != CODED && key == ' ' && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
 				rule.registerKeyPress(key);
+				keyPressed = false;
 			}
 
 			start.setCaptionLabel("STOP");
 			score.setText("SCORE: " + rule.SCORE);
 		}
-
-		// SCORE += 5; // test
 
 		info1.setText("Num squares: "
 				+ analyzer.getTotalColoredSquares(analyzer.getTopMostColoredRow(), grid.getNumRows() - 1))
@@ -151,6 +151,8 @@ public class Main extends PApplet {
 		varietySlider.getCaptionLabel().setFont(textFont);
 		numRowsSlider.getCaptionLabel().setFont(textFont);
 		numColsSlider.getCaptionLabel().setFont(textFont);
+
+		// Label fonts
 		score.setFont(scoreFont);
 		info1.setFont(textFont);
 	}
