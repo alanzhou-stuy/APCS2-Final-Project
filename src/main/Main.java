@@ -27,7 +27,7 @@ public class Main extends PApplet {
 
 	private static int SPEED = 5;
 	private static int FRAMERATE = 60;
-	private static int CONTROL_RESPONSIVENESS = 2;
+	private static int CONTROL_RESPONSIVENESS = 3;
 	private int COUNTER = 0;
 
 	public static void main(String[] args) {
@@ -68,7 +68,7 @@ public class Main extends PApplet {
 
 	public void settings() {
 		size(width, height);
-		//fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
+		// fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
 		// exit fullscreen)
 	}
 
@@ -94,7 +94,7 @@ public class Main extends PApplet {
 				keyPressed = false;
 			}
 
-			start.setCaptionLabel("STOP");
+			start.setCaptionLabel("RESET");
 			score.setText("SCORE: " + rule.SCORE);
 		}
 

@@ -33,11 +33,11 @@ public class Rules extends PApplet {
 		this.current = current;
 		this.g = g;
 	}
-	
+
 	public int getSpeed() {
 		return SPEED;
 	}
-	
+
 	public void setSpeed(int speed) {
 		SPEED = speed;
 	}
@@ -60,6 +60,7 @@ public class Rules extends PApplet {
 				numAllowedShifted = 0;
 			} else if (!GAME_OVER) {
 				current = colorizer.drop(current, 1);
+				System.out.println(rotateHitBlock(false));
 			} else {
 				System.out.println("GAME OVER!!!");
 			}
@@ -135,15 +136,15 @@ public class Rules extends PApplet {
 
 	public void registerKeyPress(int keyCode) {
 		if (keyCode == RIGHT) {
-			if (!hitSides() && !hitBlockSide(false)) {
+			if (!hitRightSide() && !hitBlockSide(false)) {
 				current = colorizer.moveRight(current);
 			}
 		} else if (keyCode == LEFT) {
-			if (!hitSides() && !hitBlockSide(true)) {
+			if (!hitLeftSide() && !hitBlockSide(true)) {
 				current = colorizer.moveLeft(current);
 			}
 		} else if (keyCode == UP) {
-			if (!hitSides() && !hitBlockSide(false)) {
+			if (!hitSides() && !rotateHitBlock(false)) {
 				current = colorizer.rotate(false, current, 1);
 			}
 		} else if (keyCode == DOWN) {
@@ -178,66 +179,29 @@ public class Rules extends PApplet {
 		return false;
 	}
 
-	public void setNumOfLines(int x) {
-		numOfLines = x;
-	}
+	private boolean rotateHitBlock(boolean clockwise) {
+		/* Checks to see if rotating block collides with a block */
 
-	public boolean hitBottom() {
-		int lowestY = g.getSquare(g.numRows - 1, 0).getYCor();
-		for (Square s : current.getSquares()) {
-			if (s.getYCor() == lowestY) {
+		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
+		
+		for(int[] coord : current.getRespectiveCoords()){
+			respectiveCoordsSample.add(coord);
+		}
+		
+		for(int i=0; i<respectiveCoordsSample.size(); i++){
+			respectiveCoordsSample.set(i, Tile.returnTransformedCoords(clockwise, respectiveCoordsSample.get(i)));
+		}
+
+		for (int[] coord : respectiveCoordsSample) {
+			if (Colorizer.isColored(g.getSquare(current.pivotY + coord[0], current.pivotX + coord[1]))) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
-	public boolean hitSides() {
-		if (leftest() == g.getSquare(0, 0).getXCor() || rightest() == g.getSquare(0, g.numCols - 1).getXCor()) {
-			return true;
-		}
-		return false;
-	}
-
-	public int leftest() {
-		Square leftest = current.getSquares().get(0);
-		for (Square s : current.getSquares()) {
-			if (s.getXCor() < leftest.getXCor()) {
-				leftest = s;
-			}
-		}
-		return leftest.getXCor();
-	}
-
-	public int rightest() {
-		Square rightest = current.getSquares().get(0);
-		for (Square s : current.getSquares()) {
-			if (s.getXCor() > rightest.getXCor()) {
-				rightest = s;
-			}
-		}
-		return rightest.getXCor();
-	}
-
-	public ArrayList<Square> lowest() {
-		ArrayList<Square> ans = new ArrayList<Square>();
-		Square lowest = current.getSquares().get(0);
-		for (Square s : current.getSquares()) {
-			if (s.getYCor() < lowest.getYCor()) {
-				lowest = s;
-			}
-		}
-		int counter = 0;
-		for (Square s : current.getSquares()) {
-			if (s.getYCor() <= lowest.getYCor()) {
-				ans.get(counter).setXYCor(s.getYCor(), s.getXCor());
-				counter++;
-			}
-		}
-		return ans;
-	}
-
-	public boolean hitBlock() {
+	private boolean hitBlock() {
 		for (Square s : current.getSquares()) {
 			boolean notPartOfCurrent = true;
 
@@ -255,6 +219,70 @@ public class Rules extends PApplet {
 		}
 
 		return false;
+	}
+
+	public void setNumOfLines(int x) {
+		numOfLines = x;
+	}
+
+	private boolean hitBottom() {
+		int lowestY = g.getSquare(g.numRows - 1, 0).getYCor();
+		for (Square s : current.getSquares()) {
+			if (s.getYCor() == lowestY) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean hitLeftSide() {
+		return leftest() == g.getSquare(0, 0).getXCor();
+	}
+
+	private boolean hitRightSide() {
+		return rightest() == g.getSquare(0, g.numCols - 1).getXCor();
+	}
+
+	public boolean hitSides() {
+		return hitLeftSide() || hitRightSide();
+	}
+
+	public int leftest() {
+		Square leftest = current.getSquares().get(0);
+		for (Square s : current.getSquares()) {
+			if (s.getColIndex() < leftest.getColIndex()) {
+				leftest = s;
+			}
+		}
+		return leftest.getXCor();
+	}
+
+	public int rightest() {
+		Square rightest = current.getSquares().get(0);
+		for (Square s : current.getSquares()) {
+			if (s.getColIndex() > rightest.getColIndex()) {
+				rightest = s;
+			}
+		}
+		return rightest.getXCor();
+	}
+
+	public ArrayList<Square> lowest() {
+		ArrayList<Square> ans = new ArrayList<Square>();
+		Square lowest = current.getSquares().get(0);
+		for (Square s : current.getSquares()) {
+			if (s.getRowIndex() < lowest.getRowIndex()) {
+				lowest = s;
+			}
+		}
+		int counter = 0;
+		for (Square s : current.getSquares()) {
+			if (s.getRowIndex() <= lowest.getRowIndex()) {
+				ans.get(counter).setXYCor(s.getYCor(), s.getXCor());
+				counter++;
+			}
+		}
+		return ans;
 	}
 
 	public Tile fullDrop() {

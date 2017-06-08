@@ -2,7 +2,6 @@ package main;
 
 import processing.core.PApplet;
 
-import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -158,7 +157,6 @@ public class Colorizer extends PApplet implements Displayable {
 		return t;
 	}
 
-	// eventually add EDGE DETECTION for moveLeft and moveRight
 	public Tile moveLeft(Tile t) {
 		int y = 0;
 		int size1 = t.getSquares().size();
@@ -239,9 +237,6 @@ public class Colorizer extends PApplet implements Displayable {
 			t1.setBlock(t.blockType(), false);
 			t1.setColor(t.getColor());
 			t = t1;
-			/*
-			 * for (Square s: t.getSquares()) { s.setPartOfCurrentBlock(true); }
-			 */
 		}
 
 		return t;
@@ -250,20 +245,4 @@ public class Colorizer extends PApplet implements Displayable {
 	public static boolean isColored(Square sq){
 		return !(sq.color[0] == 255 && sq.color[1] == 255 && sq.color[2] == 255);
 	}
-
-	/*
-	 * public Tile drop(Tile t) { return drop(t, r.calNextColoredSquare(t)); }
-	 */
-
-	/*
-	 * public void fall(Tile t) { while (current.getPivotY() < 16) { current =
-	 * drop(t); current.setPivotY(t.getPivotY() + 1); } }
-	 */
-
-	/*
-	 * public boolean hitBottom(Tile t) { int lowestYCor =
-	 * t.getSquares().get(0).getYCor(); for (Square s : t.getSquares()) { if
-	 * (s.getYCor() < lowestYCor) { lowestYCor = s.getYCor(); } if (lowestYCor
-	 * == 0) { return true; } } return false; }
-	 */
 }
