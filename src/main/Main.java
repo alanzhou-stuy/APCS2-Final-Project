@@ -43,11 +43,11 @@ public class Main extends PApplet {
 		 * lb = new Leaderboard(this, grid); lb.setBackgroundColor(new int[] {
 		 * 200, 200, 200 }); lb.create();
 		 */
-
 		setupColorizer();
 		createGUI();
 		currentTile = colorizer.spawnBlock(); // DON'T MOVE THIS
 		setupRules();
+
 	}
 
 	private void setupRules() {
