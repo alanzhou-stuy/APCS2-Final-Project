@@ -59,7 +59,6 @@ public class Rules extends PApplet {
 				numAllowedShifted = 0;
 			} else if (!GAME_OVER) {
 				current = colorizer.drop(current, 1);
-				System.out.println(rotateHitBlock(false));
 			} else {
 				System.out.println("GAME OVER!!!");
 			}
@@ -122,12 +121,12 @@ public class Rules extends PApplet {
 		// System.out.println("Total lines cleared: " + totalLinesCleared);
 		if (level == 0) {
 			if (totalLinesCleared == 4) {
-				//SPEED += 1;
+				// SPEED += 1;
 				level += 1;
 			}
 		} else {
 			if (totalLinesCleared == level * 4) {
-				//SPEED += 1;
+				// SPEED += 1;
 				level += 1;
 			}
 		}
@@ -143,7 +142,7 @@ public class Rules extends PApplet {
 				current = colorizer.moveLeft(current);
 			}
 		} else if (keyCode == UP) {
-			if (!hitSides() && !rotateHitBlock(false)) {
+			if (!rotateHitSides(false) && !rotateHitBlock(false)) {
 				current = colorizer.rotate(false, current, 1);
 			}
 		} else if (keyCode == DOWN) {
@@ -155,6 +154,26 @@ public class Rules extends PApplet {
 		} else if (keyCode == ' ') {
 			current = fullDrop();
 		}
+	}
+
+	private boolean hitBlock() {
+		for (Square s : current.getSquares()) {
+			boolean notPartOfCurrent = true;
+
+			Square bottomSquare = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
+
+			for (Square square : current.getSquares()) {
+				if (bottomSquare.equals(square)) {
+					notPartOfCurrent = false;
+				}
+			}
+
+			if (notPartOfCurrent && Colorizer.isColored(bottomSquare)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private boolean hitBlockSide(boolean left) {
@@ -184,17 +203,42 @@ public class Rules extends PApplet {
 		/* Checks to see if rotating block collides with a block */
 
 		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
-		
-		for(int[] coord : current.getRespectiveCoords()){
-			respectiveCoordsSample.add(coord);
-		}
-		
-		for(int i=0; i<respectiveCoordsSample.size(); i++){
-			respectiveCoordsSample.set(i, Tile.returnTransformedCoords(clockwise, respectiveCoordsSample.get(i)));
+
+		for (int[] coord : current.getRespectiveCoords()) {
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, coord));
 		}
 
 		for (int[] coord : respectiveCoordsSample) {
-			if (Colorizer.isColored(g.getSquare(current.pivotY + coord[0], current.pivotX + coord[1]))) {
+			if (isInBounds(current.pivotY + coord[0], current.pivotX + coord[1])) {
+				Square next = g.getSquare(current.pivotY + coord[0], current.pivotX + coord[1]);
+				boolean notPartOfCurrent = true;
+
+				for (Square s : current.getSquares()) {
+					if (s.equals(next)) {
+						notPartOfCurrent = false;
+					}
+				}
+
+				if (Colorizer.isColored(next) && notPartOfCurrent) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private boolean rotateHitSides(boolean clockwise) {
+		/* Checks to see if rotating block collides with a side wall */
+
+		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
+
+		for (int[] coord : current.getRespectiveCoords()) {
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, coord));
+		}
+
+		for (int[] coord : respectiveCoordsSample) {
+			if (!isInBounds(current.pivotY + coord[0], current.pivotX + coord[1])) {
 				return true;
 			}
 		}
@@ -202,24 +246,8 @@ public class Rules extends PApplet {
 		return false;
 	}
 
-	private boolean hitBlock() {
-		for (Square s : current.getSquares()) {
-			boolean notPartOfCurrent = true;
-
-			Square bottomSquare = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
-
-			for (Square square : current.getSquares()) {
-				if (bottomSquare.equals(square)) {
-					notPartOfCurrent = false;
-				}
-			}
-
-			if (notPartOfCurrent && Colorizer.isColored(bottomSquare)) {
-				return true;
-			}
-		}
-
-		return false;
+	private boolean isInBounds(int row, int col) {
+		return row < g.getNumRows() && row >= 0 && col < g.getNumCols() && col >= 0;
 	}
 
 	public void setNumOfLines(int x) {
