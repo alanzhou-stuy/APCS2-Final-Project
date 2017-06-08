@@ -11,7 +11,7 @@ public class Rules extends PApplet {
 	private Grid g;
 	private int numOfLines;
 	private static int TIMER;
-	private static int SPEED = 5;
+	private static int SPEED = 1;
 	private static int FRAMERATE = 60;
 	public static int SCORE;
 	private Tile saved;
@@ -23,6 +23,7 @@ public class Rules extends PApplet {
 	public Rules() {
 		TIMER = 0;
 		SCORE = 0;
+		SPEED = 1;
 	}
 
 	public Rules(Colorizer colorizer, Tile current, Grid g) {
@@ -31,7 +32,11 @@ public class Rules extends PApplet {
 		this.current = current;
 		this.g = g;
 	}
-
+	
+	public int getSpeed() {
+		return SPEED;
+	}
+	
 	public void setSpeed(int speed) {
 		SPEED = speed;
 	}
@@ -120,12 +125,12 @@ public class Rules extends PApplet {
 		// System.out.println("Total lines cleared: " + totalLinesCleared);
 		if (level == 0) {
 			if (totalLinesCleared == 4) {
-				// update speed;
+				SPEED += 1;
 				level += 1;
 			}
 		} else {
 			if (totalLinesCleared == level * 4) {
-				// speed goes up;
+				SPEED += 1;
 				level += 1;
 			}
 		}
