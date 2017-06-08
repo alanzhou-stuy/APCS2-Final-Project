@@ -7,3 +7,7 @@
 06/03/17: Fixed bug with updating/resizable Grid and drop function. - Jeffrey
 
 06/05/17: Added key inputs/controls - Jeffrey
+
+06/07/17: Started GridAnalyzer - Jeffrey
+
+06/08/17: Fixed rotate overlap bug with controls - Jeffrey
