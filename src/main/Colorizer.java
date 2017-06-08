@@ -12,7 +12,6 @@ import java.util.Random;
 public class Colorizer extends PApplet implements Displayable {
 	private PApplet pApplet;
 	private Grid g;
-	// private LinkedList<Tile> existingTiles;
 	public Tile current;
 	public int numRows, numCols;
 	public int tileSep = 1; // default is 1
@@ -106,7 +105,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnIBlock() {
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setIBlock(true);
-		int[] color = (new int[] { 189, 219, 249 });
+		int[] color = (new int[] { 102, 116, 248});
 		t.setColor(color);
 		return t;
 	}
@@ -187,13 +186,7 @@ public class Colorizer extends PApplet implements Displayable {
 		t1.setColor(t.getColor());
 		return t1;
 	}
-
-	public boolean colored(int y, int x) {
-		return g.grid[y][x].color[0] != 255 
-				&& g.grid[y][x].color[1] != 255
-				&& g.grid[y][x].color[2] != 255;
-	}
-
+	
 	/**
 	 * Rotates a tile either clockwise or counter clockwise. It utilizes the
 	 * respectiveCoords of a square, creates a coordinate transformation, and
@@ -252,6 +245,10 @@ public class Colorizer extends PApplet implements Displayable {
 		}
 
 		return t;
+	}
+	
+	public static boolean isColored(Square sq){
+		return !(sq.color[0] == 255 && sq.color[1] == 255 && sq.color[2] == 255);
 	}
 
 	/*

@@ -1,0 +1,9 @@
+05/../17: Created Window, Grid, and other display elements. - Jeffrey
+
+05/../17: Created Tiles, Squares, & other key components - Jeffrey
+
+05/../17: Added Rules to allow for Tile drop and side movement. - Alan
+
+06/03/17: Fixed bug with updating/resizable Grid and drop function. - Jeffrey
+
+06/05/17: Added key inputs/controls - Jeffrey
