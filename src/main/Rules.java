@@ -11,7 +11,7 @@ public class Rules extends PApplet {
 	private Grid g;
 	private int numOfLines;
 	private static int TIMER;
-	private static int SPEED = 1;
+	public static int SPEED = 1;
 	private static int FRAMERATE = 60;
 	public static int SCORE;
 	private Tile saved;
@@ -24,7 +24,6 @@ public class Rules extends PApplet {
 	public Rules() {
 		TIMER = 0;
 		SCORE = 0;
-		SPEED = 1;
 	}
 
 	public Rules(Colorizer colorizer, Tile current, Grid g) {
@@ -123,12 +122,12 @@ public class Rules extends PApplet {
 		// System.out.println("Total lines cleared: " + totalLinesCleared);
 		if (level == 0) {
 			if (totalLinesCleared == 4) {
-				SPEED += 1;
+				//SPEED += 1;
 				level += 1;
 			}
 		} else {
 			if (totalLinesCleared == level * 4) {
-				SPEED += 1;
+				//SPEED += 1;
 				level += 1;
 			}
 		}
@@ -148,7 +147,9 @@ public class Rules extends PApplet {
 				current = colorizer.rotate(false, current, 1);
 			}
 		} else if (keyCode == DOWN) {
-			// current = fullDrop();
+			if (!hitSides() && !hitBlockSide(false)) {
+				current = colorizer.rotate(true, current, 1);
+			}
 		} else if (keyCode == SHIFT) {
 			current = storeShifted();
 		} else if (keyCode == ' ') {
