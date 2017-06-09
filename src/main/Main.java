@@ -28,6 +28,7 @@ public class Main extends PApplet {
 	private static int SPEED = 5;
 	private static int FRAMERATE = 60;
 	private static int CONTROL_RESPONSIVENESS = 3;
+	private static int DIFFICULTY, VARIETY;
 	private int COUNTER = 0;
 
 	public static void main(String[] args) {
@@ -47,13 +48,18 @@ public class Main extends PApplet {
 		createGUI();
 		currentTile = colorizer.spawnBlock(); // DON'T MOVE THIS
 		setupRules();
-
 	}
 
 	private void setupRules() {
 		rule = new Rules(colorizer, currentTile, grid);
 		rule.setSpeed(SPEED);
 		rule.setFR(FRAMERATE);
+
+		if (analyzer != null) {
+			rule.setAnalyzer(analyzer);
+			analyzer.setRule(rule);
+		}
+
 	}
 
 	private void setupColorizer() {
@@ -120,11 +126,11 @@ public class Main extends PApplet {
 		speedSlider = gui.addSlider("SPEED").setSize(sliderWidth, sliderHeight).setRange(0, 10)
 				.setPosition(sliderSideMargin, sliderTopMargin).setValue(SPEED).setNumberOfTickMarks(11);
 
-		diffSlider = gui.addSlider("difficulty").setSize(sliderWidth, sliderHeight).setRange(0, 100)
+		diffSlider = gui.addSlider("DIFFICULTY").setSize(sliderWidth, sliderHeight).setRange(0, 100)
 				.setPosition(sliderSideMargin, sliderTopMargin + (sliderVertSpacing)).setValue(50)
 				.setNumberOfTickMarks(21);
 
-		varietySlider = gui.addSlider("variety").setSize(sliderWidth, sliderHeight).setRange(0, 100)
+		varietySlider = gui.addSlider("VARIETY").setSize(sliderWidth, sliderHeight).setRange(0, 100)
 				.setPosition(sliderSideMargin, sliderTopMargin + (2 * sliderVertSpacing)).setValue(50)
 				.setNumberOfTickMarks(11);
 

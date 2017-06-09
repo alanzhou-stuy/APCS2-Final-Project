@@ -9,6 +9,7 @@ public class Rules extends PApplet {
 	private Tile current;
 	private Colorizer colorizer;
 	private Grid g;
+	private GridAnalyzer analyzer;
 	private int numOfLines;
 	private static int TIMER;
 	public static int SPEED = 1;
@@ -45,6 +46,10 @@ public class Rules extends PApplet {
 		FRAMERATE = framerate;
 	}
 
+	public void setAnalyzer(GridAnalyzer analyzer) {
+		this.analyzer = analyzer;
+	}
+
 	public void run() {
 		// Time determined by polynomial regression
 		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35)
@@ -59,6 +64,7 @@ public class Rules extends PApplet {
 				numAllowedShifted = 0;
 			} else if (!GAME_OVER) {
 				current = colorizer.drop(current, 1);
+				analyzer.DEBUG();
 			} else {
 				System.out.println("GAME OVER!!!");
 			}
@@ -158,17 +164,9 @@ public class Rules extends PApplet {
 
 	private boolean hitBlock() {
 		for (Square s : current.getSquares()) {
-			boolean notPartOfCurrent = true;
+			Square next = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
 
-			Square bottomSquare = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
-
-			for (Square square : current.getSquares()) {
-				if (bottomSquare.equals(square)) {
-					notPartOfCurrent = false;
-				}
-			}
-
-			if (notPartOfCurrent && Colorizer.isColored(bottomSquare)) {
+			if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
 				return true;
 			}
 		}
@@ -178,7 +176,6 @@ public class Rules extends PApplet {
 
 	private boolean hitBlockSide(boolean left) {
 		for (Square s : current.getSquares()) {
-			boolean notPartOfCurrent = true;
 			Square next;
 
 			if (left) {
@@ -186,13 +183,8 @@ public class Rules extends PApplet {
 			} else {
 				next = g.getSquare(s.getRowIndex(), s.getColIndex() + 1);
 			}
-			for (Square square : current.getSquares()) {
-				if (next.equals(square)) {
-					notPartOfCurrent = false;
-				}
-			}
 
-			if (notPartOfCurrent && Colorizer.isColored(next)) {
+			if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
 				return true;
 			}
 		}
@@ -211,15 +203,8 @@ public class Rules extends PApplet {
 		for (int[] coord : respectiveCoordsSample) {
 			if (isInBounds(current.pivotY + coord[0], current.pivotX + coord[1])) {
 				Square next = g.getSquare(current.pivotY + coord[0], current.pivotX + coord[1]);
-				boolean notPartOfCurrent = true;
 
-				for (Square s : current.getSquares()) {
-					if (s.equals(next)) {
-						notPartOfCurrent = false;
-					}
-				}
-
-				if (Colorizer.isColored(next) && notPartOfCurrent) {
+				if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
 					return true;
 				}
 			}
@@ -243,6 +228,15 @@ public class Rules extends PApplet {
 			}
 		}
 
+		return false;
+	}
+
+	public static boolean partOfCurrent(Square toCheck, Tile current) {
+		for (Square square : current.getSquares()) {
+			if (toCheck.equals(square)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -318,6 +312,7 @@ public class Rules extends PApplet {
 		while (!hitBottom() && !hitBlock()) {
 			current = colorizer.drop(current, 1);
 		}
+
 		return current;
 	}
 
@@ -397,5 +392,9 @@ public class Rules extends PApplet {
 				g.grid[r + num][c].setColor(g.grid[r][c].getColor());
 			}
 		}
+	}
+
+	public Tile getCurrent() {
+		return current;
 	}
 }
