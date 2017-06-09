@@ -27,7 +27,7 @@ public class Main extends PApplet {
 
 	private static int SPEED = 5;
 	private static int FRAMERATE = 60;
-	private static int CONTROL_RESPONSIVENESS = 2;
+	private static int CONTROL_RESPONSIVENESS = 4;
 	private int COUNTER = 0;
 
 	public static void main(String[] args) {

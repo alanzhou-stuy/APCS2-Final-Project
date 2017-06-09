@@ -32,11 +32,11 @@ public class Rules extends PApplet {
 		this.current = current;
 		this.g = g;
 	}
-	
+
 	public int getSpeed() {
 		return SPEED;
 	}
-	
+
 	public void setSpeed(int speed) {
 		SPEED = speed;
 	}
@@ -45,10 +45,23 @@ public class Rules extends PApplet {
 		FRAMERATE = framerate;
 	}
 
+	public void gameOver() {
+		if (!GAME_OVER) {
+			for (Square s : current.getSquares()) {
+				if (g.grid[s.getRowIndex()][s.getColIndex()].color[0] != 255
+						//&& g.grid[s.getColIndex()][s.getRowIndex()].color[1] != 255
+						//&& g.grid[s.getColIndex()][s.getRowIndex()].color[2] != 255
+						) {
+					GAME_OVER = true;
+				}
+			}
+		}
+	}
+
 	public void run() {
 		// Time determined by polynomial regression
-		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35)
-				* (FRAMERATE / 60.0)) + 1;
+		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69
+				* Math.pow(SPEED, 2) - 7.85 * SPEED + 35) * (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
 			if ((hitBottom() || hitBlock()) && !GAME_OVER) {
@@ -121,12 +134,12 @@ public class Rules extends PApplet {
 		// System.out.println("Total lines cleared: " + totalLinesCleared);
 		if (level == 0) {
 			if (totalLinesCleared == 4) {
-				//SPEED += 1;
+				// SPEED += 1;
 				level += 1;
 			}
 		} else {
 			if (totalLinesCleared == level * 4) {
-				//SPEED += 1;
+				// SPEED += 1;
 				level += 1;
 			}
 		}
@@ -194,7 +207,8 @@ public class Rules extends PApplet {
 	}
 
 	public boolean hitSides() {
-		if (leftest() == g.getSquare(0, 0).getXCor() || rightest() == g.getSquare(0, g.numCols - 1).getXCor()) {
+		if (leftest() == g.getSquare(0, 0).getXCor()
+				|| rightest() == g.getSquare(0, g.numCols - 1).getXCor()) {
 			return true;
 		}
 		return false;
@@ -242,7 +256,8 @@ public class Rules extends PApplet {
 		for (Square s : current.getSquares()) {
 			boolean notPartOfCurrent = true;
 
-			Square bottomSquare = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
+			Square bottomSquare = g.getSquare(s.getRowIndex() + 1,
+					s.getColIndex());
 
 			for (Square square : current.getSquares()) {
 				if (bottomSquare.equals(square)) {
@@ -271,7 +286,8 @@ public class Rules extends PApplet {
 		int lowestY = g.getSquare(g.numRows - 1, 0).getYCor();
 		for (Square s : current.getSquares()) {
 			// need to change
-			if (s.getXCor() <= lowestX || s.getYCor() > lowestY || s.getXCor() > highestX) {
+			if (s.getXCor() <= lowestX || s.getYCor() > lowestY
+					|| s.getXCor() > highestX) {
 				return true;
 			}
 		}
@@ -313,7 +329,8 @@ public class Rules extends PApplet {
 		for (int r = g.getNumRows() - 1; r >= 0; r--) {
 			counter = g.getNumCols();
 			for (int c = 0; c < g.getNumCols(); c++) {
-				if (!(g.grid[r][c].color[0] == 255 && g.grid[r][c].color[1] == 255 && g.grid[r][c].color[2] == 255)) {
+				if (!(g.grid[r][c].color[0] == 255
+						&& g.grid[r][c].color[1] == 255 && g.grid[r][c].color[2] == 255)) {
 					counter--;
 				}
 			}
