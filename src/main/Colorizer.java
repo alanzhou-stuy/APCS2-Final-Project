@@ -198,7 +198,7 @@ public class Colorizer extends PApplet implements Displayable {
 	 *            number of times to rotate the tile
 	 * @return the tile with the rotated coordinates in the grid
 	 */
-	public Tile rotate(boolean clockwise, Tile t, int numTimes) {
+	public static Tile rotate(boolean clockwise, Tile t, int numTimes) {
 		while (numTimes-- > 0) {
 			int numSquares = t.getSquares().size();
 

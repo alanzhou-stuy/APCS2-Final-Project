@@ -64,9 +64,12 @@ public class Rules extends PApplet {
 				numAllowedShifted = 0;
 			} else if (!GAME_OVER) {
 				current = colorizer.drop(current, 1);
-				analyzer.DEBUG();
+				//analyzer.DEBUG();
+				
+				System.out.println(analyzer.getLowestUnfilledSquareInColumn(0).getRowIndex());
 			} else {
 				System.out.println("GAME OVER!!!");
+			
 			}
 		}
 
@@ -152,7 +155,7 @@ public class Rules extends PApplet {
 				current = colorizer.rotate(false, current, 1);
 			}
 		} else if (keyCode == DOWN) {
-			if (!hitSides() && !hitBlockSide(false)) {
+			if (!rotateHitSides(true) && !rotateHitBlock(true)) {
 				current = colorizer.rotate(true, current, 1);
 			}
 		} else if (keyCode == SHIFT) {
@@ -240,7 +243,7 @@ public class Rules extends PApplet {
 		return false;
 	}
 
-	private boolean isInBounds(int row, int col) {
+	public boolean isInBounds(int row, int col) {
 		return row < g.getNumRows() && row >= 0 && col < g.getNumCols() && col >= 0;
 	}
 

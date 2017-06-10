@@ -19,16 +19,16 @@ public class Main extends PApplet {
 	private Tile currentTile;
 	private Rules rule;
 	private GridAnalyzer analyzer;
-	// To be implemented later!
-	// private Leaderboard lb;
 	private Slider speedSlider, diffSlider, varietySlider, numRowsSlider, numColsSlider;
 	private Textlabel score, info1, info2;
-	private Button start;
+	private Button start, compStart;
 
 	private static int SPEED = 5;
 	private static int FRAMERATE = 60;
 	private static int CONTROL_RESPONSIVENESS = 3;
+	private static int COMPUTER_PLAY_SPEED = 3;
 	private static int DIFFICULTY, VARIETY;
+	private static boolean COMPUTER_PLAYS = true;
 	private int COUNTER = 0;
 
 	public static void main(String[] args) {
@@ -37,13 +37,8 @@ public class Main extends PApplet {
 
 	public void setup() {
 		frameRate(FRAMERATE); // shouldn't be changed
-
 		background(bgColor[0], bgColor[1], bgColor[2]);
 
-		/*
-		 * lb = new Leaderboard(this, grid); lb.setBackgroundColor(new int[] {
-		 * 200, 200, 200 }); lb.create();
-		 */
 		setupColorizer();
 		createGUI();
 		currentTile = colorizer.spawnBlock(); // DON'T MOVE THIS
@@ -59,7 +54,6 @@ public class Main extends PApplet {
 			rule.setAnalyzer(analyzer);
 			analyzer.setRule(rule);
 		}
-
 	}
 
 	private void setupColorizer() {
@@ -72,25 +66,29 @@ public class Main extends PApplet {
 		analyzer = new GridAnalyzer(grid);
 	}
 
-	public void settings() {
-		size(width, height);
-		// fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
-		// exit fullscreen)
-	}
-
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		rule.setSpeed(SPEED);
 
 		if (start.getBooleanValue() == false) {
 			colorizer.setRowsCols(numRows, numCols);
-			start.setCaptionLabel("START ");
+			start.setCaptionLabel("START");
+		}
+
+		if (compStart.getBooleanValue() == true) {
+			compStart.setCaptionLabel("Set to PLAYER");
+			info2.setText("Mode: Computer");
+			COMPUTER_PLAYS = true;
+		} else {
+			compStart.setCaptionLabel("Set to COMPUTER");
+			info2.setText("Mode: Player control");
+			COMPUTER_PLAYS = false;
 		}
 
 		// currentTile = colorizer.drop(currentTile, 1);
 		// currentTile = colorizer.rotate(false, currentTile, 1);
 
-		if (start.getBooleanValue() == true && rule.GAME_OVER == false) {
+		if (start.getBooleanValue() == true && rule.GAME_OVER == false && COMPUTER_PLAYS == false) {
 			rule.run();
 			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
 				rule.registerKeyPress(keyCode);
@@ -102,6 +100,16 @@ public class Main extends PApplet {
 
 			start.setCaptionLabel("RESET");
 			score.setText("SCORE: " + rule.SCORE);
+		} else if (start.getBooleanValue() == true && rule.GAME_OVER == false && COMPUTER_PLAYS == true) {
+			rule.run();
+
+			int[] possible = analyzer.getMovement();
+
+			for (int move : possible) {
+				rule.registerKeyPress(move);
+			}
+
+			keyPressed = false;
 		}
 
 		info1.setText("Num squares: "
@@ -115,7 +123,7 @@ public class Main extends PApplet {
 
 		ControlFont scoreFont = new ControlFont(createFont("Arial", 34));
 		ControlFont largeFont = new ControlFont(createFont("Arial", 22));
-		ControlFont textFont = new ControlFont(createFont("Arial", 16));
+		ControlFont textFont = new ControlFont(createFont("Arial", 18));
 
 		int sliderWidth = (int) (width * .17);
 		int sliderHeight = (int) (height * 0.075);
@@ -148,10 +156,16 @@ public class Main extends PApplet {
 				.setText("Num squares: "
 						+ analyzer.getTotalColoredSquares(analyzer.getTopMostColoredRow(), grid.getNumRows() - 1))
 				.setPosition(4 * width / 5, 250).setSize(200, 60);
+
+		info2 = gui.addTextlabel("info2").setText("Mode: " + "Player control").setPosition(4 * width / 5, 300)
+				.setSize(200, 60);
+
 		start = gui.addButton("START").setValue(0).setPosition(4 * width / 5, 150).setSize(200, 60);
+		compStart = gui.addButton("COMPUTER").setValue(0).setPosition(7 * width / 10, 350).setSize(400, 60);
 
 		// Setting fonts
 		start.getCaptionLabel().setFont(largeFont);
+		compStart.getCaptionLabel().setFont(largeFont);
 		speedSlider.getCaptionLabel().setFont(textFont);
 		diffSlider.getCaptionLabel().setFont(textFont);
 		varietySlider.getCaptionLabel().setFont(textFont);
@@ -161,5 +175,12 @@ public class Main extends PApplet {
 		// Label fonts
 		score.setFont(scoreFont);
 		info1.setFont(textFont);
+		info2.setFont(textFont);
+	}
+
+	public void settings() {
+		size(width, height);
+		// fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
+		// exit fullscreen)
 	}
 }
