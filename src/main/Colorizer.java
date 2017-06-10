@@ -2,7 +2,6 @@ package main;
 
 import processing.core.PApplet;
 
-import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -12,7 +11,6 @@ import java.util.Random;
 public class Colorizer extends PApplet implements Displayable {
 	private PApplet pApplet;
 	private Grid g;
-	// private LinkedList<Tile> existingTiles;
 	public Tile current;
 	public int numRows, numCols;
 	public int tileSep = 1; // default is 1
@@ -104,14 +102,20 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnIBlock() {
+		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setIBlock(true);
-		int[] color = (new int[] { 189, 219, 249 });
+		int[] color = (new int[] { 102, 116, 248});
 		t.setColor(color);
 		return t;
 	}
 
 	public Tile spawnJBlock() {
+		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setJBlock(true);
 		int[] color = new int[] { 47, 0, 252 };
@@ -120,6 +124,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnSBlock() {
+		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setSBlock(true);
 		int[] color = new int[] { 0, 254, 55 };
@@ -128,6 +135,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnOBlock() {
+		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setOBlock(true);
 		int[] color = new int[] { 212, 243, 48 };
@@ -136,6 +146,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnTBlock() {
+		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setTBlock(true);
 		int[] color = new int[] { 153, 51, 254 }; // 40 10 62
@@ -144,6 +157,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnZBlock() {
+		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setZBlock(true);
 		int[] color = new int[] { 254, 0, 0 };
@@ -152,6 +168,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnLBlock() {
+		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setLBlock(true);
 		int[] color = new int[] { 254, 165, 0 };
@@ -159,7 +178,6 @@ public class Colorizer extends PApplet implements Displayable {
 		return t;
 	}
 
-	// eventually add EDGE DETECTION for moveLeft and moveRight
 	public Tile moveLeft(Tile t) {
 		int y = 0;
 		int size1 = t.getSquares().size();
@@ -187,13 +205,7 @@ public class Colorizer extends PApplet implements Displayable {
 		t1.setColor(t.getColor());
 		return t1;
 	}
-
-	public boolean colored(int y, int x) {
-		return g.grid[y][x].color[0] != 255 
-				&& g.grid[y][x].color[1] != 255
-				&& g.grid[y][x].color[2] != 255;
-	}
-
+	
 	/**
 	 * Rotates a tile either clockwise or counter clockwise. It utilizes the
 	 * respectiveCoords of a square, creates a coordinate transformation, and
@@ -207,7 +219,7 @@ public class Colorizer extends PApplet implements Displayable {
 	 *            number of times to rotate the tile
 	 * @return the tile with the rotated coordinates in the grid
 	 */
-	public Tile rotate(boolean clockwise, Tile t, int numTimes) {
+	public static Tile rotate(boolean clockwise, Tile t, int numTimes) {
 		while (numTimes-- > 0) {
 			int numSquares = t.getSquares().size();
 
@@ -246,27 +258,12 @@ public class Colorizer extends PApplet implements Displayable {
 			t1.setBlock(t.blockType(), false);
 			t1.setColor(t.getColor());
 			t = t1;
-			/*
-			 * for (Square s: t.getSquares()) { s.setPartOfCurrentBlock(true); }
-			 */
 		}
 
 		return t;
 	}
-
-	/*
-	 * public Tile drop(Tile t) { return drop(t, r.calNextColoredSquare(t)); }
-	 */
-
-	/*
-	 * public void fall(Tile t) { while (current.getPivotY() < 16) { current =
-	 * drop(t); current.setPivotY(t.getPivotY() + 1); } }
-	 */
-
-	/*
-	 * public boolean hitBottom(Tile t) { int lowestYCor =
-	 * t.getSquares().get(0).getYCor(); for (Square s : t.getSquares()) { if
-	 * (s.getYCor() < lowestYCor) { lowestYCor = s.getYCor(); } if (lowestYCor
-	 * == 0) { return true; } } return false; }
-	 */
+	
+	public static boolean isColored(Square sq){
+		return !(sq.color[0] == 255 && sq.color[1] == 255 && sq.color[2] == 255);
+	}
 }

@@ -11,3 +11,5 @@
 06/07/17: Started GridAnalyzer - Jeffrey
 
 06/08/17: Fixed rotate overlap bug with controls - Jeffrey
+
+06/06/17: Added full drop (space bar) and code for the input methods. - Alan

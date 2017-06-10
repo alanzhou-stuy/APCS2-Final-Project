@@ -86,9 +86,8 @@ public class Grid {
 				} else {
 					grid[r][c] = new Square(sideMargin + colIncrement, vertMargin + rowIncrement, r, c, squareSize,
 							new int[] { 255, 255, 255 });
-				}
-				;
-
+				};
+				
 				colIncrement += squareSize + squareSep;
 			}
 
@@ -114,5 +113,5 @@ public class Grid {
 
 	public void setNumCols(int numCols) {
 		this.numCols = numCols;
-	}
+	}	
 }
