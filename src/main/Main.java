@@ -26,7 +26,7 @@ public class Main extends PApplet {
 	private Button start;
 	private static int SPEED = 5;
 	private static int FRAMERATE = 60;
-	private static int CONTROL_RESPONSIVENESS = 5;
+	private static int CONTROL_RESPONSIVENESS = 4;
 	private static int DIFFICULTY, VARIETY;
 	private int COUNTER = 0;
 
@@ -73,7 +73,7 @@ public class Main extends PApplet {
 
 	public void settings() {
 		size(width, height);
-		// fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
+		fullScreen(); // MAYBE INCLUDE THIS IN OPTIONS? (Alt-F4 or Esc to
 		// exit fullscreen)
 	}
 
