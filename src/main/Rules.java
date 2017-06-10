@@ -46,19 +46,19 @@ public class Rules extends PApplet {
 		FRAMERATE = framerate;
 	}
 
-	public void gameOver() {
+	/*public void gameOver() {
 		if (!GAME_OVER) {
-			for (Square s : current.getSquares()) {
-				if (g.grid[s.getRowIndex()][s.getColIndex()].color[0] != 255
-						//&& g.grid[s.getColIndex()][s.getRowIndex()].color[1] != 255
-						//&& g.grid[s.getColIndex()][s.getRowIndex()].color[2] != 255
-						) {
-					GAME_OVER = true;
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < g.numCols; j++) {
+					if (g.grid[i][j].color[0] != 255 && !g.grid[i][j].partOfCurrentBlock)  {
+						GAME_OVER = true;
+
+					}
 				}
 			}
 		}
-	}
-	
+	}*/
+
 	public void setAnalyzer(GridAnalyzer analyzer) {
 		this.analyzer = analyzer;
 	}
@@ -73,7 +73,7 @@ public class Rules extends PApplet {
 				if (clearLine()) {
 					updateScore();
 				}
-				current = colorizer.spawnBlock();
+				current = colorizer.spawnIBlock();
 				numAllowedShifted = 0;
 			} else if (!GAME_OVER) {
 				current = colorizer.drop(current, 1);
@@ -175,17 +175,15 @@ public class Rules extends PApplet {
 		}
 	}
 
-/*	private boolean hitBlock() {
-		for (Square s : current.getSquares()) {
-			Square next = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
-
-			if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
-				return true;
-			}
-		}
-
-		return false;
-	}*/
+	/*
+	 * private boolean hitBlock() { for (Square s : current.getSquares()) {
+	 * Square next = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
+	 * 
+	 * if (Colorizer.isColored(next) && !partOfCurrent(next, current)) { return
+	 * true; } }
+	 * 
+	 * return false; }
+	 */
 
 	private boolean hitBlockSide(boolean left) {
 		for (Square s : current.getSquares()) {
@@ -210,12 +208,14 @@ public class Rules extends PApplet {
 		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
 
 		for (int[] coord : current.getRespectiveCoords()) {
-			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, coord));
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise,
+					coord));
 		}
 
 		for (int[] coord : respectiveCoordsSample) {
 			if (isInBounds(current.pivotY + coord[0], current.pivotX + coord[1])) {
-				Square next = g.getSquare(current.pivotY + coord[0], current.pivotX + coord[1]);
+				Square next = g.getSquare(current.pivotY + coord[0],
+						current.pivotX + coord[1]);
 
 				if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
 					return true;
@@ -232,11 +232,13 @@ public class Rules extends PApplet {
 		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
 
 		for (int[] coord : current.getRespectiveCoords()) {
-			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, coord));
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise,
+					coord));
 		}
 
 		for (int[] coord : respectiveCoordsSample) {
-			if (!isInBounds(current.pivotY + coord[0], current.pivotX + coord[1])) {
+			if (!isInBounds(current.pivotY + coord[0], current.pivotX
+					+ coord[1])) {
 				return true;
 			}
 		}
@@ -254,7 +256,8 @@ public class Rules extends PApplet {
 	}
 
 	private boolean isInBounds(int row, int col) {
-		return row < g.getNumRows() && row >= 0 && col < g.getNumCols() && col >= 0;
+		return row < g.getNumRows() && row >= 0 && col < g.getNumCols()
+				&& col >= 0;
 	}
 
 	public void setNumOfLines(int x) {
