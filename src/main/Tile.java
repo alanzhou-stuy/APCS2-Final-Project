@@ -9,14 +9,13 @@ public class Tile {
 	public int pivotX, pivotY;
 	private String blockType;
 	public int[] color;
-	private int height;
+	private int maxHeight;
 	private int phase;
 	private int numPhases;
 
 	public Tile() {
 		squares = new ArrayList<Square>();
 		respectiveCoords = new ArrayList<int[]>();
-		height = 2;
 	}
 
 	public Tile(Grid g, int pivotY, int pivotX) {
@@ -34,8 +33,8 @@ public class Tile {
 		}
 	}
 
-	public int getHeight() {
-		return height;
+	public int getMaxHeight() {
+		return maxHeight;
 	}
 
 	public int[] getColor() {
@@ -91,7 +90,7 @@ public class Tile {
 			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
 		}
 
-		height = 4;
+		maxHeight = 4;
 		phase = 0;
 		blockType = "I";
 		numPhases = 2;
@@ -109,7 +108,7 @@ public class Tile {
 			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
 		}
 
-		height = 3;
+		maxHeight = 3;
 		phase = 0;
 		blockType = "J";
 		numPhases = 4;
@@ -127,7 +126,7 @@ public class Tile {
 			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
 		}
 
-		height = 3;
+		maxHeight = 3;
 		phase = 0;
 		numPhases = 4;
 		blockType = "L";
@@ -145,8 +144,8 @@ public class Tile {
 			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
 		}
 
-		height = 2;
 		numPhases = 1;
+		maxHeight = 2;
 		blockType = "O";
 	}
 
@@ -162,7 +161,7 @@ public class Tile {
 			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
 		}
 
-		height = 3;
+		maxHeight = 3;
 		numPhases = 2;
 		blockType = "S";
 	}
@@ -179,8 +178,8 @@ public class Tile {
 			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
 		}
 
-		height = 3;
 		numPhases = 4;
+		maxHeight = 3;
 		blockType = "T";
 	}
 
@@ -196,8 +195,8 @@ public class Tile {
 			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
 		}
 
-		height = 3;
 		numPhases = 2;
+		maxHeight = 3;
 		blockType = "Z";
 	}
 

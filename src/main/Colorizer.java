@@ -102,6 +102,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnIBlock() {
+		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setIBlock(true);
 		int[] color = (new int[] { 102, 116, 248});
@@ -110,6 +113,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnJBlock() {
+		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setJBlock(true);
 		int[] color = new int[] { 47, 0, 252 };
@@ -118,6 +124,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnSBlock() {
+		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setSBlock(true);
 		int[] color = new int[] { 0, 254, 55 };
@@ -126,6 +135,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnOBlock() {
+		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setOBlock(true);
 		int[] color = new int[] { 212, 243, 48 };
@@ -134,6 +146,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnTBlock() {
+		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setTBlock(true);
 		int[] color = new int[] { 153, 51, 254 }; // 40 10 62
@@ -142,6 +157,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnZBlock() {
+		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setZBlock(true);
 		int[] color = new int[] { 254, 0, 0 };
@@ -150,6 +168,9 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnLBlock() {
+		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
+			r.GAME_OVER = false;
+		}
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setLBlock(true);
 		int[] color = new int[] { 254, 165, 0 };

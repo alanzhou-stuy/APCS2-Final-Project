@@ -25,7 +25,7 @@ public class Main extends PApplet {
 
 	private static int SPEED = 5;
 	private static int FRAMERATE = 60;
-	private static int CONTROL_RESPONSIVENESS = 3;
+	private static int CONTROL_RESPONSIVENESS = 4;
 	private static int COMPUTER_PLAY_SPEED = 3;
 	private static int DIFFICULTY, VARIETY;
 	private static boolean COMPUTER_PLAYS = true;
@@ -65,7 +65,7 @@ public class Main extends PApplet {
 
 		analyzer = new GridAnalyzer(grid);
 	}
-
+	
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		rule.setSpeed(SPEED);

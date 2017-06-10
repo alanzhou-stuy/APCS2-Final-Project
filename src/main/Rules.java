@@ -46,14 +46,27 @@ public class Rules extends PApplet {
 		FRAMERATE = framerate;
 	}
 
+	/*public void gameOver() {
+		if (!GAME_OVER) {
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < g.numCols; j++) {
+					if (g.grid[i][j].color[0] != 255 && !g.grid[i][j].partOfCurrentBlock)  {
+						GAME_OVER = true;
+
+					}
+				}
+			}
+		}
+	}*/
+
 	public void setAnalyzer(GridAnalyzer analyzer) {
 		this.analyzer = analyzer;
 	}
 
 	public void run() {
 		// Time determined by polynomial regression
-		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35)
-				* (FRAMERATE / 60.0)) + 1;
+		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69
+				* Math.pow(SPEED, 2) - 7.85 * SPEED + 35) * (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
 			if ((hitBottom() || hitBlock()) && !GAME_OVER) {
@@ -165,17 +178,15 @@ public class Rules extends PApplet {
 		}
 	}
 
-	private boolean hitBlock() {
-		for (Square s : current.getSquares()) {
-			Square next = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
-
-			if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
+	/*
+	 * private boolean hitBlock() { for (Square s : current.getSquares()) {
+	 * Square next = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
+	 * 
+	 * if (Colorizer.isColored(next) && !partOfCurrent(next, current)) { return
+	 * true; } }
+	 * 
+	 * return false; }
+	 */
 
 	private boolean hitBlockSide(boolean left) {
 		for (Square s : current.getSquares()) {
@@ -200,12 +211,14 @@ public class Rules extends PApplet {
 		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
 
 		for (int[] coord : current.getRespectiveCoords()) {
-			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, coord));
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise,
+					coord));
 		}
 
 		for (int[] coord : respectiveCoordsSample) {
 			if (isInBounds(current.pivotY + coord[0], current.pivotX + coord[1])) {
-				Square next = g.getSquare(current.pivotY + coord[0], current.pivotX + coord[1]);
+				Square next = g.getSquare(current.pivotY + coord[0],
+						current.pivotX + coord[1]);
 
 				if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
 					return true;
@@ -222,11 +235,13 @@ public class Rules extends PApplet {
 		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
 
 		for (int[] coord : current.getRespectiveCoords()) {
-			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, coord));
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise,
+					coord));
 		}
 
 		for (int[] coord : respectiveCoordsSample) {
-			if (!isInBounds(current.pivotY + coord[0], current.pivotX + coord[1])) {
+			if (!isInBounds(current.pivotY + coord[0], current.pivotX
+					+ coord[1])) {
 				return true;
 			}
 		}
@@ -311,6 +326,27 @@ public class Rules extends PApplet {
 		return ans;
 	}
 
+	public boolean hitBlock() {
+		for (Square s : current.getSquares()) {
+			boolean notPartOfCurrent = true;
+
+			Square bottomSquare = g.getSquare(s.getRowIndex() + 1,
+					s.getColIndex());
+
+			for (Square square : current.getSquares()) {
+				if (bottomSquare.equals(square)) {
+					notPartOfCurrent = false;
+				}
+			}
+
+			if (notPartOfCurrent && Colorizer.isColored(bottomSquare)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public Tile fullDrop() {
 		while (!hitBottom() && !hitBlock()) {
 			current = colorizer.drop(current, 1);
@@ -325,7 +361,8 @@ public class Rules extends PApplet {
 		int lowestY = g.getSquare(g.numRows - 1, 0).getYCor();
 		for (Square s : current.getSquares()) {
 			// need to change
-			if (s.getXCor() <= lowestX || s.getYCor() > lowestY || s.getXCor() > highestX) {
+			if (s.getXCor() <= lowestX || s.getYCor() > lowestY
+					|| s.getXCor() > highestX) {
 				return true;
 			}
 		}
@@ -367,7 +404,8 @@ public class Rules extends PApplet {
 		for (int r = g.getNumRows() - 1; r >= 0; r--) {
 			counter = g.getNumCols();
 			for (int c = 0; c < g.getNumCols(); c++) {
-				if (!(g.grid[r][c].color[0] == 255 && g.grid[r][c].color[1] == 255 && g.grid[r][c].color[2] == 255)) {
+				if (!(g.grid[r][c].color[0] == 255
+						&& g.grid[r][c].color[1] == 255 && g.grid[r][c].color[2] == 255)) {
 					counter--;
 				}
 			}

@@ -216,6 +216,16 @@ public class GridAnalyzer {
 
 		return closestDiff;
 	}
+	
+	public boolean twoConsecutive(int row){
+		for (int c = 0; c < g.getNumCols() - 1; c++) {
+			if (g.grid[c][row].color[0] == g.grid[c + 1][row].color[0]
+					&& g.grid[c][row].color[0] == 255) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/*
 	 * Returns relative strength or capability of a tile based on current grid
