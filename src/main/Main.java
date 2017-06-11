@@ -99,14 +99,8 @@ public class Main extends PApplet {
 			}
 
 			start.setCaptionLabel("RESET");
-			score.setText("SCORE: " + rule.SCORE);
+			score.setText("SCORE: " + Rules.SCORE);
 		} else if (start.getBooleanValue() == true && rule.GAME_OVER == false && COMPUTER_PLAYS == true) {
-			int[] possible = analyzer.getDirections(analyzer.returnBestPosition());
-
-			for (int move : possible) {
-				rule.registerKeyPress(move);
-			}
-
 			rule.run();
 
 			keyPressed = false;

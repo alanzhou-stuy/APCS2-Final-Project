@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Analyzes the grid to check for the best and worst tiles that will fit.
@@ -55,7 +56,7 @@ public class GridAnalyzer {
 	public Square getLowestUnfilledSquareInColumn(int col) {
 		int lowestRowIndex = rule.getCurrent().getPivotY() + getColUnfilled(col);
 
-		if (rule.isInBounds(lowestRowIndex, col)) {
+		if (Rules.isInBounds(lowestRowIndex, col, g)) {
 			return g.getSquare(rule.getCurrent().getPivotY() + getColUnfilled(col), col);
 		} else {
 			return g.getSquare(g.getNumRows() - 1, col);
@@ -77,10 +78,10 @@ public class GridAnalyzer {
 
 		// make this instead getTopMostColoredRow()???
 		for (int r = startRow; r < g.getNumRows(); r++) {
-			if (rule.isInBounds(r, col) && Colorizer.isColored(g.getSquare(r, col))
+			if (Rules.isInBounds(r, col, g) && Colorizer.isColored(g.getSquare(r, col))
 					&& !Rules.partOfCurrent(g.getSquare(r, col), rule.getCurrent())) {
 				break;
-			} else if (rule.isInBounds(r, col)) {
+			} else if (Rules.isInBounds(r, col, g)) {
 				numUnfilled++;
 			}
 		}
@@ -91,7 +92,7 @@ public class GridAnalyzer {
 	/*
 	 * Returns an array containing # of squares unfilled for each column
 	 */
-	public int[] getColInformation() {
+	public int[] getColInformation(Grid g) {
 		int[] colInfo = new int[g.getNumCols()];
 
 		for (int c = 0; c < g.getNumCols(); c++) {
@@ -101,11 +102,11 @@ public class GridAnalyzer {
 		return colInfo;
 	}
 
-	public int[] getRowInformation() {
-		int[] rowInfo = new int[g.getNumRows() - getTopMostColoredRow()];
+	public int[] getRowInformation(Grid g) {
+		int[] rowInfo = new int[g.getNumRows()];
 
-		int numFilled = 0;
-		for (int r = getTopMostColoredRow(); r < g.getNumRows(); r++) {
+		for (int r = 0; r < g.getNumRows(); r++) {
+			int numFilled = 0;
 			for (int c = 0; c < g.getNumCols(); c++) {
 				if (Colorizer.isColored(g.getSquare(r, c))) {
 					numFilled++;
@@ -118,7 +119,7 @@ public class GridAnalyzer {
 	}
 
 	public void DEBUG() {
-		for (int i : getColInformation()) {
+		for (int i : getColInformation(g)) {
 			System.out.print(i + " ");
 		}
 		System.out.println();
@@ -129,13 +130,35 @@ public class GridAnalyzer {
 		int count = 0;
 
 		for (int[] coord : t.getRespectiveCoords()) {
-			if (rule.isInBounds(row + coord[0], col + coord[1])
+			if (Rules.isInBounds(row + coord[0], col + coord[1], g)
 					&& !Colorizer.isColored(g.getSquare(row + coord[0], col + coord[1]))) {
 				count++;
 			}
 		}
 
 		return count;
+	}
+
+	/* Returns HEIGHT up topmost colored in column */
+	public int getHeightCol(Grid aggregate, int c, Tile current) {
+		if (getTopMostColoredSquare(aggregate, c, current) == -1) {
+			return 0;
+		} else {
+			return aggregate.getNumRows() - getTopMostColoredSquare(aggregate, c, current);
+		}
+	}
+
+	public int getTopMostColoredSquare(Grid aggregate, int c, Tile current) {
+		int first = -1;
+
+		for (int r = 0; r < aggregate.getNumRows(); r++) {
+			if (Colorizer.isColored(aggregate.getSquare(r, c)) && !Rules.partOfCurrent(g.getSquare(r, c), current)) {
+				first = r;
+				break;
+			}
+		}
+
+		return first;
 	}
 
 	// returns an array containing horizontal key movements to get tile into
@@ -145,7 +168,7 @@ public class GridAnalyzer {
 		 * KeyCodes left - 37 up - 38 right - 39 down - 40
 		 */
 
-		int diff = getClosestDifference(rule.getCurrent().getPivotX(), getIndices(getColInformation(), true));
+		int diff = getClosestDifference(rule.getCurrent().getPivotX(), getIndices(getColInformation(g), true));
 
 		System.out.println("DIFF: " + diff);
 		int[] movement = new int[Math.abs(diff)];
@@ -168,9 +191,13 @@ public class GridAnalyzer {
 	 */
 	public int[] getDirections(int[] pos) {
 		int diff = rule.getCurrent().getPivotX() - pos[1];
+		System.out.println("Horizontal Move: " + diff);
+		System.out.println("Num rotations: " + pos[2]);
 
-		int[] directions = new int[diff + pos[2]];
+		int[] directions = new int[Math.abs(diff) + pos[2]];
 
+		// 0 -> (diff-1)
+		// (diff) -> end-1
 		if (Math.abs(diff) != diff) {
 			for (int i = 0; i < directions.length - pos[2]; i++) {
 				directions[i] = 39;
@@ -181,8 +208,10 @@ public class GridAnalyzer {
 			}
 		}
 
-		for (int i = pos[2]; i >= 0; i--) {
-			directions[directions.length-1-i] = 38;
+		if (directions.length != 0) {
+			for (int i = 0; i < pos[2]; i++) {
+				directions[Math.abs(diff) + i] = 38;
+			}
 		}
 
 		return directions;
@@ -199,48 +228,192 @@ public class GridAnalyzer {
 		ArrayList<Candidate> candidates = new ArrayList<Candidate>();
 		int[] pos = new int[3]; // first element is row, second is col,
 								// third is # rotations
-		int toPass = rule.getCurrent().getSquares().size();
-
+		int numTimes = 0;
 		/*
 		 * Go through columns and start from lowest uncolored square up,
 		 * checking for requirements
 		 */
-		int top = getTopMostColoredRow();
 
 		for (int c = 0; c < g.getNumCols(); c++) {
-			for (int r = getTopMostColoredRow() + getColUnfilled(c) - 1; r >= getTopMostColoredRow(); r--) {
-				// check to see if fit
+			for (int r = g.getNumRows() - 1; r >= 0; r--) {
+
 				Tile t = rule.getCurrent();
 
-				for (int i = 0; i < rule.getCurrent().getNumPhases(); i++) {
-					if (getFit(rule.getCurrent(), r, c) == rule.getCurrent().getSquares().size()) {
+				/* Go through rotations */
+				for (int i = 0; i < t.getNumOfPhases(); i++) {
 
-						candidates.add(new Candidate(rule.getCurrent(), i, rule.getCurrent().getPivotX(),
-								rule.getCurrent().getPivotY()));
+					if (!Rules.rotateHitSides(t, true, i, g) && !Rules.rotateHitBlock(t, true, i, g)) {
 
-						// if tile touches wall += 6.5
-						// if tile touches another block += 4
-						// if tile completes row += 1.6
-						// if tile touches floor += 0.7
+						if (getFit(t, r, c) == t.getSquares().size() && tileInDirectLineOfSight(t, r, c)) {
+							t = Colorizer.rotate(true, t, i);
+							numTimes++;
 
-						// if tile adds height -= 3.8 (depends)
-						// if tile creates hole -= 2.3
-						// if tile blockades -= 0.6
-						//
+							System.out.println("HAPPEND!");
+
+							int strength = 0;
+
+							Candidate cand = new Candidate(t, i, r, c, strength);
+
+							cand.resultingLC = getCompleteRows(t, r, c);
+							cand.resultingAH = getAggregateHeight(t, r, c);
+							cand.resultingH = numHoles(t, r, c);
+							cand.resultingB = getBumpiness(t, r, c);
+
+							cand.calculateStrength();
+							candidates.add(cand);
+							t = rule.getCurrent();
+						}
 					}
+				}
 
-					//if(isInBounds(Colorizer.rotate(true, t, 1).get
-					//t = Colorizer.rotate(true, t, 1);
+			}
+		}
+
+		Collections.sort(candidates);
+
+		System.out.println("Num Candidates: " + numTimes);
+		System.out.println("Strongest: " + candidates.get(0).strength);
+		System.out.println("Strongest AH: " + candidates.get(0).resultingAH);
+		System.out.println("Strongest H: " + candidates.get(0).resultingH);
+		System.out.println("Strongest B: " + candidates.get(0).resultingB);
+		System.out.println("Strongest LC: " + candidates.get(0).resultingLC);
+
+		return new int[] { candidates.get(0).pivotYIndex, candidates.get(0).pivotXIndex,
+				candidates.get(0).numRotations };
+
+	}
+
+	public Grid implant(Tile t, Grid orig, int row, int col) {
+		Grid copy = new Grid(orig.getNumRows(), orig.getNumCols());
+
+		for (int r = 0; r < orig.getNumRows(); r++) {
+			for (int c = 0; c < orig.getNumCols(); c++) {
+				Square origSquare = g.getSquare(r, c);
+				if (!Rules.partOfCurrent(origSquare, rule.getCurrent())) {
+					copy.grid[r][c] = new Square(r, c, origSquare.color);
+				} else {
+					copy.grid[r][c] = new Square(r, c, new int[] { 255, 255, 255 });
 				}
 			}
 		}
 
-		return new int[] { candidates.get(0).pivotYIndex, candidates.get(0).pivotXIndex,
-				candidates.get(0).numRotations };
+		for (int[] coord : t.getRespectiveCoords()) {
+			if (Rules.isInBounds(row + coord[0], col + coord[1], copy)) {
+				copy.grid[row + coord[0]][col + coord[1]].setColor(t.getColor());
+			}
+		}
+
+		return copy;
 	}
 
-	public boolean touchesWall(Tile t) {
+	/*
+	 * Returns true if there is no square above which is colored
+	 */
+	public boolean inDirectLineOfSight(Square s) {
+		boolean direct = true;
+		for (int r = s.getRowIndex() - 1; r >= 0; r--) {
+			if (Colorizer.isColored(g.getSquare(r, s.getColIndex()))) {
+				direct = false;
+			}
+		}
+		return direct;
+	}
+
+	public boolean tileInDirectLineOfSight(Tile t, int r, int c) {
+		for (int[] coord : t.getRespectiveCoords()) {
+			if (!inDirectLineOfSight(g.getSquare(r + coord[0], c + coord[1]))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/*
+	 * Returns row index of topmost square of tile
+	 */
+	public int getTopHeight(Tile t, int r, int c) {
+		int topHeight = r;
+
+		for (int[] coord : t.getRespectiveCoords()) {
+			if (r + coord[1] < topHeight) {
+				topHeight = r + coord[1];
+			}
+		}
+
+		return topHeight;
+	}
+
+	public boolean touchesWall(Tile t, int r, int c) {
+		for (int[] coord : t.getRespectiveCoords()) {
+			if (c + coord[1] == 0 || c + coord[1] == g.getNumCols()) {
+				return true;
+			}
+		}
 		return false;
+	}
+
+	/* Returns sum of heights in each column with tile implanted */
+	public int getAggregateHeight(Tile t, int row, int col) {
+		int height = 0;
+		Grid copy = implant(t, g, row, col);
+
+		for (int c = 0; c < copy.getNumCols(); c++) {
+			height += getHeightCol(copy, c, t);
+		}
+
+		return height;
+	}
+
+	public int getBumpiness(Tile t, int row, int col) {
+		int bumpiness = 0;
+		Grid copy = implant(t, g, row, col);
+
+		for (int c = 0; c < copy.getNumCols() - 2; c++) {
+			bumpiness += Math.abs(getHeightCol(copy, c, t) - getHeightCol(copy, c + 1, t));
+		}
+
+		return bumpiness;
+	}
+
+	public int getCompleteRows(Tile t, int row, int col) {
+		int complete = 0;
+		Grid copy = implant(t, g, row, col);
+
+		for (int i : getRowInformation(copy)) {
+			if (i == copy.getNumCols()) {
+				complete++;
+			}
+		}
+
+		if (complete != 0) {
+			System.out.println(complete + " complete rows!!!");
+			System.out.println("col: " + col);
+		}
+
+		return complete;
+	}
+
+	public int numHoles(Tile t, int row, int col) {
+		Grid copy = implant(t, g, row, col);
+		int holes = 0;
+
+		for (int c = 0; c < copy.getNumCols(); c++) {
+			for (int r = copy.getNumRows() - 1; r >= 0; r--) {
+				if (!Colorizer.isColored(copy.getSquare(r, c)) && coloredSquareAbove(copy, r, c, t)) {
+					holes++;
+				}
+			}
+		}
+
+		return holes;
+	}
+
+	public boolean coloredSquareAbove(Grid agg, int row, int col, Tile current) {
+		if (getTopMostColoredSquare(agg, col, current) == -1) {
+			return false;
+		} else {
+			return row > getTopMostColoredSquare(agg, col, current);
+		}
 	}
 
 	/*

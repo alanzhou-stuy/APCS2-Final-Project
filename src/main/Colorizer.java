@@ -227,7 +227,7 @@ public class Colorizer extends PApplet implements Displayable {
 
 			for (int i = 0; i < numSquares; i++) {
 				int[] coord = t.respectiveCoords.get(i);
-				t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, coord));
+				t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, 1, coord));
 			}
 
 			while (numSquares-- > 0) {

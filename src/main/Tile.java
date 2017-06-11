@@ -231,10 +231,6 @@ public class Tile {
 	public int getPivotY() {
 		return pivotY;
 	}
-	
-	public int getNumPhases(){
-		return numPhases;
-	}
 
 	public ArrayList<int[]> getRespectiveCoords() {
 		return respectiveCoords;
@@ -260,11 +256,15 @@ public class Tile {
 		return row < g.getNumRows() && row >= 0 && col < g.getNumCols() && col >= 0;
 	}
 
-	public static int[] returnTransformedCoords(boolean clockwise, int[] coords) {
+	public static int[] returnTransformedCoords(boolean clockwise, int numTimes, int[] coords) {
+		if(numTimes == 0){
+			return coords;
+		}
+		
 		if (!clockwise) {
-			return new int[] { coords[1], -1 * coords[0] };
+			return returnTransformedCoords(clockwise, numTimes-1, new int[] { coords[1], -1 * coords[0] });
 		} else {
-			return new int[] { -1 * coords[1], coords[0] };
+			return returnTransformedCoords(clockwise, numTimes-1, new int[] { -1 * coords[1], coords[0] });
 		}
 	}
 }
