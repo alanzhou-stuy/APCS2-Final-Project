@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Tile {
 	public ArrayList<Square> squares;
 	public ArrayList<int[]> respectiveCoords;
-	private Grid g;
+	public Grid g;
 	public int pivotX, pivotY;
 	private String blockType;
 	public int[] color;
@@ -24,6 +24,31 @@ public class Tile {
 		this.g = g;
 		this.pivotX = pivotX;
 		this.pivotY = pivotY;
+	}
+
+	public Tile(Grid g, Tile t, int pivotYin, int pivotXin) {
+		this();
+		this.g = g;
+		this.pivotY = pivotYin;
+		this.pivotX = pivotXin;	
+		
+		this.respectiveCoords = t.respectiveCoords;
+		
+		/*
+		for(int[] coord : t.respectiveCoords){
+			respectiveCoords.add(coord);
+		}
+		*/
+		
+		this.phase = t.phase;
+		this.blockType = t.blockType;
+		this.color = t.color;
+		this.numPhases = t.numPhases;
+		this.maxHeight = t.maxHeight;
+		
+		for (int[] coord : respectiveCoords) {
+			squares.add(g.getSquare(pivotYin + coord[0], pivotXin + coord[1]));
+		}
 	}
 
 	public void intializeCurrentBlock() {
@@ -52,7 +77,7 @@ public class Tile {
 		return squares;
 	}
 
-	public void setBlock(String s, boolean initiateCoords) {
+	public void setBlock(String s, boolean initiateCoords){
 		switch (s) {
 		case "I":
 			setIBlock(initiateCoords);
@@ -257,14 +282,14 @@ public class Tile {
 	}
 
 	public static int[] returnTransformedCoords(boolean clockwise, int numTimes, int[] coords) {
-		if(numTimes == 0){
+		if (numTimes == 0) {
 			return coords;
 		}
-		
+
 		if (!clockwise) {
-			return returnTransformedCoords(clockwise, numTimes-1, new int[] { coords[1], -1 * coords[0] });
+			return returnTransformedCoords(clockwise, numTimes - 1, new int[] { coords[1], -1 * coords[0] });
 		} else {
-			return returnTransformedCoords(clockwise, numTimes-1, new int[] { -1 * coords[1], coords[0] });
+			return returnTransformedCoords(clockwise, numTimes - 1, new int[] { -1 * coords[1], coords[0] });
 		}
 	}
 }

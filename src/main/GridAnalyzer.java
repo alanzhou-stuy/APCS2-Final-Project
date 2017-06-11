@@ -226,6 +226,7 @@ public class GridAnalyzer {
 	 */
 	public int[] returnBestPosition() {
 		ArrayList<Candidate> candidates = new ArrayList<Candidate>();
+
 		int[] pos = new int[3]; // first element is row, second is col,
 								// third is # rotations
 		int numTimes = 0;
@@ -234,39 +235,77 @@ public class GridAnalyzer {
 		 * checking for requirements
 		 */
 
+		// Tile curr = rule.getCurrent();
+
 		for (int c = 0; c < g.getNumCols(); c++) {
-			for (int r = g.getNumRows() - 1; r >= 0; r--) {
+			boolean cont = true;
 
-				Tile t = rule.getCurrent();
+			for (int r = g.getNumRows() - 1; r >= 0 && cont; r--) {
 
-				/* Go through rotations */
-				for (int i = 0; i < t.getNumOfPhases(); i++) {
+				ArrayList<Tile> rotes = new ArrayList<Tile>();
 
-					if (!Rules.rotateHitSides(t, true, i, g) && !Rules.rotateHitBlock(t, true, i, g)) {
+				for (int i = 0; i < rule.getCurrent().getNumOfPhases(); i++) {
 
-						if (getFit(t, r, c) == t.getSquares().size() && tileInDirectLineOfSight(t, r, c)) {
-							t = Colorizer.rotate(true, t, i);
-							numTimes++;
+					try {
+						Tile t = new Tile(g, rule.getCurrent(), r, c);
 
-							System.out.println("HAPPEND!");
-
-							int strength = 0;
-
-							Candidate cand = new Candidate(t, i, r, c, strength);
-
-							cand.resultingLC = getCompleteRows(t, r, c);
-							cand.resultingAH = getAggregateHeight(t, r, c);
-							cand.resultingH = numHoles(t, r, c);
-							cand.resultingB = getBumpiness(t, r, c);
-
-							cand.calculateStrength();
-							candidates.add(cand);
-							t = rule.getCurrent();
+						if (Rules.tileInBounds(t, r, c, g) && !Rules.rotateHitSides(t, true, i, g, r, c)
+								&& !Rules.rotateHitBlock(t, true, i, g, r, c)) {
+							System.out.println("Rotate!!!!!");
+							rotes.add(Colorizer.rotate(true, t, i));
 						}
+
+						t = rule.getCurrent();
+					} catch (ArrayIndexOutOfBoundsException e) {
+
 					}
 				}
 
+				for (Tile rote : rotes) {
+					try {
+						if (getFit(rote, r, c) == rote.getSquares().size() && tileInDirectLineOfSight(rote, r, c)) {
+
+							int strength = 0;
+
+							Candidate cand = new Candidate(rote, 0, r, c, strength);
+
+							cand.resultingLC = getCompleteRows(rote, r, c);
+							cand.resultingAH = getAggregateHeight(rote, r, c);
+							cand.resultingH = numHoles(rote, r, c);
+							cand.resultingB = getBumpiness(rote, r, c);
+
+							cand.calculateStrength();
+							candidates.add(cand);
+							rote = rule.getCurrent();
+							cont = false;
+						}
+					} catch (IndexOutOfBoundsException e) {
+
+					}
+				}
 			}
+
+			// for (int i = 0; i < t.getNumOfPhases(); i++) {
+
+			/*
+			 * if (Rules.tileInBounds(t, r, c, g) && !Rules.rotateHitSides(t,
+			 * true, 0, g, r, c) && !Rules.rotateHitBlock(t, true, 0, g, r, c))
+			 * { t = Colorizer.rotate(true, t, 0);
+			 * 
+			 * if (getFit(t, r, c) == t.getSquares().size() &&
+			 * tileInDirectLineOfSight(t, r, c)) { numTimes++; int strength = 0;
+			 * 
+			 * Candidate cand = new Candidate(t, 0, r, c, strength);
+			 * 
+			 * cand.resultingLC = getCompleteRows(t, r, c); cand.resultingAH =
+			 * getAggregateHeight(t, r, c); cand.resultingH = numHoles(t, r, c);
+			 * cand.resultingB = getBumpiness(t, r, c);
+			 * 
+			 * cand.calculateStrength(); candidates.add(cand); t =
+			 * rule.getCurrent(); cont = false; }
+			 * 
+			 * // } }
+			 */
 		}
 
 		Collections.sort(candidates);

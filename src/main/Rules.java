@@ -58,7 +58,7 @@ public class Rules extends PApplet {
 		this.analyzer = analyzer;
 	}
 
-	public void run() {
+	public void run(boolean computer) {
 		// Time determined by polynomial regression
 		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35)
 				* (FRAMERATE / 60.0)) + 1;
@@ -71,10 +71,12 @@ public class Rules extends PApplet {
 
 				current = colorizer.spawnBlock();
 
-				int[] possible = analyzer.getDirections(analyzer.returnBestPosition());
+				if (computer) {
+					int[] possible = analyzer.getDirections(analyzer.returnBestPosition());
 
-				for (int move : possible) {
-					registerKeyPress(move);
+					for (int move : possible) {
+						registerKeyPress(move);
+					}
 				}
 
 				numAllowedShifted = 0;
@@ -207,7 +209,7 @@ public class Rules extends PApplet {
 	public static boolean rotateHitBlock(Tile current, boolean clockwise, Grid g) {
 		return rotateHitBlock(current, clockwise, 1, g);
 	}
-	
+
 	public static boolean rotateHitBlock(Tile current, boolean clockwise, int numTimes, Grid g) {
 		/* Checks to see if rotating block collides with a block */
 
@@ -230,11 +232,33 @@ public class Rules extends PApplet {
 		return false;
 	}
 
+	public static boolean rotateHitBlock(Tile current, boolean clockwise, int numTimes, Grid g, int r, int c) {
+		/* Checks to see if rotating block collides with a block */
+
+		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
+
+		for (int[] coord : current.getRespectiveCoords()) {
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, numTimes, coord));
+		}
+
+		for (int[] coord : respectiveCoordsSample) {
+			if (isInBounds(r + coord[0], c + coord[1], g)) {
+				Square next = g.getSquare(r + coord[0], c + coord[1]);
+
+				if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	/* Checks to see if rotating block collides with a side wall */
 	public static boolean rotateHitSides(Tile current, boolean clockwise, Grid g) {
 		return rotateHitSides(current, clockwise, 1, g);
 	}
-	
+
 	public static boolean rotateHitSides(Tile current, boolean clockwise, int numTimes, Grid g) {
 		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
 
@@ -244,6 +268,22 @@ public class Rules extends PApplet {
 
 		for (int[] coord : respectiveCoordsSample) {
 			if (!isInBounds(current.pivotY + coord[0], current.pivotX + coord[1], g)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean rotateHitSides(Tile current, boolean clockwise, int numTimes, Grid g, int r, int c) {
+		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
+
+		for (int[] coord : current.getRespectiveCoords()) {
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, numTimes, coord));
+		}
+
+		for (int[] coord : respectiveCoordsSample) {
+			if (!isInBounds(r + coord[0], c + coord[1], g)) {
 				return true;
 			}
 		}
@@ -262,6 +302,21 @@ public class Rules extends PApplet {
 
 	public static boolean isInBounds(int row, int col, Grid g) {
 		return row < g.getNumRows() && row >= 0 && col < g.getNumCols() && col >= 0;
+	}
+
+	public static boolean tileInBounds(Tile t, int row, int col, Grid g) {
+		boolean inBounds = true;
+		for (int[] coords : t.getRespectiveCoords()) {
+			if (coords[0] + row < 0 || coords[0] + row >= g.getNumRows()) {
+				inBounds = false;
+			}
+
+			if (coords[1] + col < 0 || coords[1] + col >= g.getNumCols()) {
+				inBounds = false;
+			}
+		}
+
+		return inBounds;
 	}
 
 	public void setNumOfLines(int x) {

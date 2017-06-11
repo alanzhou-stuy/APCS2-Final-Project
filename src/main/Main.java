@@ -89,7 +89,7 @@ public class Main extends PApplet {
 		// currentTile = colorizer.rotate(false, currentTile, 1);
 
 		if (start.getBooleanValue() == true && rule.GAME_OVER == false && COMPUTER_PLAYS == false) {
-			rule.run();
+			rule.run(COMPUTER_PLAYS);
 			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
 				rule.registerKeyPress(keyCode);
 				keyPressed = false;
@@ -101,7 +101,7 @@ public class Main extends PApplet {
 			start.setCaptionLabel("RESET");
 			score.setText("SCORE: " + Rules.SCORE);
 		} else if (start.getBooleanValue() == true && rule.GAME_OVER == false && COMPUTER_PLAYS == true) {
-			rule.run();
+			rule.run(COMPUTER_PLAYS);
 
 			keyPressed = false;
 		}
