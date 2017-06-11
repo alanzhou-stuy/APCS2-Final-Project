@@ -11,6 +11,9 @@ public class GridAnalyzer {
 	private Rules rule;
 	private static boolean DYNAMIC = false;
 
+	private static double HEIGHT_PRIORITY = 0.5;
+	private static double FILL_ROW_PRIORITY = 0.5;
+
 	public GridAnalyzer(Grid g) {
 		this.g = g;
 	}
@@ -74,7 +77,8 @@ public class GridAnalyzer {
 
 		// make this instead getTopMostColoredRow()???
 		for (int r = startRow; r < g.getNumRows(); r++) {
-			if (rule.isInBounds(r, col) && Colorizer.isColored(g.getSquare(r, col))) {
+			if (rule.isInBounds(r, col) && Colorizer.isColored(g.getSquare(r, col))
+					&& !Rules.partOfCurrent(g.getSquare(r, col), rule.getCurrent())) {
 				break;
 			} else if (rule.isInBounds(r, col)) {
 				numUnfilled++;
@@ -95,6 +99,22 @@ public class GridAnalyzer {
 		}
 
 		return colInfo;
+	}
+
+	public int[] getRowInformation() {
+		int[] rowInfo = new int[g.getNumRows() - getTopMostColoredRow()];
+
+		int numFilled = 0;
+		for (int r = getTopMostColoredRow(); r < g.getNumRows(); r++) {
+			for (int c = 0; c < g.getNumCols(); c++) {
+				if (Colorizer.isColored(g.getSquare(r, c))) {
+					numFilled++;
+				}
+			}
+			rowInfo[r] = numFilled;
+		}
+
+		return rowInfo;
 	}
 
 	public void DEBUG() {
@@ -118,19 +138,19 @@ public class GridAnalyzer {
 		return count;
 	}
 
-	// returns an array containing key movements to get tile into best position
+	// returns an array containing horizontal key movements to get tile into
+	// best position
 	public int[] getMovement() {
 		/*
-		 * KeyCodes 37 - UP 38 - RIGHT 39 - DOWN 40 - LEFT
+		 * KeyCodes left - 37 up - 38 right - 39 down - 40
 		 */
 
 		int diff = getClosestDifference(rule.getCurrent().getPivotX(), getIndices(getColInformation(), true));
+
 		System.out.println("DIFF: " + diff);
 		int[] movement = new int[Math.abs(diff)];
 
 		if (Math.abs(diff) != diff) {
-			// it is negative
-
 			for (int i = 0; i < movement.length; i++) {
 				movement[i] = 39;
 			}
@@ -140,39 +160,87 @@ public class GridAnalyzer {
 			}
 		}
 
-		// For each orientation, see how well it fits
-		// getFit();
 		return movement;
+	}
+
+	/*
+	 * Returns keyboard movements to get to position provided
+	 */
+	public int[] getDirections(int[] pos) {
+		int diff = rule.getCurrent().getPivotX() - pos[1];
+
+		int[] directions = new int[diff + pos[2]];
+
+		if (Math.abs(diff) != diff) {
+			for (int i = 0; i < directions.length - pos[2]; i++) {
+				directions[i] = 39;
+			}
+		} else {
+			for (int i = 0; i < directions.length - pos[2]; i++) {
+				directions[i] = 37;
+			}
+		}
+
+		for (int i = pos[2]; i >= 0; i--) {
+			directions[directions.length-1-i] = 38;
+		}
+
+		return directions;
 	}
 
 	/*
 	 * Requirements for candidate squares:
 	 * 
-	 * Adds little to the height of the tiles Fills in suitable tiles around
-	 * Creates few holes (HARD) Maximize score (HARD!!!)
+	 * Is in bounds, and can reach position by dropping directly (without tricky
+	 * movements) Tries to minimize height (if possible) Tries to complete lines
+	 * (for higher score)
 	 */
 	public int[] returnBestPosition() {
+		ArrayList<Candidate> candidates = new ArrayList<Candidate>();
 		int[] pos = new int[3]; // first element is row, second is col,
 								// third is # rotations
 		int toPass = rule.getCurrent().getSquares().size();
 
-		// go through every orientation and every position possible
+		/*
+		 * Go through columns and start from lowest uncolored square up,
+		 * checking for requirements
+		 */
+		int top = getTopMostColoredRow();
 
-		for (int r = getTopMostColoredRow(); r < g.getNumRows(); r++) {
-			for (int c = 0; c < g.getNumCols(); c++) {
+		for (int c = 0; c < g.getNumCols(); c++) {
+			for (int r = getTopMostColoredRow() + getColUnfilled(c) - 1; r >= getTopMostColoredRow(); r--) {
+				// check to see if fit
 				Tile t = rule.getCurrent();
 
-				for (int j = 0; j < t.getNumPhases(); j++) {
-					if (getFit(rule.getCurrent(), r, c) > toPass) {
+				for (int i = 0; i < rule.getCurrent().getNumPhases(); i++) {
+					if (getFit(rule.getCurrent(), r, c) == rule.getCurrent().getSquares().size()) {
 
+						candidates.add(new Candidate(rule.getCurrent(), i, rule.getCurrent().getPivotX(),
+								rule.getCurrent().getPivotY()));
+
+						// if tile touches wall += 6.5
+						// if tile touches another block += 4
+						// if tile completes row += 1.6
+						// if tile touches floor += 0.7
+
+						// if tile adds height -= 3.8 (depends)
+						// if tile creates hole -= 2.3
+						// if tile blockades -= 0.6
+						//
 					}
 
-					t = Colorizer.rotate(true, t, 1);
+					//if(isInBounds(Colorizer.rotate(true, t, 1).get
+					//t = Colorizer.rotate(true, t, 1);
 				}
 			}
 		}
 
-		return pos;
+		return new int[] { candidates.get(0).pivotYIndex, candidates.get(0).pivotXIndex,
+				candidates.get(0).numRotations };
+	}
+
+	public boolean touchesWall(Tile t) {
+		return false;
 	}
 
 	/*
@@ -216,11 +284,10 @@ public class GridAnalyzer {
 
 		return closestDiff;
 	}
-	
-	public boolean twoConsecutive(int row){
+
+	public boolean twoConsecutive(int row) {
 		for (int c = 0; c < g.getNumCols() - 1; c++) {
-			if (g.grid[c][row].color[0] == g.grid[c + 1][row].color[0]
-					&& g.grid[c][row].color[0] == 255) {
+			if (g.grid[c][row].color[0] == g.grid[c + 1][row].color[0] && g.grid[c][row].color[0] == 255) {
 				return true;
 			}
 		}

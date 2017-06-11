@@ -229,9 +229,8 @@ public class Rules extends PApplet {
 		return false;
 	}
 
+	/* Checks to see if rotating block collides with a side wall */
 	private boolean rotateHitSides(boolean clockwise) {
-		/* Checks to see if rotating block collides with a side wall */
-
 		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
 
 		for (int[] coord : current.getRespectiveCoords()) {

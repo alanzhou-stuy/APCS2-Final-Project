@@ -65,8 +65,8 @@ public class Colorizer extends PApplet implements Displayable {
 
 		return null;
 	}
-	
-	public Tile smartSpawn(){
+
+	public Tile smartSpawn() {
 		return null;
 	}
 
@@ -102,18 +102,18 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnIBlock() {
-		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
+		if (g.grid[1][g.getNumCols() / 2 - 1].color[0] != 255) {
 			r.GAME_OVER = false;
 		}
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setIBlock(true);
-		int[] color = (new int[] { 102, 116, 248});
+		int[] color = (new int[] { 102, 116, 248 });
 		t.setColor(color);
 		return t;
 	}
 
 	public Tile spawnJBlock() {
-		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
+		if (g.grid[1][g.getNumCols() / 2 - 1].color[0] != 255) {
 			r.GAME_OVER = false;
 		}
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
@@ -124,7 +124,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnSBlock() {
-		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+		if (g.grid[0][g.getNumCols() / 2 - 1].color[0] != 255) {
 			r.GAME_OVER = false;
 		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
@@ -135,7 +135,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnOBlock() {
-		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+		if (g.grid[0][g.getNumCols() / 2 - 1].color[0] != 255) {
 			r.GAME_OVER = false;
 		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
@@ -146,7 +146,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnTBlock() {
-		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+		if (g.grid[0][g.getNumCols() / 2 - 1].color[0] != 255) {
 			r.GAME_OVER = false;
 		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
@@ -157,7 +157,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnZBlock() {
-		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
+		if (g.grid[0][g.getNumCols() / 2 - 1].color[0] != 255) {
 			r.GAME_OVER = false;
 		}
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
@@ -168,7 +168,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnLBlock() {
-		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
+		if (g.grid[1][g.getNumCols() / 2 - 1].color[0] != 255) {
 			r.GAME_OVER = false;
 		}
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
@@ -205,7 +205,7 @@ public class Colorizer extends PApplet implements Displayable {
 		t1.setColor(t.getColor());
 		return t1;
 	}
-	
+
 	/**
 	 * Rotates a tile either clockwise or counter clockwise. It utilizes the
 	 * respectiveCoords of a square, creates a coordinate transformation, and
@@ -227,8 +227,7 @@ public class Colorizer extends PApplet implements Displayable {
 
 			for (int i = 0; i < numSquares; i++) {
 				int[] coord = t.respectiveCoords.get(i);
-				t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise,
-						coord));
+				t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, coord));
 			}
 
 			while (numSquares-- > 0) {
@@ -262,8 +261,8 @@ public class Colorizer extends PApplet implements Displayable {
 
 		return t;
 	}
-	
-	public static boolean isColored(Square sq){
+
+	public static boolean isColored(Square sq) {
 		return !(sq.color[0] == 255 && sq.color[1] == 255 && sq.color[2] == 255);
 	}
 }

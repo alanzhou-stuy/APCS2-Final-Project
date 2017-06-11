@@ -65,7 +65,7 @@ public class Main extends PApplet {
 
 		analyzer = new GridAnalyzer(grid);
 	}
-	
+
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		rule.setSpeed(SPEED);
@@ -101,13 +101,13 @@ public class Main extends PApplet {
 			start.setCaptionLabel("RESET");
 			score.setText("SCORE: " + rule.SCORE);
 		} else if (start.getBooleanValue() == true && rule.GAME_OVER == false && COMPUTER_PLAYS == true) {
-			rule.run();
-
-			int[] possible = analyzer.getMovement();
+			int[] possible = analyzer.getDirections(analyzer.returnBestPosition());
 
 			for (int move : possible) {
 				rule.registerKeyPress(move);
 			}
+
+			rule.run();
 
 			keyPressed = false;
 		}
@@ -138,16 +138,12 @@ public class Main extends PApplet {
 				.setPosition(sliderSideMargin, sliderTopMargin + (sliderVertSpacing)).setValue(50)
 				.setNumberOfTickMarks(21);
 
-		varietySlider = gui.addSlider("VARIETY").setSize(sliderWidth, sliderHeight).setRange(0, 100)
-				.setPosition(sliderSideMargin, sliderTopMargin + (2 * sliderVertSpacing)).setValue(50)
-				.setNumberOfTickMarks(11);
-
 		numRowsSlider = gui.addSlider("numRows").setSize(sliderWidth, sliderHeight).setRange(5, 50)
-				.setPosition(sliderSideMargin, sliderTopMargin + (3 * sliderVertSpacing)).setValue(20)
+				.setPosition(sliderSideMargin, sliderTopMargin + (2 * sliderVertSpacing)).setValue(20)
 				.setNumberOfTickMarks(46);
 
 		numColsSlider = gui.addSlider("numCols").setSize(sliderWidth, sliderHeight).setRange(5, 50)
-				.setPosition(sliderSideMargin, sliderTopMargin + (4 * sliderVertSpacing)).setValue(10)
+				.setPosition(sliderSideMargin, sliderTopMargin + (3 * sliderVertSpacing)).setValue(10)
 				.setNumberOfTickMarks(46);
 
 		score = gui.addTextlabel("score").setText("SCORE: " + Rules.SCORE).setPosition(4 * width / 5, 50).setSize(200,
@@ -161,14 +157,13 @@ public class Main extends PApplet {
 				.setSize(200, 60);
 
 		start = gui.addButton("START").setValue(0).setPosition(4 * width / 5, 150).setSize(200, 60);
-		compStart = gui.addButton("COMPUTER").setValue(0).setPosition(7 * width / 10, 350).setSize(400, 60);
+		compStart = gui.addButton("COMPUTER").setValue(0).setPosition(3 * width / 4, 350).setSize(300, 60);
 
 		// Setting fonts
 		start.getCaptionLabel().setFont(largeFont);
 		compStart.getCaptionLabel().setFont(largeFont);
 		speedSlider.getCaptionLabel().setFont(textFont);
 		diffSlider.getCaptionLabel().setFont(textFont);
-		varietySlider.getCaptionLabel().setFont(textFont);
 		numRowsSlider.getCaptionLabel().setFont(textFont);
 		numColsSlider.getCaptionLabel().setFont(textFont);
 
