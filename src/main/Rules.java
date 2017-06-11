@@ -18,13 +18,16 @@ public class Rules extends PApplet {
 	private Tile saved;
 	private boolean savedTile;
 	private int numAllowedShifted;
-	private int level;
-	private int totalLinesCleared;
+	public int level;
+	public int totalLinesCleared;
 	public boolean GAME_OVER = false;
+	public int tempCountLines;
+	public int latestScore;
 
 	public Rules() {
 		TIMER = 0;
 		SCORE = 0;
+		level = 1;
 	}
 
 	public Rules(Colorizer colorizer, Tile current, Grid g) {
@@ -40,24 +43,20 @@ public class Rules extends PApplet {
 
 	public void setSpeed(int speed) {
 		SPEED = speed;
+		level = speed;
 	}
 
 	public void setFR(int framerate) {
 		FRAMERATE = framerate;
 	}
 
-	/*public void gameOver() {
-		if (!GAME_OVER) {
-			for (int i = 0; i < 3; i++) {
-				for (int j = 0; j < g.numCols; j++) {
-					if (g.grid[i][j].color[0] != 255 && !g.grid[i][j].partOfCurrentBlock)  {
-						GAME_OVER = true;
-
-					}
-				}
-			}
-		}
-	}*/
+	/*
+	 * public void gameOver() { if (!GAME_OVER) { for (int i = 0; i < 3; i++) {
+	 * for (int j = 0; j < g.numCols; j++) { if (g.grid[i][j].color[0] != 255 &&
+	 * !g.grid[i][j].partOfCurrentBlock) { GAME_OVER = true;
+	 * 
+	 * } } } } }
+	 */
 
 	public void setAnalyzer(GridAnalyzer analyzer) {
 		this.analyzer = analyzer;
@@ -69,20 +68,21 @@ public class Rules extends PApplet {
 				* Math.pow(SPEED, 2) - 7.85 * SPEED + 35) * (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
+			//System.out.println(GAME_OVER);
 			if ((hitBottom() || hitBlock()) && !GAME_OVER) {
 				if (clearLine()) {
 					updateScore();
 				}
-				current = colorizer.spawnIBlock();
+				current = colorizer.spawnBlock();
 				numAllowedShifted = 0;
 			} else if (!GAME_OVER) {
 				current = colorizer.drop(current, 1);
-				analyzer.DEBUG();
+				//analyzer.DEBUG();
+
 			} else {
 				System.out.println("GAME OVER!!!");
 			}
 		}
-
 		TIMER++;
 	}
 
@@ -120,35 +120,46 @@ public class Rules extends PApplet {
 	}
 
 	public void updateScore() {
-		levelUp();
 		int n = numOfLines;
 		if (n == 1) {
-			SCORE += 40 * (level + 1);
+			SCORE += 40 * (level);
 		} else if (n == 2) {
-			SCORE += 100 * (level + 1);
+			SCORE += 100 * (level);
 		} else if (n == 3) {
-			SCORE += 300 * (level + 1);
+			SCORE += 300 * (level);
 		} else {
-			SCORE += 1200 * (level + 1);
+			SCORE += 1200 * (level);
 		}
 		totalLinesCleared += numOfLines;
+		tempCountLines += numOfLines;
+		levelUp();
 		numOfLines = 0;
+		latestScore = SCORE;
 	}
 
 	public void levelUp() {
-		// System.out.println("Level: " + level);
-		// System.out.println("Total lines cleared: " + totalLinesCleared);
-		if (level == 0) {
-			if (totalLinesCleared == 4) {
-				// SPEED += 1;
+		//System.out.println("Level: " + level);
+		//System.out.println("Total lines cleared: " + totalLinesCleared);
+		//System.out.println("Temp clear lines: " + tempCountLines);
+		if (level == 10) {
+			return;
+		} 
+		else {
+			if (tempCountLines >= 4) {
+				SPEED += 1;
 				level += 1;
-			}
-		} else {
-			if (totalLinesCleared == level * 4) {
-				// SPEED += 1;
-				level += 1;
+				tempCountLines -= 4;
 			}
 		}
+	}
+	
+	public void setLevel(int x) {
+		level = x;
+		SPEED = x;
+	}
+	
+	public void setTotalLinesCleared(int lines) {
+		totalLinesCleared = lines;
 	}
 
 	public void registerKeyPress(int keyCode) {

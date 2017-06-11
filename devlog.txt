@@ -10,4 +10,6 @@
 
 06/06/17: Added full drop (space bar) and code for the input methods. - Alan
 
+06/11/17: Added levels, speeds updating with levels, restarting the game when you lose, and a high score tracker - Alan
+
 

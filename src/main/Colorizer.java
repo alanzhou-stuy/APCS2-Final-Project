@@ -16,6 +16,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public int tileSep = 1; // default is 1
 	public static int[] WHITE = { 255, 255, 255 };
 	public Rules r;
+	public boolean reset;
 
 	/**
 	 * @param grid
@@ -33,6 +34,7 @@ public class Colorizer extends PApplet implements Displayable {
 		numCols = g.getNumCols();
 		current = new Tile();
 		r = new Rules();
+		reset = false;
 	}
 
 	public void setTileSep(int tileSep) {
@@ -44,6 +46,11 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnBlock() {
+		checkForGameOver();
+		if (r.GAME_OVER) {
+			reset = true;
+			restart();
+		}
 		Random rand = new Random();
 		int x = rand.nextInt(7);
 		switch (x) {
@@ -68,6 +75,21 @@ public class Colorizer extends PApplet implements Displayable {
 	
 	public Tile smartSpawn(){
 		return null;
+	}
+	
+	public void restart() {
+		for (int i = 0; i < g.numRows; i++){
+			for (int j = 0; j < g.numCols; j++) {
+				g.grid[i][j].color[0] = 255; 
+				g.grid[i][j].color[1] = 255; 
+				g.grid[i][j].color[2] = 255; 
+			}
+		}
+		r.GAME_OVER = false;
+		r.setLevel(1);
+		r.setTotalLinesCleared(0);
+		r.SCORE = 0;
+		r.tempCountLines = 0;
 	}
 
 	@Override
@@ -101,10 +123,18 @@ public class Colorizer extends PApplet implements Displayable {
 		this.numCols = numCols;
 	}
 
-	public Tile spawnIBlock() {
-		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
-			r.GAME_OVER = false;
+	public void checkForGameOver() {
+		for (int i = 0;i < 3; i++) {
+			if (g.grid[i][g.getNumCols() / 2 -1].color[0] != 255 ||
+				g.grid[i][g.getNumCols() / 2].color[0] != 255 || 
+				g.grid[i][g.getNumCols() / 2 + 1].color[0] != 255 ) {
+				r.GAME_OVER = true;
+			}
 		}
+	}
+	
+	public Tile spawnIBlock() {
+		//checkForGameOver();
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setIBlock(true);
 		int[] color = (new int[] { 102, 116, 248});
@@ -113,9 +143,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnJBlock() {
-		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
-			r.GAME_OVER = false;
-		}
+		//checkForGameOver();
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setJBlock(true);
 		int[] color = new int[] { 47, 0, 252 };
@@ -124,9 +152,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnSBlock() {
-		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
-			r.GAME_OVER = false;
-		}
+		//checkForGameOver();
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setSBlock(true);
 		int[] color = new int[] { 0, 254, 55 };
@@ -135,9 +161,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnOBlock() {
-		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
-			r.GAME_OVER = false;
-		}
+		//checkForGameOver();
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setOBlock(true);
 		int[] color = new int[] { 212, 243, 48 };
@@ -146,9 +170,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnTBlock() {
-		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
-			r.GAME_OVER = false;
-		}
+		//checkForGameOver();
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setTBlock(true);
 		int[] color = new int[] { 153, 51, 254 }; // 40 10 62
@@ -157,9 +179,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnZBlock() {
-		if (g.grid[0][g.getNumCols() / 2 -1].color[0] != 255) {
-			r.GAME_OVER = false;
-		}
+		//checkForGameOver();
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setZBlock(true);
 		int[] color = new int[] { 254, 0, 0 };
@@ -168,9 +188,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnLBlock() {
-		if (g.grid[1][g.getNumCols() / 2 -1].color[0] != 255) {
-			r.GAME_OVER = false;
-		}
+		//checkForGameOver();
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setLBlock(true);
 		int[] color = new int[] { 254, 165, 0 };
