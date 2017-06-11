@@ -11,7 +11,7 @@ public class Tile {
 	public int[] color;
 	private int maxHeight;
 	private int phase;
-	private int numOfPhases;
+	private int numPhases;
 
 	public Tile() {
 		squares = new ArrayList<Square>();
@@ -25,9 +25,9 @@ public class Tile {
 		this.pivotX = pivotX;
 		this.pivotY = pivotY;
 	}
-	
+
 	public void intializeCurrentBlock() {
-		for (Square s: squares) {
+		for (Square s : squares) {
 			s.setPartOfCurrentBlock(true);
 			System.out.println("OK");
 		}
@@ -93,7 +93,7 @@ public class Tile {
 		maxHeight = 4;
 		phase = 0;
 		blockType = "I";
-		numOfPhases = 2;
+		numPhases = 2;
 	}
 
 	public void setJBlock(boolean initiateCoords) {
@@ -111,7 +111,7 @@ public class Tile {
 		maxHeight = 3;
 		phase = 0;
 		blockType = "J";
-		numOfPhases = 4;
+		numPhases = 4;
 	}
 
 	public void setLBlock(boolean initiateCoords) {
@@ -128,7 +128,7 @@ public class Tile {
 
 		maxHeight = 3;
 		phase = 0;
-		numOfPhases = 4;
+		numPhases = 4;
 		blockType = "L";
 	}
 
@@ -144,8 +144,8 @@ public class Tile {
 			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
 		}
 
+		numPhases = 1;
 		maxHeight = 2;
-		numOfPhases = 1;
 		blockType = "O";
 	}
 
@@ -162,7 +162,7 @@ public class Tile {
 		}
 
 		maxHeight = 3;
-		numOfPhases = 2;
+		numPhases = 2;
 		blockType = "S";
 	}
 
@@ -178,8 +178,8 @@ public class Tile {
 			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
 		}
 
+		numPhases = 4;
 		maxHeight = 3;
-		numOfPhases = 4;
 		blockType = "T";
 	}
 
@@ -195,18 +195,17 @@ public class Tile {
 			squares.add(g.getSquare(pivotY + coord[0], pivotX + coord[1]));
 		}
 
+		numPhases = 2;
 		maxHeight = 3;
-		numOfPhases = 2;
 		blockType = "Z";
 	}
 
 	public Square remove() {
-		//squares.get(0).partOfCurrentBlock = false;
 		return squares.remove(0);
 	}
 
 	public int getNumOfPhases() {
-		return numOfPhases;
+		return numPhases;
 	}
 
 	public int getPhase() {
@@ -232,6 +231,10 @@ public class Tile {
 	public int getPivotY() {
 		return pivotY;
 	}
+	
+	public int getNumPhases(){
+		return numPhases;
+	}
 
 	public ArrayList<int[]> getRespectiveCoords() {
 		return respectiveCoords;
@@ -251,6 +254,10 @@ public class Tile {
 
 	public void setRespectiveCoords(ArrayList<int[]> respectiveCoords) {
 		this.respectiveCoords = respectiveCoords;
+	}
+
+	private boolean isInBounds(int row, int col) {
+		return row < g.getNumRows() && row >= 0 && col < g.getNumCols() && col >= 0;
 	}
 
 	public static int[] returnTransformedCoords(boolean clockwise, int[] coords) {
