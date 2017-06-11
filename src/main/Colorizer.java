@@ -134,7 +134,6 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 	
 	public Tile spawnIBlock() {
-		//checkForGameOver();
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setIBlock(true);
 		int[] color = (new int[] { 102, 116, 248});
@@ -143,7 +142,6 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnJBlock() {
-		//checkForGameOver();
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setJBlock(true);
 		int[] color = new int[] { 47, 0, 252 };
@@ -152,7 +150,6 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnSBlock() {
-		//checkForGameOver();
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setSBlock(true);
 		int[] color = new int[] { 0, 254, 55 };
@@ -161,7 +158,6 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnOBlock() {
-		//checkForGameOver();
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setOBlock(true);
 		int[] color = new int[] { 212, 243, 48 };
@@ -170,16 +166,14 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnTBlock() {
-		//checkForGameOver();
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setTBlock(true);
-		int[] color = new int[] { 153, 51, 254 }; // 40 10 62
+		int[] color = new int[] { 153, 51, 254 }; 
 		t.setColor(color);
 		return t;
 	}
 
 	public Tile spawnZBlock() {
-		//checkForGameOver();
 		Tile t = new Tile(g, 0, g.getNumCols() / 2 - 1);
 		t.setZBlock(true);
 		int[] color = new int[] { 254, 0, 0 };
@@ -188,7 +182,6 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public Tile spawnLBlock() {
-		//checkForGameOver();
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setLBlock(true);
 		int[] color = new int[] { 254, 165, 0 };
