@@ -220,24 +220,22 @@ public class Colorizer extends PApplet implements Displayable {
 	 * @return the tile with the rotated coordinates in the grid
 	 */
 	public static Tile rotate(boolean clockwise, Tile t, int numTimes) {
-		while (numTimes-- > 0) {
-			int numSquares = t.getSquares().size();
+		int numSquares = t.getSquares().size();
 
-			// Adds new coords, then removes old ones!!!
+		// Adds new coords, then removes old ones!!!
 
-			for (int i = 0; i < numSquares; i++) {
-				int[] coord = t.respectiveCoords.get(i);
-				t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, 1, coord));
-			}
-
-			while (numSquares-- > 0) {
-				t.respectiveCoords.remove(0);
-				t.remove().setColor(WHITE);
-			}
-
-			t.setBlock(t.blockType(), false);
-			t.setColor(t.getColor());
+		for (int i = 0; i < numSquares; i++) {
+			int[] coord = t.respectiveCoords.get(i);
+			t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, numTimes, coord));
 		}
+
+		while (numSquares-- > 0) {
+			t.respectiveCoords.remove(0);
+			t.remove().setColor(WHITE);
+		}
+
+		t.setBlock(t.blockType(), false);
+		t.setColor(t.getColor());
 
 		return t;
 	}

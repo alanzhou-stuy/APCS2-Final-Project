@@ -69,8 +69,8 @@ public class Rules extends PApplet {
 					updateScore();
 				}
 
-				current = colorizer.spawnBlock();
-
+				current = colorizer.spawnBlock();			
+				
 				if (computer) {
 					int[] possible = analyzer.getDirections(analyzer.returnBestPosition());
 
@@ -78,6 +78,8 @@ public class Rules extends PApplet {
 						registerKeyPress(move);
 					}
 				}
+				
+				System.out.println("RUN COMPLETE");
 
 				numAllowedShifted = 0;
 			} else if (!GAME_OVER) {
@@ -232,7 +234,7 @@ public class Rules extends PApplet {
 		return false;
 	}
 
-	public static boolean rotateHitBlock(Tile current, boolean clockwise, int numTimes, Grid g, int r, int c) {
+	public static boolean rotateHitBlock(Tile current, boolean clockwise, int numTimes, Grid grid, int r, int c) {
 		/* Checks to see if rotating block collides with a block */
 
 		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
@@ -242,8 +244,8 @@ public class Rules extends PApplet {
 		}
 
 		for (int[] coord : respectiveCoordsSample) {
-			if (isInBounds(r + coord[0], c + coord[1], g)) {
-				Square next = g.getSquare(r + coord[0], c + coord[1]);
+			if (isInBounds(r + coord[0], c + coord[1], grid)) {
+				Square next = grid.getSquare(r + coord[0], c + coord[1]);
 
 				if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
 					return true;
@@ -300,18 +302,18 @@ public class Rules extends PApplet {
 		return false;
 	}
 
-	public static boolean isInBounds(int row, int col, Grid g) {
-		return row < g.getNumRows() && row >= 0 && col < g.getNumCols() && col >= 0;
+	public static boolean isInBounds(int row, int col, Grid grid) {
+		return row < grid.getNumRows() && row >= 0 && col < grid.getNumCols() && col >= 0;
 	}
 
-	public static boolean tileInBounds(Tile t, int row, int col, Grid g) {
+	public static boolean tileInBounds(Tile t, int row, int col, Grid grid) {
 		boolean inBounds = true;
 		for (int[] coords : t.getRespectiveCoords()) {
-			if (coords[0] + row < 0 || coords[0] + row >= g.getNumRows()) {
+			if (coords[0] + row < 0 || coords[0] + row >= grid.getNumRows()) {
 				inBounds = false;
 			}
 
-			if (coords[1] + col < 0 || coords[1] + col >= g.getNumCols()) {
+			if (coords[1] + col < 0 || coords[1] + col >= grid.getNumCols()) {
 				inBounds = false;
 			}
 		}

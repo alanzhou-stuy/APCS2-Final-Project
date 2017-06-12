@@ -126,7 +126,7 @@ public class GridAnalyzer {
 	}
 
 	// returns number of squares that don't overlap existing ones
-	public int getFit(Tile t, int row, int col) {
+	public int getFit(Tile t, Grid g, int row, int col) {
 		int count = 0;
 
 		for (int[] coord : t.getRespectiveCoords()) {
@@ -230,59 +230,61 @@ public class GridAnalyzer {
 		int[] pos = new int[3]; // first element is row, second is col,
 								// third is # rotations
 		int numTimes = 0;
+		int counter2 = 0;
 		/*
 		 * Go through columns and start from lowest uncolored square up,
 		 * checking for requirements
 		 */
 
-		// Tile curr = rule.getCurrent();
+		Tile t;
+		Grid copy;
 
 		for (int c = 0; c < g.getNumCols(); c++) {
-			boolean cont = true;
-
-			for (int r = g.getNumRows() - 1; r >= 0 && cont; r--) {
+			for (int r = g.getNumRows() - 1; r >= 0; r--) {
 
 				ArrayList<Tile> rotes = new ArrayList<Tile>();
 
 				for (int i = 0; i < rule.getCurrent().getNumOfPhases(); i++) {
-
 					try {
-						Tile t = new Tile(g, rule.getCurrent(), r, c);
+						t = new Tile(g, rule.getCurrent(), r, c);
+						copy = implant(t, g, r, c);
 
-						if (Rules.tileInBounds(t, r, c, g) && !Rules.rotateHitSides(t, true, i, g, r, c)
-								&& !Rules.rotateHitBlock(t, true, i, g, r, c)) {
-							System.out.println("Rotate!!!!!");
+						// System.out.println("Second Boolean: " +
+						// !Rules.rotateHitBlock(t, true, i, copy, r, c));
+
+						if (Rules.tileInBounds(t, r, c, copy) && !Rules.rotateHitSides(t, true, i, copy, r, c)
+						// && !Rules.rotateHitBlock(t, true, i, copy, r, c)
+						) {
 							rotes.add(Colorizer.rotate(true, t, i));
+							counter2++;
 						}
-
-						t = rule.getCurrent();
 					} catch (ArrayIndexOutOfBoundsException e) {
 
 					}
 				}
 
 				for (Tile rote : rotes) {
-					try {
-						if (getFit(rote, r, c) == rote.getSquares().size() && tileInDirectLineOfSight(rote, r, c)) {
+					copy = implant(rote, g, rote.pivotY, rote.pivotX);
 
-							int strength = 0;
+					System.out.println(getFit(rote, copy, r, c) + " -- " + rote.pivotY + " " + rote.pivotX);
+					if (getFit(rote, copy, r, c) == rote.getSquares().size() && tileInDirectLineOfSight(rote, r, c)) {
+						numTimes++;
 
-							Candidate cand = new Candidate(rote, 0, r, c, strength);
+						int strength = 0;
 
-							cand.resultingLC = getCompleteRows(rote, r, c);
-							cand.resultingAH = getAggregateHeight(rote, r, c);
-							cand.resultingH = numHoles(rote, r, c);
-							cand.resultingB = getBumpiness(rote, r, c);
+						Candidate cand = new Candidate(rote, 0, r, c, strength);
 
-							cand.calculateStrength();
-							candidates.add(cand);
-							rote = rule.getCurrent();
-							cont = false;
-						}
-					} catch (IndexOutOfBoundsException e) {
+						cand.resultingLC = getCompleteRows(rote, r, c);
+						cand.resultingAH = getAggregateHeight(rote, r, c);
+						cand.resultingH = numHoles(rote, r, c);
+						cand.resultingB = getBumpiness(rote, r, c);
 
+						cand.calculateStrength();
+						candidates.add(cand);
 					}
+
 				}
+
 			}
 
 			// for (int i = 0; i < t.getNumOfPhases(); i++) {
@@ -307,6 +309,9 @@ public class GridAnalyzer {
 			 * // } }
 			 */
 		}
+
+		System.out.println("total: " + getTotalColoredSquares(0, g.getNumRows() - 1));
+		System.out.println("Counter2: " + counter2);
 
 		Collections.sort(candidates);
 
