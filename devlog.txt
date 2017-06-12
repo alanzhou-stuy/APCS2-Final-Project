@@ -19,3 +19,5 @@
 06/08/17: Fixed rotate overlap bug with controls - Jeffrey
 
 06/10/17: Added levels, speeds updating with levels, restarting the game when you lose, and a high score tracker - Alan
+
+06/11/17: Added basic computer heuristics - Jeffrey
