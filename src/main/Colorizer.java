@@ -239,6 +239,23 @@ public class Colorizer extends PApplet implements Displayable {
 
 		return t;
 	}
+	
+	public static Tile nonChangingRotate(boolean clockwise, Tile t, int numTimes){
+		int numSquares = t.getSquares().size();
+
+		// Adds new coords, then removes old ones!!!
+
+		for (int i = 0; i < numSquares; i++) {
+			int[] coord = t.respectiveCoords.get(i);
+			t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, numTimes, coord));
+		}
+
+		while (numSquares-- > 0) {
+			t.respectiveCoords.remove(0);
+		}
+
+		return t;
+	}
 
 	public Tile drop(Tile t, int amount) {
 		int numSquares = t.getSquares().size();

@@ -230,7 +230,6 @@ public class GridAnalyzer {
 		int[] pos = new int[3]; // first element is row, second is col,
 								// third is # rotations
 		int numTimes = 0;
-		int counter2 = 0;
 		/*
 		 * Go through columns and start from lowest uncolored square up,
 		 * checking for requirements
@@ -249,25 +248,17 @@ public class GridAnalyzer {
 						t = new Tile(g, rule.getCurrent(), r, c);
 						copy = implant(t, g, r, c);
 
-						// System.out.println("Second Boolean: " +
-						// !Rules.rotateHitBlock(t, true, i, copy, r, c));
-
-						if (Rules.tileInBounds(t, r, c, copy) && !Rules.rotateHitSides(t, true, i, copy, r, c)
-						// && !Rules.rotateHitBlock(t, true, i, copy, r, c)
-						) {
-							rotes.add(Colorizer.rotate(true, t, i));
-							counter2++;
+						if (Rules.tileInBounds(t, r, c, copy) && !Rules.rotateHitSides(t, true, i, copy, r, c)) {
+							rotes.add(Colorizer.nonChangingRotate(true, t, i));
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
-
 					}
 				}
 
 				for (Tile rote : rotes) {
 					copy = implant(rote, g, rote.pivotY, rote.pivotX);
 
-					System.out.println(getFit(rote, copy, r, c) + " -- " + rote.pivotY + " " + rote.pivotX);
-					if (getFit(rote, copy, r, c) == rote.getSquares().size() && tileInDirectLineOfSight(rote, r, c)) {
+					if (getFit(rote, g, r, c) == rote.getSquares().size() && tileInDirectLineOfSight(rote, r, c)) {
 						numTimes++;
 
 						int strength = 0;
@@ -282,36 +273,11 @@ public class GridAnalyzer {
 						cand.calculateStrength();
 						candidates.add(cand);
 					}
-
 				}
-
 			}
-
-			// for (int i = 0; i < t.getNumOfPhases(); i++) {
-
-			/*
-			 * if (Rules.tileInBounds(t, r, c, g) && !Rules.rotateHitSides(t,
-			 * true, 0, g, r, c) && !Rules.rotateHitBlock(t, true, 0, g, r, c))
-			 * { t = Colorizer.rotate(true, t, 0);
-			 * 
-			 * if (getFit(t, r, c) == t.getSquares().size() &&
-			 * tileInDirectLineOfSight(t, r, c)) { numTimes++; int strength = 0;
-			 * 
-			 * Candidate cand = new Candidate(t, 0, r, c, strength);
-			 * 
-			 * cand.resultingLC = getCompleteRows(t, r, c); cand.resultingAH =
-			 * getAggregateHeight(t, r, c); cand.resultingH = numHoles(t, r, c);
-			 * cand.resultingB = getBumpiness(t, r, c);
-			 * 
-			 * cand.calculateStrength(); candidates.add(cand); t =
-			 * rule.getCurrent(); cont = false; }
-			 * 
-			 * // } }
-			 */
 		}
 
 		System.out.println("total: " + getTotalColoredSquares(0, g.getNumRows() - 1));
-		System.out.println("Counter2: " + counter2);
 
 		Collections.sort(candidates);
 
