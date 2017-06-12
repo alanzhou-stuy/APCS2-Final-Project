@@ -124,7 +124,7 @@ public class Colorizer extends PApplet implements Displayable {
 	}
 
 	public void checkForGameOver() {
-		for (int i = 0;i < 3; i++) {
+		for (int i = 0;i < 4; i++) {
 			if (g.grid[i][g.getNumCols() / 2 -1].color[0] != 255 ||
 				g.grid[i][g.getNumCols() / 2].color[0] != 255 || 
 				g.grid[i][g.getNumCols() / 2 + 1].color[0] != 255 ) {

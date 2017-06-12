@@ -72,7 +72,7 @@ public class Rules extends PApplet {
 				if (clearLine()) {
 					updateScore();
 				}
-				current = colorizer.spawnBlock();
+				current = colorizer.spawnIBlock();
 				numAllowedShifted = 0;
 			} else if (!GAME_OVER) {
 				current = colorizer.drop(current, 1);
