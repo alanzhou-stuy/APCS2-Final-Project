@@ -21,6 +21,7 @@ public class Rules extends PApplet {
 	private int level;
 	private int totalLinesCleared;
 	public boolean GAME_OVER = false;
+	private Main main;
 
 	public Rules() {
 		TIMER = 0;
@@ -40,6 +41,10 @@ public class Rules extends PApplet {
 
 	public void setSpeed(int speed) {
 		SPEED = speed;
+	}
+	
+	public void setMain(Main main){
+		this.main = main;
 	}
 
 	public void setFR(int framerate) {
@@ -69,7 +74,7 @@ public class Rules extends PApplet {
 					updateScore();
 				}
 
-				current = colorizer.spawnBlock();			
+				current = colorizer.spawnBlock();		
 				
 				if (computer) {
 					int[] possible = analyzer.getDirections(analyzer.returnBestPosition());
@@ -77,6 +82,8 @@ public class Rules extends PApplet {
 					for (int move : possible) {
 						registerKeyPress(move);
 					}
+					
+					main.updateCompInfo();
 				}
 				
 				System.out.println("RUN COMPLETE");

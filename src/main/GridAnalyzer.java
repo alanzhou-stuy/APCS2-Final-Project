@@ -12,9 +12,6 @@ public class GridAnalyzer {
 	private Rules rule;
 	private static boolean DYNAMIC = false;
 
-	private static double HEIGHT_PRIORITY = 0.5;
-	private static double FILL_ROW_PRIORITY = 0.5;
-
 	public GridAnalyzer(Grid g) {
 		this.g = g;
 	}
@@ -224,19 +221,14 @@ public class GridAnalyzer {
 	 * movements) Tries to minimize height (if possible) Tries to complete lines
 	 * (for higher score)
 	 */
-	public int[] returnBestPosition() {
+	public Candidate returnBestCandidate() {
 		ArrayList<Candidate> candidates = new ArrayList<Candidate>();
-
-		int[] pos = new int[3]; // first element is row, second is col,
-								// third is # rotations
-		int numTimes = 0;
 		/*
 		 * Go through columns and start from lowest uncolored square up,
 		 * checking for requirements
 		 */
 
 		Tile t;
-		Grid copy;
 
 		for (int c = 0; c < g.getNumCols(); c++) {
 			for (int r = g.getNumRows() - 1; r >= 0; r--) {
@@ -246,27 +238,31 @@ public class GridAnalyzer {
 				for (int i = 0; i < rule.getCurrent().getNumOfPhases(); i++) {
 					try {
 						t = new Tile(g, rule.getCurrent(), r, c);
-						copy = implant(t, g, r, c);
+						Grid copy = implant(t, g, r, c);
 
 						if (Rules.tileInBounds(t, r, c, copy) && !Rules.rotateHitSides(t, true, i, copy, r, c)) {
-							rotes.add(Colorizer.nonChangingRotate(true, t, i));
+							rotes.add(Colorizer.nonChangingRotate(true, t, i, copy));
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
 					}
 				}
 
 				for (Tile rote : rotes) {
-					copy = implant(rote, g, rote.pivotY, rote.pivotX);
+					Grid copy = implant(rote, g, rote.pivotY, rote.pivotX);
 
 					if (getFit(rote, g, r, c) == rote.getSquares().size() && tileInDirectLineOfSight(rote, r, c)) {
-						numTimes++;
 
 						int strength = 0;
+						int numRotations = 0;
 
-						Candidate cand = new Candidate(rote, 0, r, c, strength);
+						if (rote.NR != 0) {
+							numRotations = rote.NR;
+						}
+
+						Candidate cand = new Candidate(rote, numRotations, r, c, strength);
 
 						cand.resultingLC = getCompleteRows(rote, r, c);
-						cand.resultingAH = getAggregateHeight(rote, r, c);
+						cand.resultingAH = getAggregateHeight(rote, r, c, copy);
 						cand.resultingH = numHoles(rote, r, c);
 						cand.resultingB = getBumpiness(rote, r, c);
 
@@ -277,20 +273,27 @@ public class GridAnalyzer {
 			}
 		}
 
-		System.out.println("total: " + getTotalColoredSquares(0, g.getNumRows() - 1));
-
 		Collections.sort(candidates);
 
-		System.out.println("Num Candidates: " + numTimes);
-		System.out.println("Strongest: " + candidates.get(0).strength);
-		System.out.println("Strongest AH: " + candidates.get(0).resultingAH);
-		System.out.println("Strongest H: " + candidates.get(0).resultingH);
-		System.out.println("Strongest B: " + candidates.get(0).resultingB);
-		System.out.println("Strongest LC: " + candidates.get(0).resultingLC);
+		/*
+		 * System.out.println("total: " + getTotalColoredSquares(0,
+		 * g.getNumRows() - 1)); System.out.println("Num Candidates: " +
+		 * numTimes + " or " + candidates.size());
+		 * System.out.println("Strongest: " + candidates.get(0).strength);
+		 * System.out.println("Strongest AH: " + candidates.get(0).resultingAH);
+		 * System.out.println("Strongest H: " + candidates.get(0).resultingH);
+		 * System.out.println("Strongest B: " + candidates.get(0).resultingB);
+		 * System.out.println("Strongest LC: " + candidates.get(0).resultingLC);
+		 */
 
-		return new int[] { candidates.get(0).pivotYIndex, candidates.get(0).pivotXIndex,
-				candidates.get(0).numRotations };
+		return candidates.get(0);
 
+	}
+
+	public int[] returnBestPosition() {
+		Candidate best = returnBestCandidate();
+
+		return new int[] { best.pivotYIndex, best.pivotXIndex, best.numRotations };
 	}
 
 	public Grid implant(Tile t, Grid orig, int row, int col) {
@@ -363,12 +366,12 @@ public class GridAnalyzer {
 	}
 
 	/* Returns sum of heights in each column with tile implanted */
-	public int getAggregateHeight(Tile t, int row, int col) {
+	public int getAggregateHeight(Tile t, int row, int col, Grid g) {
 		int height = 0;
-		Grid copy = implant(t, g, row, col);
+		// Grid copy = implant(t, g, row, col);
 
-		for (int c = 0; c < copy.getNumCols(); c++) {
-			height += getHeightCol(copy, c, t);
+		for (int c = 0; c < g.getNumCols(); c++) {
+			height += getHeightCol(g, c, t);
 		}
 
 		return height;
@@ -393,11 +396,6 @@ public class GridAnalyzer {
 			if (i == copy.getNumCols()) {
 				complete++;
 			}
-		}
-
-		if (complete != 0) {
-			System.out.println(complete + " complete rows!!!");
-			System.out.println("col: " + col);
 		}
 
 		return complete;

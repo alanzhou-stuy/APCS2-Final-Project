@@ -12,6 +12,7 @@ public class Tile {
 	private int maxHeight;
 	private int phase;
 	private int numPhases;
+	public int NR;
 
 	public Tile() {
 		squares = new ArrayList<Square>();
@@ -56,6 +57,10 @@ public class Tile {
 			s.setPartOfCurrentBlock(true);
 			System.out.println("OK");
 		}
+	}
+	
+	public void setNR(int num){
+		NR = num;
 	}
 
 	public int getMaxHeight() {

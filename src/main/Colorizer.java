@@ -240,7 +240,7 @@ public class Colorizer extends PApplet implements Displayable {
 		return t;
 	}
 	
-	public static Tile nonChangingRotate(boolean clockwise, Tile t, int numTimes){
+	public static Tile nonChangingRotate(boolean clockwise, Tile t, int numTimes, Grid copy){
 		int numSquares = t.getSquares().size();
 
 		// Adds new coords, then removes old ones!!!
@@ -252,7 +252,15 @@ public class Colorizer extends PApplet implements Displayable {
 
 		while (numSquares-- > 0) {
 			t.respectiveCoords.remove(0);
+			t.squares.remove(0);
 		}
+		
+		for (int[] coord : t.respectiveCoords) {
+			t.squares.add(copy.getSquare(t.pivotY + coord[0], t.pivotX + coord[1]));
+		}
+		
+		t.setNR(numTimes);
+		t.setColor(t.getColor());
 
 		return t;
 	}
