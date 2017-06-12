@@ -1,54 +1,46 @@
 # APCS2-Final-Project
 
-<h3> Customizable Tetris (w/ Very Basic AI) </h3>
+# Customizable Tetris (w/ Very Basic AI)
 
-<hr>
-<h4>Features:</h4>
-<ul>
-<li>Works like Tetris. Able to store a block (Cannot see the stored block).</li>
-<li>Resize the grid by changing the # of rows or # of columns.</li>
-<li>Change the level, which changes the speed.</li>
-<li>Levels up as you clear 4 lines for each level, higher score for higher level.</li>
-<li>Restarts automatically when you lose.</li>
-<li>Keeps track of the highest score.</li>
-<li>Has a player mode, but also an AI mode.</li>
-<li>AI utilizies basic heuristics, gathering height, hole, 'bumpiness', and line clear data</li>
-</ul>
-<hr>
+## Features:
+- Works like Tetris. Able to store a block (Cannot see the stored block).
+- Resize the grid by changing the # of rows or # of columns.
+- Change the level, which changes the speed.
+- Levels up as you clear 4 lines for each level, higher score for higher level.
+- Restarts automatically when you lose.
+- Keeps track of the highest score.
+- Has a player mode, but also an AI mode.
+- AI utilizies basic heuristics, gathering height, hole, 'bumpiness', and line clear data
 
-<h4>How to play:</h4>
-<ol>
-<li>Select difficulty, and speed levels in the sliders on the left side of the screen.</li>
-<li>Change board size (# of rows, # of columns) to your likings. Larger boards may be easier to play on!
-<li>Press START to allow for tiles to start falling</li>
-<li>Press SHIFT to save tiles</li>
-<li>Press SPACE to drop tiles quickly</li>
-</ol>
+## How to play:
+1. Select difficulty, and speed levels in the sliders on the left side of the screen
+2. Change board size (# of rows, # of columns) to your likings. Larger boards may be easier to play on!
+3. Press *START* to allow for tiles to start falling
+4. Press *shift* to save tiles
+5. Press *space* to drop tiles quickly
 
-<h4>Features in development</h4>
-<ul>
-<li>Grid analyzer to find the relative placement of tiles as to determine those to provide the player</li>
-<li>Randomly generated Tetris shapes for greater variety and difficulty</li>
-<li>Computer to play the game</li>
-</ul>
+## Features in development:
+- Grid analyzer to find the relative placement of tiles as to determine those to provide the player
+- Randomly generated Tetris shapes for greater variety and difficulty
+- Computer to play the game
 
-<h4>Unresolved bugs:</h4>
-<ul>
-<li>Game crashes if you try to move a tile too fast before it spawns. </li>
-<li>Computer doesn't rotate tiles</li>
-<li>Scoring for computer doesn't update</li>
-<li>I-block may not trigger a game over</li>
-<li>Changing rows and columns in mid game may cause a crash when spawning blocks</li>
-</ul>
+## Unresolved bugs:
+- Game crashes if you try to move a tile too fast before it spawns.
+- Computer doesn't rotate tiles
+- Scoring for computer doesn't update
+- I-block may not trigger a game over
+- Changing rows and columns in mid game may cause a crash when spawning blocks
 
-<h4>Compilation:</h4>
+## Compilation:
 **Requires Java 8**
-<b>Linux: </b>
-Use ```./run.sh```
-<b>Windows: </b>
-Use ```run.bat```
 
-<h4>Contributors:</h4>
-<br>
-Jeffrey Luo
-Alan Zhou
+**Linux**:\
+Use `./run.sh`
+
+**Windows**:\
+Use `run.bat`
+
+#### Contributors:
+Jeffrey Luo\
+Alan Zhou\
+*APCS-2 Mr. Konstantinovich (Pd. 10)*
