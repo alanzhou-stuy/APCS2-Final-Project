@@ -34,6 +34,12 @@ public class Square {
 		partOfCurrentBlock = true;
 	}
 	
+	public Square(int rowIndex, int colIndex, int[] color){
+		this.rowIndex = rowIndex;
+		this.colIndex = colIndex;
+		this.color = color;
+	}
+	
 	public void setPartOfCurrentBlock(boolean b) {
 		partOfCurrentBlock = b;
 	}

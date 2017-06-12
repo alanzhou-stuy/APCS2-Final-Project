@@ -72,8 +72,8 @@ public class Colorizer extends PApplet implements Displayable {
 
 		return null;
 	}
-	
-	public Tile smartSpawn(){
+
+	public Tile smartSpawn() {
 		return null;
 	}
 	
@@ -136,7 +136,7 @@ public class Colorizer extends PApplet implements Displayable {
 	public Tile spawnIBlock() {
 		Tile t = new Tile(g, 1, g.getNumCols() / 2 - 1);
 		t.setIBlock(true);
-		int[] color = (new int[] { 102, 116, 248});
+		int[] color = (new int[] { 102, 116, 248 });
 		t.setColor(color);
 		return t;
 	}
@@ -216,7 +216,7 @@ public class Colorizer extends PApplet implements Displayable {
 		t1.setColor(t.getColor());
 		return t1;
 	}
-	
+
 	/**
 	 * Rotates a tile either clockwise or counter clockwise. It utilizes the
 	 * respectiveCoords of a square, creates a coordinate transformation, and
@@ -231,25 +231,47 @@ public class Colorizer extends PApplet implements Displayable {
 	 * @return the tile with the rotated coordinates in the grid
 	 */
 	public static Tile rotate(boolean clockwise, Tile t, int numTimes) {
-		while (numTimes-- > 0) {
-			int numSquares = t.getSquares().size();
+		int numSquares = t.getSquares().size();
 
-			// Adds new coords, then removes old ones!!!
+		// Adds new coords, then removes old ones!!!
 
-			for (int i = 0; i < numSquares; i++) {
-				int[] coord = t.respectiveCoords.get(i);
-				t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise,
-						coord));
-			}
-
-			while (numSquares-- > 0) {
-				t.respectiveCoords.remove(0);
-				t.remove().setColor(WHITE);
-			}
-
-			t.setBlock(t.blockType(), false);
-			t.setColor(t.getColor());
+		for (int i = 0; i < numSquares; i++) {
+			int[] coord = t.respectiveCoords.get(i);
+			t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, numTimes, coord));
 		}
+
+		while (numSquares-- > 0) {
+			t.respectiveCoords.remove(0);
+			t.remove().setColor(WHITE);
+		}
+
+		t.setBlock(t.blockType(), false);
+		t.setColor(t.getColor());
+
+		return t;
+	}
+	
+	public static Tile nonChangingRotate(boolean clockwise, Tile t, int numTimes, Grid copy){
+		int numSquares = t.getSquares().size();
+
+		// Adds new coords, then removes old ones!!!
+
+		for (int i = 0; i < numSquares; i++) {
+			int[] coord = t.respectiveCoords.get(i);
+			t.addRespectiveCoord(Tile.returnTransformedCoords(clockwise, numTimes, coord));
+		}
+
+		while (numSquares-- > 0) {
+			t.respectiveCoords.remove(0);
+			t.squares.remove(0);
+		}
+		
+		for (int[] coord : t.respectiveCoords) {
+			t.squares.add(copy.getSquare(t.pivotY + coord[0], t.pivotX + coord[1]));
+		}
+		
+		t.setNR(numTimes);
+		t.setColor(t.getColor());
 
 		return t;
 	}
@@ -273,8 +295,8 @@ public class Colorizer extends PApplet implements Displayable {
 
 		return t;
 	}
-	
-	public static boolean isColored(Square sq){
+
+	public static boolean isColored(Square sq) {
 		return !(sq.color[0] == 255 && sq.color[1] == 255 && sq.color[2] == 255);
 	}
 }

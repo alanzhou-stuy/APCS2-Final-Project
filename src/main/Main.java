@@ -19,14 +19,15 @@ public class Main extends PApplet {
 	private Tile currentTile;
 	private Rules rule;
 	private GridAnalyzer analyzer;
-	private Slider speedSlider, diffSlider, varietySlider, numRowsSlider, numColsSlider;
-	private Textlabel score, info1, info2,info3,info4;
+	private Slider speedSlider, numRowsSlider, numColsSlider;
+	private Textlabel score, mode;
+	private Textlabel holes, aggHeight, linesToClear, bumpiness, strength;
+	private Textlabel level, linesCleared, highScore;
 	private Button start, compStart;
+	private boolean onStart;
 	private static int SPEED = 1;
 	private static int FRAMERATE = 60;
 	private static int CONTROL_RESPONSIVENESS = 4;
-	private static int COMPUTER_PLAY_SPEED = 3;
-	private static int DIFFICULTY, VARIETY;
 	private static boolean COMPUTER_PLAYS = true;
 	private int COUNTER = 0;
 	private static int HIGHSCORE = 0;
@@ -40,12 +41,12 @@ public class Main extends PApplet {
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		setupColorizer();
 		createGUI();
-		currentTile = colorizer.spawnBlock(); // DON'T MOVE THIS
 		setupRules();
+		onStart = true;
 	}
 
 	private void setupRules() {
-		rule = new Rules(colorizer, currentTile, grid);
+		rule = new Rules(colorizer, grid);
 		rule.setSpeed(SPEED);
 		rule.setFR(FRAMERATE);
 
@@ -53,6 +54,8 @@ public class Main extends PApplet {
 			rule.setAnalyzer(analyzer);
 			analyzer.setRule(rule);
 		}
+
+		rule.setMain(this);
 	}
 
 	private void setupColorizer() {
@@ -64,11 +67,11 @@ public class Main extends PApplet {
 
 		analyzer = new GridAnalyzer(grid);
 	}
-	
+
 	public void draw() {
 		background(bgColor[0], bgColor[1], bgColor[2]);
 		rule.setSpeed(SPEED);
-		
+
 		if (start.getBooleanValue() == false) {
 			colorizer.setRowsCols(numRows, numCols);
 			start.setCaptionLabel("START");
@@ -76,11 +79,11 @@ public class Main extends PApplet {
 
 		if (compStart.getBooleanValue() == true) {
 			compStart.setCaptionLabel("Set to PLAYER");
-			info2.setText("Mode: Computer");
+			mode.setText("Mode: Computer");
 			COMPUTER_PLAYS = true;
 		} else {
 			compStart.setCaptionLabel("Set to COMPUTER");
-			info2.setText("Mode: Player control");
+			mode.setText("Mode: Player control");
 			COMPUTER_PLAYS = false;
 		}
 
@@ -88,7 +91,13 @@ public class Main extends PApplet {
 		// currentTile = colorizer.rotate(false, currentTile, 1);
 
 		if (start.getBooleanValue() == true && rule.GAME_OVER == false && COMPUTER_PLAYS == false) {
-			rule.run();
+
+			if (onStart) {
+				currentTile = colorizer.spawnBlock(); // DON'T MOVE THIS
+				rule.setCurrent(currentTile);
+				onStart = false;
+			}
+			rule.run(COMPUTER_PLAYS);
 			if (colorizer.reset) {
 				rule.setLevel(1);
 				rule.setTotalLinesCleared(0);
@@ -96,11 +105,12 @@ public class Main extends PApplet {
 			}
 			if (rule.latestScore > HIGHSCORE) {
 				HIGHSCORE = rule.latestScore;
-				//System.out.println(HIGHSCORE);
+				// System.out.println(HIGHSCORE);
 			}
 			if (rule.SPEED != SPEED) {
 				SPEED = rule.SPEED;
 			}
+
 			if (keyPressed && key == CODED && COUNTER++ % CONTROL_RESPONSIVENESS == 0) {
 				rule.registerKeyPress(keyCode);
 				keyPressed = false;
@@ -110,32 +120,29 @@ public class Main extends PApplet {
 			}
 
 			start.setCaptionLabel("RESET");
-			score.setText("SCORE: " + rule.SCORE);
-			rule.setSpeed(rule.getSpeed());	
+			score.setText("SCORE: " + Rules.SCORE);
+			rule.setSpeed(rule.getSpeed());
+
 		} else if (start.getBooleanValue() == true && rule.GAME_OVER == false && COMPUTER_PLAYS == true) {
-			rule.run();
-
-			int[] possible = analyzer.getMovement();
-
-			for (int move : possible) {
-				rule.registerKeyPress(move);
-			}
-
+			rule.run(COMPUTER_PLAYS);
 			keyPressed = false;
 		}
+
 		colorizer.refresh();
-		info1.setText("Num squares: "
-				+ analyzer.getTotalColoredSquares(analyzer.getTopMostColoredRow(), grid.getNumRows() - 1))
-				.setPosition(4 * width / 5, 250).setSize(200, 60);
-		info2.setText("Level: "
-				+ rule.level)
-				.setPosition(4 * width / 5, 300).setSize(200, 60);
-		info3.setText("Total Lines Cleared: "
-				+ rule.totalLinesCleared)
-				.setPosition(4 * width / 5, 350).setSize(200, 60);
-		info4.setText("High Score:" 
-				+ HIGHSCORE)
-				.setPosition(4 * width / 5,400).setSize(200,60);
+
+		level.setText("Level: " + rule.level);
+		linesCleared.setText("Total Lines Cleared: " + rule.totalLinesCleared);
+		highScore.setText("High Score: " + HIGHSCORE);
+	}
+
+	public void updateCompInfo() {
+		Candidate best = analyzer.returnBestCandidate();
+
+		aggHeight.setText("Aggregate height: " + best.resultingAH);
+		holes.setText("Holes: " + best.resultingH);
+		linesToClear.setText("Lines to clear: " + best.resultingLC);
+		bumpiness.setText("Bumpiness: " + best.resultingB);
+		strength.setText("Overall: " + best.strength);
 	}
 
 	public void createGUI() {
@@ -154,55 +161,62 @@ public class Main extends PApplet {
 		speedSlider = gui.addSlider("SPEED").setSize(sliderWidth, sliderHeight).setRange(0, 10)
 				.setPosition(sliderSideMargin, sliderTopMargin).setValue(rule.SPEED).setNumberOfTickMarks(11);
 
-		diffSlider = gui.addSlider("DIFFICULTY").setSize(sliderWidth, sliderHeight).setRange(0, 100)
-				.setPosition(sliderSideMargin, sliderTopMargin + (sliderVertSpacing)).setValue(50)
-				.setNumberOfTickMarks(21);
-
-		varietySlider = gui.addSlider("VARIETY").setSize(sliderWidth, sliderHeight).setRange(0, 100)
-				.setPosition(sliderSideMargin, sliderTopMargin + (2 * sliderVertSpacing)).setValue(50)
-				.setNumberOfTickMarks(11);
-
 		numRowsSlider = gui.addSlider("numRows").setSize(sliderWidth, sliderHeight).setRange(5, 50)
-				.setPosition(sliderSideMargin, sliderTopMargin + (3 * sliderVertSpacing)).setValue(20)
+				.setPosition(sliderSideMargin, sliderTopMargin + (1 * sliderVertSpacing)).setValue(20)
 				.setNumberOfTickMarks(46);
 
 		numColsSlider = gui.addSlider("numCols").setSize(sliderWidth, sliderHeight).setRange(5, 50)
-				.setPosition(sliderSideMargin, sliderTopMargin + (4 * sliderVertSpacing)).setValue(10)
+				.setPosition(sliderSideMargin, sliderTopMargin + (2 * sliderVertSpacing)).setValue(10)
 				.setNumberOfTickMarks(46);
 
-		score = gui.addTextlabel("score").setText("SCORE: " + Rules.SCORE).setPosition(4 * width / 5, 50).setSize(200,
+		score = gui.addTextlabel("score").setText("SCORE: " + Rules.SCORE).setPosition(3 * width / 4, 50).setSize(200,
 				60);
-		info1 = gui.addTextlabel("info")
-				.setText("Num squares: "
-						+ analyzer.getTotalColoredSquares(analyzer.getTopMostColoredRow(), grid.getNumRows() - 1))
-				.setPosition(4 * width / 5, 250).setSize(200, 60);
-		info2 = gui.addTextlabel("level").setText("Level: "
-				+ 1).setPosition(4 * width / 5, 300).setSize(200, 60);
-		info3 = gui.addTextlabel("lines cleared").setText("Total Lines Cleared: "
-				+ 0)
-				.setPosition(4 * width / 5, 350).setSize(200, 60);
-		start = gui.addButton("START").setValue(0).setPosition(4 * width / 5, 150).setSize(200, 60);
-		info4 = gui.addTextlabel("high score").setText("High Score: "
-				+ HIGHSCORE)
-				.setPosition(4 * width / 5,400).setSize(200,60);
-		start = gui.addButton("START").setValue(0).setPosition(4 * width / 5, 150).setSize(200, 60);
-		compStart = gui.addButton("COMPUTER").setValue(0).setPosition(7 * width / 10, 450).setSize(400, 60);
+
+		level = gui.addTextlabel("level").setText("Level: " + 1).setPosition(3 * width / 4, 100).setSize(200, 60);
+
+		mode = gui.addTextlabel("mode").setText("Mode: " + "Player control").setPosition(3 * width / 4, 320)
+				.setSize(200, 60);
+
+		aggHeight = gui.addTextlabel("aggHeight").setText("Aggregate Height: " + 0).setPosition(3 * width / 4, 480)
+				.setSize(200, 60);
+
+		holes = gui.addTextlabel("holes").setText("Holes: " + 0).setPosition(3 * width / 4, 510).setSize(200, 60);
+
+		linesToClear = gui.addTextlabel("linesCleared").setText("Lines to clear: " + 0).setPosition(3 * width / 4, 540)
+				.setSize(200, 60);
+
+		bumpiness = gui.addTextlabel("bumpiness").setText("Bumpiness: " + 0).setPosition(3 * width / 4, 570)
+				.setSize(200, 60);
+
+		strength = gui.addTextlabel("strength").setText("Strength: " + 0).setPosition(3 * width / 4, 600).setSize(200,
+				60);
+
+		start = gui.addButton("START").setValue(0).setPosition(3 * width / 4, 210).setSize(200, 60);
+		compStart = gui.addButton("COMPUTER").setValue(0).setPosition(3 * width / 4, 360).setSize(300, 60);
+
+		linesCleared = gui.addTextlabel("lines cleared").setText("Total Lines Cleared: " + 0)
+				.setPosition(3 * width / 4, 160).setSize(200, 60);
+		highScore = gui.addTextlabel("high score").setText("High Score: " + HIGHSCORE).setPosition(3 * width / 4, 130)
+				.setSize(200, 60);
 
 		// Setting fonts
 		start.getCaptionLabel().setFont(largeFont);
 		compStart.getCaptionLabel().setFont(largeFont);
 		speedSlider.getCaptionLabel().setFont(textFont);
-		diffSlider.getCaptionLabel().setFont(textFont);
-		varietySlider.getCaptionLabel().setFont(textFont);
 		numRowsSlider.getCaptionLabel().setFont(textFont);
 		numColsSlider.getCaptionLabel().setFont(textFont);
 
 		// Label fonts
 		score.setFont(scoreFont);
-		info1.setFont(textFont);
-		info2.setFont(textFont);
-		info3.setFont(textFont);
-		info4.setFont(textFont);
+		holes.setFont(textFont);
+		mode.setFont(textFont);
+		aggHeight.setFont(textFont);
+		linesToClear.setFont(textFont);
+		bumpiness.setFont(textFont);
+		strength.setFont(textFont);
+		level.setFont(textFont);
+		linesCleared.setFont(textFont);
+		highScore.setFont(textFont);
 	}
 
 	public void settings() {

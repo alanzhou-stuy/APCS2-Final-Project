@@ -21,6 +21,7 @@ public class Rules extends PApplet {
 	public int level;
 	public int totalLinesCleared;
 	public boolean GAME_OVER = false;
+	private Main main;
 	public int tempCountLines;
 	public int latestScore;
 
@@ -30,20 +31,27 @@ public class Rules extends PApplet {
 		level = 1;
 	}
 
-	public Rules(Colorizer colorizer, Tile current, Grid g) {
+	public Rules(Colorizer colorizer, Grid g) {
 		this();
 		this.colorizer = colorizer;
-		this.current = current;
 		this.g = g;
 	}
 
 	public int getSpeed() {
 		return SPEED;
 	}
+	
+	public void setCurrent(Tile current){
+		this.current = current;
+	}
 
 	public void setSpeed(int speed) {
 		SPEED = speed;
 		level = speed;
+	}
+
+	public void setMain(Main main) {
+		this.main = main;
 	}
 
 	public void setFR(int framerate) {
@@ -62,24 +70,34 @@ public class Rules extends PApplet {
 		this.analyzer = analyzer;
 	}
 
-	public void run() {
+	public void run(boolean computer) {
 		// Time determined by polynomial regression
-		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69
-				* Math.pow(SPEED, 2) - 7.85 * SPEED + 35) * (FRAMERATE / 60.0)) + 1;
+		int run_period = (int) ((-0.0235 * Math.pow(SPEED, 3) + 0.69 * Math.pow(SPEED, 2) - 7.85 * SPEED + 35)
+				* (FRAMERATE / 60.0)) + 1;
 
 		if (TIMER % run_period == 0) {
 			if ((hitBottom() || hitBlock()) && !GAME_OVER) {
 				if (clearLine()) {
 					updateScore();
 				}
-				current = colorizer.spawnIBlock();
+				current = colorizer.spawnBlock();
+
+				if (computer) {
+					int[] possible = analyzer.getDirections(analyzer.returnBestPosition());
+
+					for (int move : possible) {
+						registerKeyPress(move);
+					}
+					if (clearLine()) {
+						updateScore();
+					}
+					main.updateCompInfo();
+				}
 				numAllowedShifted = 0;
 			} else if (!GAME_OVER) {
 				current = colorizer.drop(current, 1);
-				//analyzer.DEBUG();
 			} else {
-				System.out.println("GAME OVER!!!");
-			
+				System.out.println("GAME OVER");
 			}
 		}
 		TIMER++;
@@ -134,11 +152,10 @@ public class Rules extends PApplet {
 		latestScore = SCORE;
 	}
 
-	public void levelUp() {		
+	public void levelUp() {
 		if (level == 10) {
 			return;
-		} 
-		else {
+		} else {
 			if (tempCountLines >= 4) {
 				SPEED += 1;
 				level += 1;
@@ -146,12 +163,12 @@ public class Rules extends PApplet {
 			}
 		}
 	}
-	
+
 	public void setLevel(int x) {
 		level = x;
 		SPEED = x;
 	}
-	
+
 	public void setTotalLinesCleared(int lines) {
 		totalLinesCleared = lines;
 	}
@@ -166,12 +183,12 @@ public class Rules extends PApplet {
 				current = colorizer.moveLeft(current);
 			}
 		} else if (keyCode == UP) {
-			if (!rotateHitSides(false) && !rotateHitBlock(false)) {
-				current = colorizer.rotate(false, current, 1);
+			if (!rotateHitSides(current, false, g) && !rotateHitBlock(current, false, g)) {
+				current = Colorizer.rotate(false, current, 1);
 			}
 		} else if (keyCode == DOWN) {
-			if (!rotateHitSides(true) && !rotateHitBlock(true)) {
-				current = colorizer.rotate(true, current, 1);
+			if (!rotateHitSides(current, true, g) && !rotateHitBlock(current, true, g)) {
+				current = Colorizer.rotate(true, current, 1);
 			}
 		} else if (keyCode == SHIFT) {
 			current = storeShifted();
@@ -197,20 +214,22 @@ public class Rules extends PApplet {
 		return false;
 	}
 
-	private boolean rotateHitBlock(boolean clockwise) {
+	public static boolean rotateHitBlock(Tile current, boolean clockwise, Grid g) {
+		return rotateHitBlock(current, clockwise, 1, g);
+	}
+
+	public static boolean rotateHitBlock(Tile current, boolean clockwise, int numTimes, Grid g) {
 		/* Checks to see if rotating block collides with a block */
 
 		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
 
 		for (int[] coord : current.getRespectiveCoords()) {
-			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise,
-					coord));
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, numTimes, coord));
 		}
 
 		for (int[] coord : respectiveCoordsSample) {
-			if (isInBounds(current.pivotY + coord[0], current.pivotX + coord[1])) {
-				Square next = g.getSquare(current.pivotY + coord[0],
-						current.pivotX + coord[1]);
+			if (isInBounds(current.pivotY + coord[0], current.pivotX + coord[1], g)) {
+				Square next = g.getSquare(current.pivotY + coord[0], current.pivotX + coord[1]);
 
 				if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
 					return true;
@@ -221,19 +240,58 @@ public class Rules extends PApplet {
 		return false;
 	}
 
-	private boolean rotateHitSides(boolean clockwise) {
-		/* Checks to see if rotating block collides with a side wall */
+	public static boolean rotateHitBlock(Tile current, boolean clockwise, int numTimes, Grid grid, int r, int c) {
+		/* Checks to see if rotating block collides with a block */
 
 		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
 
 		for (int[] coord : current.getRespectiveCoords()) {
-			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise,
-					coord));
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, numTimes, coord));
 		}
 
 		for (int[] coord : respectiveCoordsSample) {
-			if (!isInBounds(current.pivotY + coord[0], current.pivotX
-					+ coord[1])) {
+			if (isInBounds(r + coord[0], c + coord[1], grid)) {
+				Square next = grid.getSquare(r + coord[0], c + coord[1]);
+
+				if (Colorizer.isColored(next) && !partOfCurrent(next, current)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/* Checks to see if rotating block collides with a side wall */
+	public static boolean rotateHitSides(Tile current, boolean clockwise, Grid g) {
+		return rotateHitSides(current, clockwise, 1, g);
+	}
+
+	public static boolean rotateHitSides(Tile current, boolean clockwise, int numTimes, Grid g) {
+		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
+
+		for (int[] coord : current.getRespectiveCoords()) {
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, numTimes, coord));
+		}
+
+		for (int[] coord : respectiveCoordsSample) {
+			if (!isInBounds(current.pivotY + coord[0], current.pivotX + coord[1], g)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean rotateHitSides(Tile current, boolean clockwise, int numTimes, Grid g, int r, int c) {
+		ArrayList<int[]> respectiveCoordsSample = new ArrayList<int[]>();
+
+		for (int[] coord : current.getRespectiveCoords()) {
+			respectiveCoordsSample.add(Tile.returnTransformedCoords(clockwise, numTimes, coord));
+		}
+
+		for (int[] coord : respectiveCoordsSample) {
+			if (!isInBounds(r + coord[0], c + coord[1], g)) {
 				return true;
 			}
 		}
@@ -250,8 +308,23 @@ public class Rules extends PApplet {
 		return false;
 	}
 
-	public boolean isInBounds(int row, int col) {
-		return row < g.getNumRows() && row >= 0 && col < g.getNumCols() && col >= 0;
+	public static boolean isInBounds(int row, int col, Grid grid) {
+		return row < grid.getNumRows() && row >= 0 && col < grid.getNumCols() && col >= 0;
+	}
+
+	public static boolean tileInBounds(Tile t, int row, int col, Grid grid) {
+		boolean inBounds = true;
+		for (int[] coords : t.getRespectiveCoords()) {
+			if (coords[0] + row < 0 || coords[0] + row >= grid.getNumRows()) {
+				inBounds = false;
+			}
+
+			if (coords[1] + col < 0 || coords[1] + col >= grid.getNumCols()) {
+				inBounds = false;
+			}
+		}
+
+		return inBounds;
 	}
 
 	public void setNumOfLines(int x) {
@@ -322,8 +395,7 @@ public class Rules extends PApplet {
 		for (Square s : current.getSquares()) {
 			boolean notPartOfCurrent = true;
 
-			Square bottomSquare = g.getSquare(s.getRowIndex() + 1,
-					s.getColIndex());
+			Square bottomSquare = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
 
 			for (Square square : current.getSquares()) {
 				if (bottomSquare.equals(square)) {
@@ -352,13 +424,15 @@ public class Rules extends PApplet {
 		int highestX = g.getSquare(0, g.numCols - 1).getXCor();
 		int lowestY = g.getSquare(g.numRows - 1, 0).getYCor();
 		for (Square s : current.getSquares()) {
-			if (s.getXCor() <= lowestX || s.getYCor() > lowestY
-					|| s.getXCor() > highestX) {
+
+			// need to change
+			if (s.getXCor() <= lowestX || s.getYCor() > lowestY || s.getXCor() > highestX) {
 				return true;
 			}
 		}
 		return false;
 	}
+
 	/**
 	 * Sets the squares in an entire row to have a color of white (255,255,255)
 	 * 
@@ -381,8 +455,7 @@ public class Rules extends PApplet {
 		for (int r = g.getNumRows() - 1; r >= 0; r--) {
 			counter = g.getNumCols();
 			for (int c = 0; c < g.getNumCols(); c++) {
-				if (!(g.grid[r][c].color[0] == 255
-						&& g.grid[r][c].color[1] == 255 && g.grid[r][c].color[2] == 255)) {
+				if (!(g.grid[r][c].color[0] == 255 && g.grid[r][c].color[1] == 255 && g.grid[r][c].color[2] == 255)) {
 					counter--;
 				}
 			}
