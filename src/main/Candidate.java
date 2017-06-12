@@ -5,7 +5,7 @@ public class Candidate implements Comparable<Candidate> {
 	public int numRotations;
 	public int pivotYIndex;
 	public int pivotXIndex;
-	
+
 	public int resultingAH;
 	public int resultingLC;
 	public int resultingH;
@@ -24,8 +24,8 @@ public class Candidate implements Comparable<Candidate> {
 	public int compareTo(Candidate o) {
 		return o.strength - this.strength;
 	}
-	
-	public void calculateStrength(){
+
+	public void calculateStrength() {
 		strength = (int) (-50 * resultingAH + 176 * resultingLC - 35 * resultingH - 20 * resultingB);
 	}
 }

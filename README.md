@@ -7,7 +7,13 @@
 <hr>
 <h4>Features:</h4>
 <ul>
+<li>Works like Tetris. Able to store a block(Cannot see the stored block).</li>
 <li>Resize the grid by changing the # of rows or # of columns.</li>
+<li>Change the level, which changes the speed.</li>
+<li>Levels up as you clear 4 lines for each level, higher score for higher level.</li>
+<li>Restarts automatically when you lose.</li>
+<li>Keeps track of the highest score.</li>
+<li>Has a player mode, but also an AI mode.</li>
 </ul>
 <hr>
 
@@ -28,7 +34,7 @@
 <h4>Unresolved bugs:</h4>
 <ul>
 <li>Rotating tiles can overlap each other; can violate bounds of grid(game-mechanic)</li>
-<li>Tiles may sometimes spawn on the top repeatedly after the grid is filled up </li
+<li>Game crashes if you try to move a tile too fast before it spawns. </li>
 </ul>
 
 <h4>Contributors:</h4>

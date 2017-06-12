@@ -18,32 +18,39 @@ public class Rules extends PApplet {
 	private Tile saved;
 	private boolean savedTile;
 	private int numAllowedShifted;
-	private int level;
-	private int totalLinesCleared;
+	public int level;
+	public int totalLinesCleared;
 	public boolean GAME_OVER = false;
 	private Main main;
+	public int tempCountLines;
+	public int latestScore;
 
 	public Rules() {
 		TIMER = 0;
 		SCORE = 0;
+		level = 1;
 	}
 
-	public Rules(Colorizer colorizer, Tile current, Grid g) {
+	public Rules(Colorizer colorizer, Grid g) {
 		this();
 		this.colorizer = colorizer;
-		this.current = current;
 		this.g = g;
 	}
 
 	public int getSpeed() {
 		return SPEED;
 	}
+	
+	public void setCurrent(Tile current){
+		this.current = current;
+	}
 
 	public void setSpeed(int speed) {
 		SPEED = speed;
+		level = speed;
 	}
-	
-	public void setMain(Main main){
+
+	public void setMain(Main main) {
 		this.main = main;
 	}
 
@@ -74,28 +81,27 @@ public class Rules extends PApplet {
 					updateScore();
 				}
 
-				current = colorizer.spawnBlock();		
-				
+				current = colorizer.spawnBlock();
+
 				if (computer) {
 					int[] possible = analyzer.getDirections(analyzer.returnBestPosition());
 
 					for (int move : possible) {
 						registerKeyPress(move);
 					}
-					
+					if (clearLine()) {
+						updateScore();
+					}
 					main.updateCompInfo();
 				}
-				
-				System.out.println("RUN COMPLETE");
 
 				numAllowedShifted = 0;
 			} else if (!GAME_OVER) {
 				current = colorizer.drop(current, 1);
 			} else {
-				System.out.println("GAME OVER!!!");
+				System.out.println("GAME OVER");
 			}
 		}
-
 		TIMER++;
 	}
 
@@ -104,7 +110,6 @@ public class Rules extends PApplet {
 		if (numAllowedShifted == 0) {
 			if (!savedTile) {
 				saved = current;
-				// current.setBlock(current.blockType(), false);
 				current.pivotY = 0;
 				current.pivotX = g.getNumCols() / 2 - 1;
 				int numSquares = current.getSquares().size();
@@ -118,7 +123,6 @@ public class Rules extends PApplet {
 				Tile temp1 = new Tile();
 				temp1 = saved;
 				saved = current;
-				// current.setBlock(current.blockType(), false);
 				saved.pivotY = 0;
 				saved.pivotX = g.getNumCols() / 2 - 1;
 				int numSquares = current.getSquares().size();
@@ -133,35 +137,42 @@ public class Rules extends PApplet {
 	}
 
 	public void updateScore() {
-		levelUp();
 		int n = numOfLines;
 		if (n == 1) {
-			SCORE += 40 * (level + 1);
+			SCORE += 40 * (level);
 		} else if (n == 2) {
-			SCORE += 100 * (level + 1);
+			SCORE += 100 * (level);
 		} else if (n == 3) {
-			SCORE += 300 * (level + 1);
+			SCORE += 300 * (level);
 		} else {
-			SCORE += 1200 * (level + 1);
+			SCORE += 1200 * (level);
 		}
 		totalLinesCleared += numOfLines;
+		tempCountLines += numOfLines;
+		levelUp();
 		numOfLines = 0;
+		latestScore = SCORE;
 	}
 
 	public void levelUp() {
-		// System.out.println("Level: " + level);
-		// System.out.println("Total lines cleared: " + totalLinesCleared);
-		if (level == 0) {
-			if (totalLinesCleared == 4) {
-				// SPEED += 1;
-				level += 1;
-			}
+		if (level == 10) {
+			return;
 		} else {
-			if (totalLinesCleared == level * 4) {
-				// SPEED += 1;
+			if (tempCountLines >= 4) {
+				SPEED += 1;
 				level += 1;
+				tempCountLines -= 4;
 			}
 		}
+	}
+
+	public void setLevel(int x) {
+		level = x;
+		SPEED = x;
+	}
+
+	public void setTotalLinesCleared(int lines) {
+		totalLinesCleared = lines;
 	}
 
 	public void registerKeyPress(int keyCode) {
@@ -187,16 +198,6 @@ public class Rules extends PApplet {
 			current = fullDrop();
 		}
 	}
-
-	/*
-	 * private boolean hitBlock() { for (Square s : current.getSquares()) {
-	 * Square next = g.getSquare(s.getRowIndex() + 1, s.getColIndex());
-	 * 
-	 * if (Colorizer.isColored(next) && !partOfCurrent(next, current)) { return
-	 * true; } }
-	 * 
-	 * return false; }
-	 */
 
 	private boolean hitBlockSide(boolean left) {
 		for (Square s : current.getSquares()) {
@@ -425,6 +426,7 @@ public class Rules extends PApplet {
 		int highestX = g.getSquare(0, g.numCols - 1).getXCor();
 		int lowestY = g.getSquare(g.numRows - 1, 0).getYCor();
 		for (Square s : current.getSquares()) {
+
 			// need to change
 			if (s.getXCor() <= lowestX || s.getYCor() > lowestY || s.getXCor() > highestX) {
 				return true;
@@ -432,19 +434,6 @@ public class Rules extends PApplet {
 		}
 		return false;
 	}
-
-	/*
-	 * public int calLowestYCorOfTile(Tile t) { int lowest =
-	 * t.getSquares().get(0).getYCor(); for (Square s : t.getSquares()) { if
-	 * (s.getYCor() < lowest) { lowest = s.getYCor(); } } return lowest; }
-	 * 
-	 * public int calHighestYCorOfTile(Tile t) { int highest =
-	 * t.getSquares().get(0).getYCor(); for (Square s : t.getSquares()) { if
-	 * (s.getYCor() > highest) { highest = s.getYCor(); } } return highest; }
-	 * 
-	 * public int calNextColoredSquare(Tile t) { int[] white = new int[] { 255,
-	 * 255, 255 }; return 1; }
-	 */
 
 	/**
 	 * Sets the squares in an entire row to have a color of white (255,255,255)

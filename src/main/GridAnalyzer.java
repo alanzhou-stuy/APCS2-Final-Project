@@ -287,7 +287,6 @@ public class GridAnalyzer {
 		 */
 
 		return candidates.get(0);
-
 	}
 
 	public int[] returnBestPosition() {

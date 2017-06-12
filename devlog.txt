@@ -6,10 +6,16 @@
 
 06/03/17: Fixed bug with updating/resizable Grid and drop function. - Jeffrey
 
+06/04/17: Added the function that allows for storing tiles. -Alan
+
 06/05/17: Added key inputs/controls - Jeffrey
+
+06/06/17: Added full drop (space bar) and code for the input methods. - Alan
 
 06/07/17: Started GridAnalyzer - Jeffrey
 
+06/07/17: Added score. -Alan
+
 06/08/17: Fixed rotate overlap bug with controls - Jeffrey
 
-06/06/17: Added full drop (space bar) and code for the input methods. - Alan
+06/10/17: Added levels, speeds updating with levels, restarting the game when you lose, and a high score tracker - Alan
