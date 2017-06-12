@@ -80,6 +80,7 @@ public class Main extends PApplet {
 		if (compStart.getBooleanValue() == true) {
 			compStart.setCaptionLabel("Set to PLAYER");
 			mode.setText("Mode: Computer");
+			
 			COMPUTER_PLAYS = true;
 		} else {
 			compStart.setCaptionLabel("Set to COMPUTER");
@@ -91,7 +92,6 @@ public class Main extends PApplet {
 		// currentTile = colorizer.rotate(false, currentTile, 1);
 
 		if (start.getBooleanValue() == true && rule.GAME_OVER == false && COMPUTER_PLAYS == false) {
-
 			if (onStart) {
 				currentTile = colorizer.spawnBlock(); // DON'T MOVE THIS
 				rule.setCurrent(currentTile);
@@ -124,7 +124,12 @@ public class Main extends PApplet {
 			rule.setSpeed(rule.getSpeed());
 
 		} else if (start.getBooleanValue() == true && rule.GAME_OVER == false && COMPUTER_PLAYS == true) {
-			rule.run(COMPUTER_PLAYS);
+			if (onStart) {
+				currentTile = colorizer.spawnBlock(); // DON'T MOVE THIS
+				rule.setCurrent(currentTile);
+				onStart = false;
+			}
+			rule.run(COMPUTER_PLAYS);		
 			keyPressed = false;
 		}
 

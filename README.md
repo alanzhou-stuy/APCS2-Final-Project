@@ -44,9 +44,9 @@
 <h4>Compilation:</h4>
 **Requires Java 8**
 <b>Linux: </b>
-Use ```run.sh```
+Use ```./run.sh```
 <b>Windows: </b>
-Use ```java -jar Demo.jar```
+Use ```run.bat```
 
 <h4>Contributors:</h4>
 <br>

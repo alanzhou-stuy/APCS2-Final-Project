@@ -167,7 +167,6 @@ public class GridAnalyzer {
 
 		int diff = getClosestDifference(rule.getCurrent().getPivotX(), getIndices(getColInformation(g), true));
 
-		System.out.println("DIFF: " + diff);
 		int[] movement = new int[Math.abs(diff)];
 
 		if (Math.abs(diff) != diff) {
@@ -188,8 +187,6 @@ public class GridAnalyzer {
 	 */
 	public int[] getDirections(int[] pos) {
 		int diff = rule.getCurrent().getPivotX() - pos[1];
-		System.out.println("Horizontal Move: " + diff);
-		System.out.println("Num rotations: " + pos[2]);
 
 		int[] directions = new int[Math.abs(diff) + pos[2]];
 
