@@ -6,6 +6,8 @@
 
 06/03/17: Fixed bug with updating/resizable Grid and drop function. - Jeffrey
 
+06/04/17: Added the function that allows for storing tiles. -Alan
+
 06/05/17: Added key inputs/controls - Jeffrey
 
 06/06/17: Added full drop (space bar) and code for the input methods. - Alan

@@ -162,7 +162,7 @@ public class GridAnalyzer {
 			for (int c = 0; c < g.getNumCols(); c++) {
 				Tile t = rule.getCurrent();
 
-				for (int j = 0; j < t.getNumPhases(); j++) {
+				for (int j = 0; j < t.getNumOfPhases(); j++) {
 					if (getFit(rule.getCurrent(), r, c) > toPass) {
 
 					}
